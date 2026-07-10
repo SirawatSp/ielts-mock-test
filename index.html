@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Academic — Mock Test 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4efe4;
+  --paper-deep:#ece5d4;
+  --ink:#1c2a44;
+  --ink-soft:#4a5670;
+  --line:#c9bfa8;
+  --blue:#2456a6;
+  --blueprint:#dce6f5;
+  --signal:#c8451f;
+  --green:#2e6b45;
+  --amber:#a86b1f;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Newsreader',serif;
+  --display:'Fraunces',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--serif);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.6;
+  background-image:
+    linear-gradient(rgba(36,86,166,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36,86,166,.055) 1px, transparent 1px);
+  background-size:28px 28px;
+  min-height:100vh;
+}
+
+/* ---------- header ---------- */
+header{
+  border-bottom:3px double var(--ink);
+  background:var(--paper);
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 1px 0 rgba(28,42,68,.08);
+}
+.head-inner{
+  max-width:1200px;margin:0 auto;padding:14px 24px 0;
+  display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px;
+}
+.brand{display:flex;align-items:baseline;gap:14px}
+.brand h1{
+  font-family:var(--display);font-weight:900;font-size:clamp(1.3rem,3vw,1.9rem);
+  letter-spacing:-.02em;
+}
+.brand h1 em{font-style:italic;font-weight:300;color:var(--blue)}
+.candidate{
+  font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--ink-soft);text-align:right;line-height:1.5;
+}
+.candidate b{color:var(--signal)}
+nav{max-width:1200px;margin:0 auto;padding:8px 24px 0;display:flex;gap:2px;overflow-x:auto}
+nav button{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--paper-deep);border:1px solid var(--line);border-bottom:none;
+  padding:9px 16px 7px;cursor:pointer;color:var(--ink-soft);
+  border-radius:6px 6px 0 0;white-space:nowrap;transition:all .15s;
+  position:relative;top:1px;
+}
+nav button:hover{background:var(--blueprint);color:var(--blue)}
+nav button.active{
+  background:var(--paper);color:var(--ink);font-weight:600;
+  border-color:var(--ink);border-bottom:1px solid var(--paper);
+}
+nav button .tick{color:var(--green);margin-left:4px}
+
+/* ---------- layout ---------- */
+main{max-width:1200px;margin:0 auto;padding:32px 24px 120px}
+section{display:none}
+section.active{display:block;animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.sheet{
+  background:var(--paper);border:1px solid var(--ink);
+  box-shadow:6px 6px 0 rgba(28,42,68,.12);
+  padding:clamp(20px,4vw,44px);position:relative;
+}
+.sheet + .sheet{margin-top:28px}
+.stamp{
+  position:absolute;top:-1px;right:-1px;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);padding:6px 14px;
+}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2rem);margin-bottom:6px;letter-spacing:-.01em}
+h3{font-family:var(--display);font-weight:700;font-size:1.1rem;margin:26px 0 10px;color:var(--blue)}
+.kicker{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--signal);margin-bottom:8px}
+.rubric{
+  font-size:.92rem;color:var(--ink-soft);border-left:3px solid var(--blue);
+  padding:8px 14px;background:var(--blueprint);margin:14px 0 22px;font-style:italic;
+}
+
+/* ---------- timer ---------- */
+.timerbar{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  border:1px dashed var(--ink);padding:10px 16px;margin:18px 0 26px;background:var(--paper-deep);
+}
+.timerbar .clock{font-family:var(--mono);font-size:1.5rem;font-weight:600;min-width:96px}
+.timerbar.warn .clock{color:var(--amber)}
+.timerbar.crit .clock{color:var(--signal);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
+.timerbar .tlabel{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
+.btn{
+  font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
+  border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+  padding:9px 18px;cursor:pointer;transition:all .15s;
+}
+.btn:hover{background:var(--blue);border-color:var(--blue)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--blueprint);color:var(--blue)}
+.btn.signal{background:var(--signal);border-color:var(--signal)}
+.btn.signal:hover{background:#a83817}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ---------- reading ---------- */
+.read-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink)}
+@media(max-width:900px){.read-grid{grid-template-columns:1fr}}
+.passage{
+  padding:clamp(18px,3vw,36px);border-right:1px solid var(--ink);
+  max-height:78vh;overflow-y:auto;background:var(--paper);
+}
+@media(max-width:900px){.passage{border-right:none;border-bottom:1px solid var(--ink);max-height:52vh}}
+.passage h4{font-family:var(--display);font-size:1.35rem;font-weight:900;margin-bottom:16px}
+.passage p{margin-bottom:14px;font-size:.98rem}
+.passage p b.para{font-family:var(--mono);font-size:.8rem;color:var(--signal);margin-right:8px}
+.questions{padding:clamp(18px,3vw,36px);max-height:78vh;overflow-y:auto;background:var(--paper-deep)}
+@media(max-width:900px){.questions{max-height:none}}
+.qblock{margin-bottom:30px}
+.qblock legend,.qhead{
+  font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue);font-weight:600;margin-bottom:4px;
+}
+.qnote{font-size:.85rem;font-style:italic;color:var(--ink-soft);margin-bottom:14px}
+.q{margin-bottom:16px;padding:12px 14px;background:var(--paper);border:1px solid var(--line);position:relative}
+.q .qnum{font-family:var(--mono);font-size:.75rem;font-weight:600;color:var(--signal)}
+.q p{font-size:.94rem;margin:2px 0 8px}
+.tfng{display:flex;gap:6px;flex-wrap:wrap}
+.tfng label{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;border:1px solid var(--ink);
+  padding:6px 12px;cursor:pointer;transition:all .12s;user-select:none;background:var(--paper);
+}
+.tfng input{display:none}
+.tfng input:checked + span{}
+.tfng label:has(input:checked){background:var(--ink);color:var(--paper)}
+.tfng label:hover{background:var(--blueprint)}
+.tfng label:has(input:checked):hover{background:var(--ink)}
+select,.fill{
+  font-family:var(--mono);font-size:.85rem;padding:7px 10px;border:1px solid var(--ink);
+  background:var(--paper);color:var(--ink);max-width:100%;
+}
+.fill{width:220px}
+.headlist{font-size:.88rem;background:var(--paper);border:1px dashed var(--ink);padding:12px 16px;margin-bottom:14px}
+.headlist li{margin-left:20px;margin-bottom:3px}
+.result-tag{
+  font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;
+  padding:2px 8px;margin-left:8px;display:none;
+}
+.q.correct .result-tag.ok{display:inline;background:var(--green);color:var(--paper)}
+.q.wrong .result-tag.no{display:inline;background:var(--signal);color:var(--paper)}
+.q.correct{border-color:var(--green)}
+.q.wrong{border-color:var(--signal)}
+.explain{display:none;font-size:.84rem;margin-top:8px;padding:8px 12px;background:var(--blueprint);border-left:3px solid var(--blue)}
+.marked .explain{display:block}
+.scorecard{
+  display:none;margin-top:24px;padding:20px;border:2px solid var(--ink);background:var(--paper);
+  text-align:center;
+}
+.scorecard.show{display:block}
+.scorecard .big{font-family:var(--display);font-size:2.6rem;font-weight:900}
+.scorecard .band{color:var(--blue)}
+
+/* ---------- writing ---------- */
+.chartbox{border:1px solid var(--ink);background:#fff;padding:18px;margin:18px 0}
+.chartbox svg{width:100%;height:auto;display:block}
+textarea{
+  width:100%;min-height:340px;font-family:var(--serif);font-size:1.02rem;line-height:1.7;
+  padding:18px;border:1px solid var(--ink);background:#fffdf8;color:var(--ink);resize:vertical;
+}
+textarea:focus{outline:2px solid var(--blue);outline-offset:-1px}
+textarea.small{min-height:90px}
+.wc{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+  margin-top:8px;display:flex;justify-content:space-between;color:var(--ink-soft);
+}
+.wc .count.low{color:var(--signal)}
+.wc .count.ok{color:var(--green)}
+
+/* ---------- speaking ---------- */
+.cuecard{
+  border:2px solid var(--ink);background:var(--blueprint);padding:24px 28px;margin:16px 0;
+  box-shadow:4px 4px 0 rgba(36,86,166,.2);
+}
+.cuecard h4{font-family:var(--display);font-size:1.15rem;margin-bottom:10px}
+.cuecard ul{margin:8px 0 8px 22px;font-size:.94rem}
+.spq{margin-bottom:22px}
+.spq p.qtext{font-weight:600;margin-bottom:8px;font-size:.97rem}
+.spq p.qtext .qn{font-family:var(--mono);color:var(--signal);font-size:.78rem;margin-right:6px}
+
+/* ---------- results ---------- */
+.pkg{
+  font-family:var(--mono);font-size:.72rem;white-space:pre-wrap;background:var(--ink);color:#dce6f5;
+  padding:20px;max-height:340px;overflow:auto;border:1px solid var(--ink);line-height:1.5;
+}
+.checklist{list-style:none;margin:16px 0}
+.checklist li{
+  font-family:var(--mono);font-size:.78rem;padding:10px 14px;border:1px solid var(--line);
+  margin-bottom:6px;background:var(--paper-deep);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.checklist .state{font-weight:600}
+.checklist .state.done{color:var(--green)}
+.checklist .state.todo{color:var(--signal)}
+
+/* overview cards */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:26px}
+.ov-card{
+  border:1px solid var(--ink);background:var(--paper);padding:20px;cursor:pointer;
+  transition:all .15s;position:relative;
+}
+.ov-card:hover{box-shadow:4px 4px 0 rgba(36,86,166,.25);transform:translate(-2px,-2px)}
+.ov-card .num{font-family:var(--display);font-weight:900;font-size:2rem;color:var(--blueprint);-webkit-text-stroke:1.5px var(--blue)}
+.ov-card h4{font-family:var(--display);font-size:1.05rem;margin:6px 0 4px}
+.ov-card p{font-size:.82rem;color:var(--ink-soft)}
+.ov-card .dur{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-top:10px;display:block}
+
+footer{
+  max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
+  font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);
+  border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.toast{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.74rem;
+  padding:12px 22px;opacity:0;transition:all .3s;z-index:99;letter-spacing:.05em;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div class="brand"><h1>IELTS <em>Academic</em> — Mock 01</h1></div>
+    <div class="candidate">
+      Candidate: Omn · Bangkok<br>
+      Target: <b>7.0 overall / 6.5 min</b> · Chevening / DAAD
+    </div>
+  </div>
+  <nav id="nav">
+    <button data-sec="overview" class="active">Brief</button>
+    <button data-sec="reading">1 · Reading</button>
+    <button data-sec="writing1">2 · Writing T1</button>
+    <button data-sec="writing2">3 · Writing T2</button>
+    <button data-sec="speaking">4 · Speaking</button>
+    <button data-sec="results">Results</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="overview" class="active">
+  <div class="sheet">
+    <span class="stamp">Session Brief</span>
+    <p class="kicker">Structured practice session · all four papers</p>
+    <h2>How this mock works</h2>
+    <p style="max-width:70ch;margin-top:10px">
+      Work through the four sections in order. Timers run inside each section — press <b>Start</b> when you're ready.
+      Everything you type is <b>saved automatically in this browser</b>, so you can close the tab and come back.
+      Reading is <b>marked instantly</b> with explanations. Writing and Speaking can't be machine-scored:
+      when you finish, the <b>Results</b> tab bundles your answers into one assessment package you paste to Claude
+      (or a tutor) for banded feedback against the official criteria — one message, minimal tokens.
+    </p>
+    <div class="ov-grid">
+      <div class="ov-card" data-go="reading"><span class="num">01</span><h4>Reading</h4><p>One academic passage on passive cooling · 13 questions · TFNG, headings, completion.</p><span class="dur">⏱ 20 min · auto-marked</span></div>
+      <div class="ov-card" data-go="writing1"><span class="num">02</span><h4>Writing Task 1</h4><p>Describe a line graph — electricity used for space cooling by region, 2000–2050.</p><span class="dur">⏱ 20 min · 150+ words</span></div>
+      <div class="ov-card" data-go="writing2"><span class="num">03</span><h4>Writing Task 2</h4><p>Discussion essay — preserving historic buildings vs. modern development.</p><span class="dur">⏱ 40 min · 250+ words</span></div>
+      <div class="ov-card" data-go="speaking"><span class="num">04</span><h4>Speaking</h4><p>Parts 1–3 typed simulation. Cue card with 1-min prep + 2-min talk timers.</p><span class="dur">⏱ ~15 min</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ READING ============ -->
+<section id="reading">
+  <div class="sheet">
+    <span class="stamp">Paper 1 / 4</span>
+    <p class="kicker">Academic Reading · Passage 1 of 1</p>
+    <h2>The Quiet Return of Passive Cooling</h2>
+    <p class="rubric">You should spend about 20 minutes on Questions 1–13, which are based on the reading passage. In the real test you'd face 3 passages / 40 questions in 60 minutes — this is one passage at test pace.</p>
+
+    <div class="timerbar" id="tb-reading">
+      <span class="clock">20:00</span>
+      <span class="tlabel">Reading · 20 min</span>
+      <button class="btn" data-timer="reading" data-mins="20">Start</button>
+    </div>
+
+    <div class="read-grid">
+      <div class="passage">
+        <h4>The Quiet Return of Passive Cooling</h4>
+        <p><b class="para">A</b> For most of the twentieth century, the story of thermal comfort in buildings was a story of machines. The invention of modern air conditioning in 1902 by Willis Carrier — originally designed to control humidity in a Brooklyn printing plant — gradually transformed architecture itself. Buildings no longer needed to respond to their climates; they could simply be sealed and mechanically cooled. By the 1960s, the glass-box office tower, identical whether built in Stockholm or Singapore, had become the international symbol of modernity. What was lost in this transition was several millennia of accumulated knowledge about how to keep buildings cool without consuming energy.</p>
+        <p><b class="para">B</b> That knowledge was extensive. Traditional builders in hot climates developed remarkably sophisticated techniques long before electricity existed. In the Persian Gulf, wind towers known as badgirs channelled breezes down into living quarters while allowing warm air to escape, sometimes passing incoming air over pools of water to cool it through evaporation. In Southeast Asia, houses were raised on stilts to catch ground-level breezes, with steep roofs and deep overhangs that shaded walls from the high tropical sun while shedding monsoon rain. Courtyard houses across the Mediterranean and Middle East used thick masonry walls to absorb heat during the day and release it during cooler nights, a strategy engineers now call thermal mass. None of these techniques required a single watt of electricity.</p>
+        <p><b class="para">C</b> The economic logic of abandoning such methods once seemed unassailable. Air conditioning was cheap to run when energy was cheap, and it offered something passive techniques could not: precise, guaranteed control. A developer could promise tenants twenty-three degrees regardless of what the weather did. Passive design, by contrast, could only promise comfort most of the time, and its performance depended on correct orientation, careful detailing and sometimes on occupants' willingness to open and close windows at appropriate hours. In a commercial property market that valued predictability, the machine won.</p>
+        <p><b class="para">D</b> Yet the costs of that victory have become impossible to ignore. Cooling now accounts for nearly ten percent of global electricity consumption, and the International Energy Agency projects that the number of air conditioning units worldwide could triple by 2050, driven largely by rising incomes in hot, populous countries such as India, Indonesia and Nigeria. This creates a feedback loop with troubling implications: air conditioners expel waste heat into city streets, raising outdoor temperatures — studies in Tokyo and Paris have measured night-time increases of one to two degrees attributable to air conditioning exhaust — which in turn increases the demand for more cooling.</p>
+        <p><b class="para">E</b> In response, a growing movement of architects and engineers is attempting not to abandon mechanical cooling but to reduce buildings' dependence on it. The approach is sometimes called "passive first": design the building envelope, orientation and ventilation so effectively that machines are needed only during the most extreme conditions. In Ahmedabad, India, a hospital completed in 2014 combined thick insulated walls, small carefully-shaded windows and night-time ventilation to keep indoor temperatures roughly ten degrees below outdoor peaks without any air conditioning in its general wards. In Singapore, several recent high-rise developments have revived the deep balconies, sky gardens and cross-ventilation of the region's vernacular shophouses, cutting cooling loads by margins their developers were initially reluctant to believe.</p>
+        <p><b class="para">F</b> Technology, ironically, has accelerated the revival of these pre-technological ideas. Computer simulation now allows designers to model airflow, solar radiation and thermal behaviour before construction begins, converting what was once inherited craft knowledge into quantifiable engineering. A designer in Bangkok can test forty roof configurations in an afternoon — an experimental luxury unavailable to the anonymous builders who refined the traditional Thai house over centuries of trial and error. Some researchers argue this represents the ideal synthesis: ancient strategies validated and optimised by modern analysis.</p>
+        <p><b class="para">G</b> Obstacles remain, however, and they are less technical than institutional. Building codes in many countries were written around mechanical systems and can actually penalise naturally ventilated designs. Property valuations rarely reward low running costs as strongly as they punish unconventional appearance. And the construction industry, like any industry, prefers to repeat what it already knows how to build. The techniques that kept people comfortable for five thousand years are no longer secret; whether they become standard practice again is a question of incentives rather than knowledge.</p>
+      </div>
+
+      <div class="questions" id="reading-qs">
+        <div class="qblock">
+          <p class="qhead">Questions 1–5 · True / False / Not Given</p>
+          <p class="qnote">Write TRUE if the statement agrees with the passage, FALSE if it contradicts it, NOT GIVEN if there is no information.</p>
+
+          <div class="q" data-q="1"><span class="qnum">Q1</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Air conditioning was originally invented to cool office workers.</p>
+            <div class="tfng">
+              <label><input type="radio" name="q1" value="TRUE"><span>TRUE</span></label>
+              <label><input type="radio" name="q1" value="FALSE"><span>FALSE</span></label>
+              <label><input type="radio" name="q1" value="NOT GIVEN"><span>NOT GIVEN</span></label>
+            </div>
+            <div class="explain"><b>FALSE.</b> Paragraph A: it was "originally designed to control humidity in a Brooklyn printing plant" — for machines/paper, not office workers. A stated purpose that differs from the statement = contradiction, not absence of information.</div>
+          </div>
+
+          <div class="q" data-q="2"><span class="qnum">Q2</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Badgirs sometimes used water to lower the temperature of incoming air.</p>
+            <div class="tfng">
+              <label><input type="radio" name="q2" value="TRUE"><span>TRUE</span></label>
+              <label><input type="radio" name="q2" value="FALSE"><span>FALSE</span></label>
+              <label><input type="radio" name="q2" value="NOT GIVEN"><span>NOT GIVEN</span></label>
+            </div>
+            <div class="explain"><b>TRUE.</b> Paragraph B: "sometimes passing incoming air over pools of water to cool it through evaporation." Direct paraphrase — "sometimes" in both.</div>
+          </div>
+
+          <div class="q" data-q="3"><span class="qnum">Q3</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Passive design techniques guaranteed the same level of comfort as air conditioning.</p>
+            <div class="tfng">
+              <label><input type="radio" name="q3" value="TRUE"><span>TRUE</span></label>
+              <label><input type="radio" name="q3" value="FALSE"><span>FALSE</span></label>
+              <label><input type="radio" name="q3" value="NOT GIVEN"><span>NOT GIVEN</span></label>
+            </div>
+            <div class="explain"><b>FALSE.</b> Paragraph C: AC offered "precise, guaranteed control" while passive design "could only promise comfort most of the time". The passage explicitly contrasts them — a direct contradiction of "guaranteed the same level".</div>
+          </div>
+
+          <div class="q" data-q="4"><span class="qnum">Q4</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>The IEA predicts most new air conditioning demand by 2050 will come from Europe.</p>
+            <div class="tfng">
+              <label><input type="radio" name="q4" value="TRUE"><span>TRUE</span></label>
+              <label><input type="radio" name="q4" value="FALSE"><span>FALSE</span></label>
+              <label><input type="radio" name="q4" value="NOT GIVEN"><span>NOT GIVEN</span></label>
+            </div>
+            <div class="explain"><b>FALSE.</b> Paragraph D: growth is "driven largely by rising incomes in hot, populous countries such as India, Indonesia and Nigeria" — the passage names where most demand comes from, and it is not Europe. Contradiction, not NOT GIVEN.</div>
+          </div>
+
+          <div class="q" data-q="5"><span class="qnum">Q5</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>The Ahmedabad hospital uses no air conditioning anywhere in the building.</p>
+            <div class="tfng">
+              <label><input type="radio" name="q5" value="TRUE"><span>TRUE</span></label>
+              <label><input type="radio" name="q5" value="FALSE"><span>FALSE</span></label>
+              <label><input type="radio" name="q5" value="NOT GIVEN"><span>NOT GIVEN</span></label>
+            </div>
+            <div class="explain"><b>NOT GIVEN.</b> Paragraph E says no AC "in its general wards" — a limited claim. Whether other areas (operating theatres, offices) use AC is simply not stated. Classic trap: a TRUE answer over-extends the passage's claim; FALSE requires contradiction that isn't there.</div>
+          </div>
+        </div>
+
+        <div class="qblock">
+          <p class="qhead">Questions 6–9 · Matching Headings</p>
+          <p class="qnote">Choose the correct heading for paragraphs C, D, F and G from the list (i–vii).</p>
+          <ol class="headlist" style="list-style:none">
+            <li><b>i.</b> Why the machine seemed the rational choice</li>
+            <li><b>ii.</b> The environmental damage caused by traditional building</li>
+            <li><b>iii.</b> Rules and habits, not science, as the remaining barrier</li>
+            <li><b>iv.</b> Modern tools breathing new life into old wisdom</li>
+            <li><b>v.</b> A vicious cycle of heat and demand</li>
+            <li><b>vi.</b> Governments subsidising passive design</li>
+            <li><b>vii.</b> The global spread of the glass tower</li>
+          </ol>
+
+          <div class="q" data-q="6"><span class="qnum">Q6</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Paragraph C</p>
+            <select name="q6"><option value="">— select —</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select>
+            <div class="explain"><b>i.</b> Paragraph C explains the "economic logic" of choosing AC — cheap energy, guaranteed control, market that "valued predictability… the machine won." That is exactly "why the machine seemed the rational choice."</div>
+          </div>
+          <div class="q" data-q="7"><span class="qnum">Q7</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Paragraph D</p>
+            <select name="q7"><option value="">— select —</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select>
+            <div class="explain"><b>v.</b> The "feedback loop" — AC expels waste heat → hotter streets → more demand for cooling — is the "vicious cycle of heat and demand."</div>
+          </div>
+          <div class="q" data-q="8"><span class="qnum">Q8</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Paragraph F</p>
+            <select name="q8"><option value="">— select —</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select>
+            <div class="explain"><b>iv.</b> Computer simulation revives "pre-technological ideas" — "ancient strategies validated and optimised by modern analysis" = "modern tools breathing new life into old wisdom."</div>
+          </div>
+          <div class="q" data-q="9"><span class="qnum">Q9</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Paragraph G</p>
+            <select name="q9"><option value="">— select —</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select>
+            <div class="explain"><b>iii.</b> Obstacles are "less technical than institutional" — building codes, valuations, industry habit. "A question of incentives rather than knowledge" = "rules and habits, not science."</div>
+          </div>
+        </div>
+
+        <div class="qblock">
+          <p class="qhead">Questions 10–13 · Sentence Completion</p>
+          <p class="qnote">Complete each sentence with NO MORE THAN TWO WORDS from the passage.</p>
+
+          <div class="q" data-q="10"><span class="qnum">Q10</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Thick walls that store daytime heat and release it at night are an example of what engineers call <input class="fill" name="q10" autocomplete="off">.</p>
+            <div class="explain"><b>thermal mass.</b> Paragraph B: "…a strategy engineers now call thermal mass."</div>
+          </div>
+          <div class="q" data-q="11"><span class="qnum">Q11</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Air conditioning succeeded commercially partly because the property market valued <input class="fill" name="q11" autocomplete="off">.</p>
+            <div class="explain"><b>predictability.</b> Paragraph C: "In a commercial property market that valued predictability, the machine won."</div>
+          </div>
+          <div class="q" data-q="12"><span class="qnum">Q12</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>Air conditioners raise street temperatures by expelling <input class="fill" name="q12" autocomplete="off"> into the urban environment.</p>
+            <div class="explain"><b>waste heat.</b> Paragraph D: "air conditioners expel waste heat into city streets."</div>
+          </div>
+          <div class="q" data-q="13"><span class="qnum">Q13</span><span class="result-tag ok">✓ Correct</span><span class="result-tag no">✗ Wrong</span>
+            <p>The "passive first" approach aims to design buildings so machines are only necessary during the most <input class="fill" name="q13" autocomplete="off"> conditions.</p>
+            <div class="explain"><b>extreme.</b> Paragraph E: "machines are needed only during the most extreme conditions."</div>
+          </div>
+        </div>
+
+        <button class="btn signal" id="mark-reading" style="width:100%;padding:14px">Submit &amp; mark answers</button>
+        <div class="scorecard" id="reading-score">
+          <p class="kicker">Reading result</p>
+          <p class="big"><span id="raw-score">0</span>/13 · band ≈ <span class="band" id="band-score">–</span></p>
+          <p style="font-size:.82rem;color:var(--ink-soft);margin-top:6px">Approximate band, scaled from the official 40-question Academic conversion. Wrong answers now show explanations above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WRITING TASK 1 ============ -->
+<section id="writing1">
+  <div class="sheet">
+    <span class="stamp">Paper 2 / 4</span>
+    <p class="kicker">Academic Writing · Task 1</p>
+    <h2>Describe the graph</h2>
+    <p class="rubric">You should spend about 20 minutes on this task. Write at least 150 words. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Do NOT give opinions or reasons — report only what the graph shows.</p>
+
+    <div class="timerbar" id="tb-writing1">
+      <span class="clock">20:00</span>
+      <span class="tlabel">Task 1 · 20 min</span>
+      <button class="btn" data-timer="writing1" data-mins="20">Start</button>
+    </div>
+
+    <p><b>The graph below shows electricity consumed for space cooling in four regions between 2000 and 2020, with projections to 2050.</b></p>
+
+    <div class="chartbox">
+      <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono',monospace" role="img" aria-label="Line graph of electricity for space cooling by region 2000 to 2050">
+        <text x="380" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#1c2a44">Electricity used for space cooling, 2000–2050 (terawatt-hours)</text>
+        <!-- axes -->
+        <line x1="80" y1="60" x2="80" y2="370" stroke="#1c2a44" stroke-width="1.5"/>
+        <line x1="80" y1="370" x2="700" y2="370" stroke="#1c2a44" stroke-width="1.5"/>
+        <!-- y grid: 0..2000 TWh, 370px..70px  (y = 370 - v*0.15) -->
+        <g font-size="11" fill="#4a5670">
+          <line x1="80" y1="370" x2="700" y2="370" stroke="#c9bfa8" stroke-dasharray="3 3"/><text x="70" y="374" text-anchor="end">0</text>
+          <line x1="80" y1="295" x2="700" y2="295" stroke="#c9bfa8" stroke-dasharray="3 3"/><text x="70" y="299" text-anchor="end">500</text>
+          <line x1="80" y1="220" x2="700" y2="220" stroke="#c9bfa8" stroke-dasharray="3 3"/><text x="70" y="224" text-anchor="end">1000</text>
+          <line x1="80" y1="145" x2="700" y2="145" stroke="#c9bfa8" stroke-dasharray="3 3"/><text x="70" y="149" text-anchor="end">1500</text>
+          <line x1="80" y1="70" x2="700" y2="70" stroke="#c9bfa8" stroke-dasharray="3 3"/><text x="70" y="74" text-anchor="end">2000</text>
+        </g>
+        <!-- x labels: 2000,2010,2020,2030,2040,2050 → x=100,220,340,460,580,700 -->
+        <g font-size="11" fill="#4a5670" text-anchor="middle">
+          <text x="100" y="390">2000</text><text x="220" y="390">2010</text><text x="340" y="390">2020</text>
+          <text x="460" y="390">2030</text><text x="580" y="390">2040</text><text x="700" y="390">2050</text>
+        </g>
+        <!-- projection divider at 2020 -->
+        <line x1="340" y1="60" x2="340" y2="370" stroke="#c8451f" stroke-width="1" stroke-dasharray="6 4"/>
+        <text x="346" y="58" font-size="10" fill="#c8451f">projected →</text>
+
+        <!-- Asia Pacific: 2000:300 2010:520 2020:900 2030:1300 2040:1650 2050:1900 -->
+        <polyline fill="none" stroke="#c8451f" stroke-width="3"
+          points="100,325 220,292 340,235 460,175 580,122.5 700,85"/>
+        <!-- North America: 2000:550 2010:600 2020:640 2030:660 2040:670 2050:680 -->
+        <polyline fill="none" stroke="#2456a6" stroke-width="3"
+          points="100,287.5 220,280 340,274 460,271 580,269.5 700,268"/>
+        <!-- Middle East & Africa: 2000:120 2010:200 2020:330 2030:520 2040:750 2050:1000 -->
+        <polyline fill="none" stroke="#2e6b45" stroke-width="3" stroke-dasharray="0"
+          points="100,352 220,340 340,320.5 460,292 580,257.5 700,220"/>
+        <!-- Europe: 2000:150 2010:180 2020:220 2030:270 2040:310 2050:340 -->
+        <polyline fill="none" stroke="#a86b1f" stroke-width="3"
+          points="100,347.5 220,343 340,337 460,329.5 580,323.5 700,319"/>
+
+        <!-- point markers -->
+        <g fill="#c8451f"><circle cx="100" cy="325" r="4"/><circle cx="220" cy="292" r="4"/><circle cx="340" cy="235" r="4"/><circle cx="460" cy="175" r="4"/><circle cx="580" cy="122.5" r="4"/><circle cx="700" cy="85" r="4"/></g>
+        <g fill="#2456a6"><circle cx="100" cy="287.5" r="4"/><circle cx="220" cy="280" r="4"/><circle cx="340" cy="274" r="4"/><circle cx="460" cy="271" r="4"/><circle cx="580" cy="269.5" r="4"/><circle cx="700" cy="268" r="4"/></g>
+        <g fill="#2e6b45"><circle cx="100" cy="352" r="4"/><circle cx="220" cy="340" r="4"/><circle cx="340" cy="320.5" r="4"/><circle cx="460" cy="292" r="4"/><circle cx="580" cy="257.5" r="4"/><circle cx="700" cy="220" r="4"/></g>
+        <g fill="#a86b1f"><circle cx="100" cy="347.5" r="4"/><circle cx="220" cy="343" r="4"/><circle cx="340" cy="337" r="4"/><circle cx="460" cy="329.5" r="4"/><circle cx="580" cy="323.5" r="4"/><circle cx="700" cy="319" r="4"/></g>
+
+        <!-- legend -->
+        <g font-size="12" fill="#1c2a44">
+          <rect x="96" y="415" width="18" height="4" fill="#c8451f"/><text x="120" y="421">Asia Pacific</text>
+          <rect x="246" y="415" width="18" height="4" fill="#2456a6"/><text x="270" y="421">North America</text>
+          <rect x="436" y="415" width="18" height="4" fill="#2e6b45"/><text x="460" y="421">Middle East &amp; Africa</text>
+          <rect x="646" y="415" width="18" height="4" fill="#a86b1f"/><text x="670" y="421">Europe</text>
+        </g>
+      </svg>
+    </div>
+
+    <textarea id="essay1" placeholder="Write your Task 1 response here… (overview paragraph is the single most important sentence for Task Achievement)"></textarea>
+    <div class="wc"><span>Minimum 150 words · aim 170–190</span><span class="count" id="wc1">0 words</span></div>
+  </div>
+</section>
+
+<!-- ============ WRITING TASK 2 ============ -->
+<section id="writing2">
+  <div class="sheet">
+    <span class="stamp">Paper 3 / 4</span>
+    <p class="kicker">Academic Writing · Task 2</p>
+    <h2>Essay</h2>
+    <p class="rubric">You should spend about 40 minutes on this task. Write at least 250 words. Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
+
+    <div class="timerbar" id="tb-writing2">
+      <span class="clock">40:00</span>
+      <span class="tlabel">Task 2 · 40 min</span>
+      <button class="btn" data-timer="writing2" data-mins="40">Start</button>
+    </div>
+
+    <div class="cuecard" style="background:var(--paper-deep)">
+      <p style="font-size:1.05rem"><b>In many growing cities, historic buildings are demolished to make way for modern developments. Some people believe that preserving old buildings should take priority over new construction, while others argue that cities must modernise to meet the needs of their residents.</b></p>
+      <p style="margin-top:10px"><b>Discuss both these views and give your own opinion.</b></p>
+    </div>
+
+    <textarea id="essay2" style="min-height:420px" placeholder="Write your Task 2 essay here… (position must be clear in the introduction AND consistent throughout — that's the #1 Task Response point-loser)"></textarea>
+    <div class="wc"><span>Minimum 250 words · aim 270–300</span><span class="count" id="wc2">0 words</span></div>
+  </div>
+</section>
+
+<!-- ============ SPEAKING ============ -->
+<section id="speaking">
+  <div class="sheet">
+    <span class="stamp">Paper 4 / 4</span>
+    <p class="kicker">Speaking · typed simulation</p>
+    <h2>Speaking test</h2>
+    <p class="rubric">Type your answers as you would SAY them — contractions, natural fillers, spoken rhythm. Don't redraft or polish; your first phrasing is what the evaluation needs to see. Answers that read like written English will be flagged.</p>
+
+    <h3>Part 1 · Interview (4–5 sentences each is plenty)</h3>
+    <div class="spq"><p class="qtext"><span class="qn">1.1</span>Let's talk about your work. What do you do, and what does a typical day involve?</p><textarea class="small" id="sp1a"></textarea></div>
+    <div class="spq"><p class="qtext"><span class="qn">1.2</span>Do you enjoy the area of the city where you live? Why or why not?</p><textarea class="small" id="sp1b"></textarea></div>
+    <div class="spq"><p class="qtext"><span class="qn">1.3</span>Do you prefer modern buildings or older ones? Why?</p><textarea class="small" id="sp1c"></textarea></div>
+    <div class="spq"><p class="qtext"><span class="qn">1.4</span>Is the weather in your country an important factor in how people live?</p><textarea class="small" id="sp1d"></textarea></div>
+
+    <h3>Part 2 · Long turn</h3>
+    <div class="cuecard">
+      <h4>Describe a building or public space that impressed you.</h4>
+      <p>You should say:</p>
+      <ul>
+        <li>where it is and when you visited it</li>
+        <li>what it looks like</li>
+        <li>what people do there</li>
+      </ul>
+      <p>and explain why it impressed you so much.</p>
+    </div>
+    <div class="timerbar" id="tb-prep">
+      <span class="clock">01:00</span>
+      <span class="tlabel">Prep · 1 min (notes only)</span>
+      <button class="btn" data-timer="prep" data-mins="1">Start prep</button>
+    </div>
+    <textarea class="small" id="sp2notes" placeholder="Prep notes (bullet points, not sentences)…" style="min-height:70px"></textarea>
+    <div class="timerbar" id="tb-talk">
+      <span class="clock">02:00</span>
+      <span class="tlabel">Talk · 2 min — type continuously, don't stop to edit</span>
+      <button class="btn" data-timer="talk" data-mins="2">Start talk</button>
+    </div>
+    <textarea id="sp2" style="min-height:220px" placeholder="Your 2-minute talk — keep typing until the timer ends…"></textarea>
+    <div class="wc"><span>A 2-min talk ≈ 220–300 spoken words</span><span class="count" id="wcsp2">0 words</span></div>
+
+    <h3>Part 3 · Discussion (go deeper — speculate, compare, concede)</h3>
+    <div class="spq"><p class="qtext"><span class="qn">3.1</span>Why do you think some cities preserve their old buildings while others demolish them?</p><textarea class="small" id="sp3a"></textarea></div>
+    <div class="spq"><p class="qtext"><span class="qn">3.2</span>How might climate change affect the way buildings are designed in the future?</p><textarea class="small" id="sp3b"></textarea></div>
+    <div class="spq"><p class="qtext"><span class="qn">3.3</span>Some say iconic architecture benefits a city's image more than its residents. Do you agree?</p><textarea class="small" id="sp3c"></textarea></div>
+    <div class="spq"><p class="qtext"><span class="qn">3.4</span>Should governments regulate the appearance of private buildings? Why or why not?</p><textarea class="small" id="sp3d"></textarea></div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="results">
+  <div class="sheet">
+    <span class="stamp">Assessment</span>
+    <p class="kicker">Session summary &amp; assessment package</p>
+    <h2>Results</h2>
+
+    <ul class="checklist" id="checklist">
+      <li><span>1 · Reading (auto-marked)</span><span class="state todo" id="ck-reading">Not submitted</span></li>
+      <li><span>2 · Writing Task 1</span><span class="state todo" id="ck-w1">0 words</span></li>
+      <li><span>3 · Writing Task 2</span><span class="state todo" id="ck-w2">0 words</span></li>
+      <li><span>4 · Speaking (9 answers)</span><span class="state todo" id="ck-sp">0 / 9 answered</span></li>
+    </ul>
+
+    <h3>Get your band scores</h3>
+    <p style="max-width:70ch;font-size:.95rem">
+      Writing and Speaking need a human-quality assessor. Click below to copy a single self-contained
+      package — your answers plus strict marking instructions (4 criteria per skill, band per criterion,
+      cross-task error patterns, weaknesses, next-session drills). Paste it into a <b>fresh Claude chat</b>:
+      the app has already done the test-delivery work, so that one message is all the context Claude needs.
+    </p>
+    <div style="display:flex;gap:10px;margin:18px 0;flex-wrap:wrap">
+      <button class="btn signal" id="copy-pkg">📋 Copy assessment package</button>
+      <button class="btn ghost" id="preview-pkg">Preview package</button>
+      <button class="btn ghost" id="reset-all">⟲ Reset entire test</button>
+    </div>
+    <div class="pkg" id="pkg-preview" style="display:none"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>IELTS Academic Mock 01 · Passive Cooling Series</span>
+  <span>Timers &amp; answers saved locally · nothing leaves this browser</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= state & persistence ================= */
+const LS_KEY='ielts-mock-01';
+const state=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+function save(){localStorage.setItem(LS_KEY,JSON.stringify(state))}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
+
+/* ================= navigation ================= */
+const nav=document.getElementById('nav');
+function go(sec){
+  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('active',s.id===sec));
+  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.sec===sec));
+  window.scrollTo({top:0});
+  if(sec==='results')refreshChecklist();
+}
+nav.addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.sec)});
+document.querySelectorAll('.ov-card').forEach(c=>c.addEventListener('click',()=>go(c.dataset.go)));
+
+/* ================= timers ================= */
+const timers={};
+document.querySelectorAll('[data-timer]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.timer,bar=btn.closest('.timerbar'),clock=bar.querySelector('.clock');
+    if(timers[id]){ // stop
+      clearInterval(timers[id]);delete timers[id];btn.textContent='Start';return;
+    }
+    let sec=parseInt(btn.dataset.mins)*60;
+    btn.textContent='Stop';
+    const tick=()=>{
+      const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0');
+      clock.textContent=`${m}:${s}`;
+      bar.classList.toggle('warn',sec<=300&&sec>60);
+      bar.classList.toggle('crit',sec<=60);
+      if(sec<=0){clearInterval(timers[id]);delete timers[id];btn.textContent='Start';
+        clock.textContent='00:00';toast(`⏱ Time's up — ${bar.querySelector('.tlabel').textContent.split('·')[0].trim()}`);
+        try{new AudioContext().close()}catch(e){}
+      }
+      sec--;
+    };
+    tick();timers[id]=setInterval(tick,1000);
+  });
+});
+
+/* ================= reading marking ================= */
+const KEY={
+  q1:'FALSE',q2:'TRUE',q3:'FALSE',q4:'FALSE',q5:'NOT GIVEN',
+  q6:'i',q7:'v',q8:'iv',q9:'iii',
+  q10:['thermal mass'],q11:['predictability'],q12:['waste heat'],q13:['extreme']
+};
+// approximate band from 13-question passage (scaled from official /40 conversion)
+const BAND=[2.5,3,3.5,4,4.5,5,5.5,6,6,6.5,7,7.5,8,9]; // index = raw score 0..13
+function getAnswer(q){
+  const radios=document.querySelector(`input[name="${q}"]:checked`);
+  if(radios)return radios.value;
+  const sel=document.querySelector(`select[name="${q}"]`);
+  if(sel)return sel.value;
+  const inp=document.querySelector(`input.fill[name="${q}"]`);
+  if(inp)return inp.value.trim();
+  return '';
+}
+document.getElementById('mark-reading').addEventListener('click',()=>{
+  let raw=0;
+  document.getElementById('reading-qs').classList.add('marked');
+  for(let i=1;i<=13;i++){
+    const q='q'+i,el=document.querySelector(`.q[data-q="${i}"]`);
+    const ans=getAnswer(q);let ok;
+    if(Array.isArray(KEY[q])){
+      ok=KEY[q].some(k=>ans.toLowerCase().replace(/\s+/g,' ')===k);
+    }else{ok=ans===KEY[q]}
+    el.classList.remove('correct','wrong');
+    el.classList.add(ok?'correct':'wrong');
+    if(ok)raw++;
+  }
+  state.readingRaw=raw;state.readingDone=true;save();
+  document.getElementById('raw-score').textContent=raw;
+  document.getElementById('band-score').textContent=BAND[raw].toFixed(1);
+  document.getElementById('reading-score').classList.add('show');
+  document.getElementById('reading-score').scrollIntoView({behavior:'smooth',block:'center'});
+});
+
+/* ================= word counts + autosave ================= */
+const fields=['essay1','essay2','sp1a','sp1b','sp1c','sp1d','sp2notes','sp2','sp3a','sp3b','sp3c','sp3d'];
+function wc(t){return t.trim()?t.trim().split(/\s+/).length:0}
+function updateCounts(){
+  const pairs=[['essay1','wc1',150],['essay2','wc2',250],['sp2','wcsp2',0]];
+  pairs.forEach(([f,c,min])=>{
+    const n=wc(document.getElementById(f).value);
+    const el=document.getElementById(c);el.textContent=n+' words';
+    el.classList.toggle('low',min>0&&n>0&&n<min);
+    el.classList.toggle('ok',min>0&&n>=min);
+  });
+}
+fields.forEach(f=>{
+  const el=document.getElementById(f);
+  if(state[f])el.value=state[f];
+  el.addEventListener('input',()=>{state[f]=el.value;save();updateCounts()});
+});
+// restore reading selections
+for(let i=1;i<=13;i++){
+  const k='ans_q'+i;
+  if(state[k]!==undefined){
+    const r=document.querySelector(`input[name="q${i}"][value="${state[k]}"]`);
+    if(r)r.checked=true;
+    const s=document.querySelector(`select[name="q${i}"]`);if(s)s.value=state[k];
+    const t=document.querySelector(`input.fill[name="q${i}"]`);if(t)t.value=state[k];
+  }
+}
+document.getElementById('reading-qs').addEventListener('change',e=>{
+  const n=e.target.name;if(n){state['ans_'+n]=getAnswer(n);save()}
+});
+document.getElementById('reading-qs').addEventListener('input',e=>{
+  const n=e.target.name;if(n&&e.target.classList.contains('fill')){state['ans_'+n]=e.target.value.trim();save()}
+});
+updateCounts();
+
+/* ================= results / package ================= */
+function refreshChecklist(){
+  const r=document.getElementById('ck-reading');
+  if(state.readingDone){r.textContent=`${state.readingRaw}/13 · band ≈ ${BAND[state.readingRaw].toFixed(1)}`;r.className='state done'}
+  const w1=wc(document.getElementById('essay1').value);
+  const e1=document.getElementById('ck-w1');e1.textContent=w1+' words';e1.className='state '+(w1>=150?'done':'todo');
+  const w2=wc(document.getElementById('essay2').value);
+  const e2=document.getElementById('ck-w2');e2.textContent=w2+' words';e2.className='state '+(w2>=250?'done':'todo');
+  const spIds=['sp1a','sp1b','sp1c','sp1d','sp2','sp3a','sp3b','sp3c','sp3d'];
+  const done=spIds.filter(i=>wc(document.getElementById(i).value)>0).length;
+  const es=document.getElementById('ck-sp');es.textContent=done+' / 9 answered';es.className='state '+(done===9?'done':'todo');
+}
+function buildPackage(){
+  const g=id=>document.getElementById(id).value.trim()||'(no answer)';
+  const reading=state.readingDone?`${state.readingRaw}/13 (approx band ${BAND[state.readingRaw].toFixed(1)})`:'not submitted';
+  return `You are an expert IELTS Academic examiner. I completed a full mock test in a web app. Mark my Writing and Speaking below. Be direct and specific — tell me exactly what is costing band points, not generic encouragement.
+
+CANDIDATE: Bangkok-based architect. Target: overall 7.0, no band below 6.5 (UK master's + Chevening/DAAD).
+READING (already auto-marked): ${reading}.
+
+For EACH writing task give a band for Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy, plus an overall task band and 3-5 specific line edits that would raise the score. Then flag grammar/vocab errors that REPEAT across both tasks so I can track patterns.
+
+For Speaking, evaluate the typed answers AS IF SPOKEN against Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy (skip Pronunciation). Explicitly flag any phrasing that sounds written rather than natural spoken English.
+
+Finish with: (1) estimated overall band across all four skills, (2) my 2-3 biggest weaknesses ranked, (3) exactly 3 practice tasks for my next session.
+
+==================================================
+WRITING TASK 1 (20 min, min 150 words — line graph: electricity used for space cooling in TWh, 2000-2050, four regions. Asia Pacific rises steeply 300→1900; Middle East & Africa 120→1000 accelerating; North America nearly flat 550→680; Europe gradual 150→340. Data after 2020 is projected.)
+
+MY RESPONSE (${wc(document.getElementById('essay1').value)} words):
+${g('essay1')}
+
+==================================================
+WRITING TASK 2 (40 min, min 250 words — "In many growing cities, historic buildings are demolished to make way for modern developments. Some believe preserving old buildings should take priority; others argue cities must modernise. Discuss both views and give your own opinion.")
+
+MY RESPONSE (${wc(document.getElementById('essay2').value)} words):
+${g('essay2')}
+
+==================================================
+SPEAKING PART 1
+Q: What do you do, and what does a typical day involve?
+A: ${g('sp1a')}
+Q: Do you enjoy the area of the city where you live?
+A: ${g('sp1b')}
+Q: Do you prefer modern buildings or older ones?
+A: ${g('sp1c')}
+Q: Is the weather in your country an important factor in how people live?
+A: ${g('sp1d')}
+
+SPEAKING PART 2 (cue card: describe a building or public space that impressed you — 1 min prep, 2 min talk)
+PREP NOTES: ${g('sp2notes')}
+TALK (${wc(document.getElementById('sp2').value)} words typed in 2 min):
+${g('sp2')}
+
+SPEAKING PART 3
+Q: Why do some cities preserve old buildings while others demolish them?
+A: ${g('sp3a')}
+Q: How might climate change affect building design in the future?
+A: ${g('sp3b')}
+Q: Does iconic architecture benefit a city's image more than its residents?
+A: ${g('sp3c')}
+Q: Should governments regulate the appearance of private buildings?
+A: ${g('sp3d')}`;
+}
+document.getElementById('copy-pkg').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(buildPackage());toast('✓ Copied — paste into a fresh Claude chat')}
+  catch(e){document.getElementById('preview-pkg').click();toast('Clipboard blocked — copy from the preview below')}
+});
+document.getElementById('preview-pkg').addEventListener('click',()=>{
+  const p=document.getElementById('pkg-preview');
+  p.style.display=p.style.display==='none'?'block':'none';
+  p.textContent=buildPackage();
+});
+document.getElementById('reset-all').addEventListener('click',()=>{
+  if(confirm('Erase all answers and scores for this mock? This cannot be undone.')){
+    localStorage.removeItem(LS_KEY);location.reload();
+  }
+});
+</script>
+</body>
+</html>
