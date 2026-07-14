@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Practice Gym — Band 7 Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4efe4;--paper-deep:#ece5d4;--ink:#1c2a44;--ink-soft:#4a5670;--line:#c9bfa8;
+  --blue:#2456a6;--blueprint:#dce6f5;--signal:#c8451f;--green:#2e6b45;--amber:#a86b1f;
+  --mono:'IBM Plex Mono',monospace;--serif:'Newsreader',serif;--display:'Fraunces',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;
+  background-image:linear-gradient(rgba(36,86,166,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(36,86,166,.055) 1px,transparent 1px);
+  background-size:28px 28px;min-height:100vh;
+}
+header{border-bottom:3px double var(--ink);background:var(--paper);position:sticky;top:0;z-index:50}
+.head-inner{max-width:1200px;margin:0 auto;padding:14px 24px 0;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px}
+.brand h1{font-family:var(--display);font-weight:900;font-size:clamp(1.3rem,3vw,1.9rem);letter-spacing:-.02em}
+.brand h1 em{font-style:italic;font-weight:300;color:var(--blue)}
+.candidate{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);text-align:right;line-height:1.5}
+.candidate a{color:var(--signal);text-decoration:none;font-weight:600}
+.candidate a:hover{text-decoration:underline}
+nav{max-width:1200px;margin:0 auto;padding:8px 24px 0;display:flex;gap:2px;overflow-x:auto}
+nav button{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-deep);border:1px solid var(--line);border-bottom:none;padding:9px 14px 7px;cursor:pointer;color:var(--ink-soft);border-radius:6px 6px 0 0;white-space:nowrap;transition:all .15s;position:relative;top:1px}
+nav button:hover{background:var(--blueprint);color:var(--blue)}
+nav button.active{background:var(--paper);color:var(--ink);font-weight:600;border-color:var(--ink);border-bottom:1px solid var(--paper)}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 120px}
+section{display:none}
+section.active{display:block;animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sheet{background:var(--paper);border:1px solid var(--ink);box-shadow:6px 6px 0 rgba(28,42,68,.12);padding:clamp(20px,4vw,44px);position:relative}
+.stamp{position:absolute;top:-1px;right:-1px;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:6px 14px}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2rem);margin-bottom:6px;letter-spacing:-.01em}
+h3{font-family:var(--display);font-weight:700;font-size:1.1rem;margin:26px 0 10px;color:var(--blue)}
+.kicker{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--signal);margin-bottom:8px}
+.rubric{font-size:.92rem;color:var(--ink-soft);border-left:3px solid var(--blue);padding:8px 14px;background:var(--blueprint);margin:14px 0 22px;font-style:italic}
+.btn{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:9px 18px;cursor:pointer;transition:all .15s}
+.btn:hover{background:var(--blue);border-color:var(--blue)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--blueprint);color:var(--blue)}
+.btn.signal{background:var(--signal);border-color:var(--signal)}
+.btn.signal:hover{background:#a83817}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+textarea,input[type=text]{font-family:var(--serif);font-size:1rem;line-height:1.6;padding:12px 14px;border:1px solid var(--ink);background:#fffdf8;color:var(--ink);width:100%}
+textarea:focus,input[type=text]:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.74rem;padding:12px 22px;opacity:0;transition:all .3s;z-index:99;letter-spacing:.05em}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* home cards */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:26px}
+.ov-card{border:1px solid var(--ink);background:var(--paper);padding:20px;cursor:pointer;transition:all .15s}
+.ov-card:hover{box-shadow:4px 4px 0 rgba(36,86,166,.25);transform:translate(-2px,-2px)}
+.ov-card .num{font-family:var(--display);font-weight:900;font-size:2rem;color:var(--blueprint);-webkit-text-stroke:1.5px var(--blue)}
+.ov-card h4{font-family:var(--display);font-size:1.05rem;margin:6px 0 4px}
+.ov-card p{font-size:.82rem;color:var(--ink-soft)}
+.ov-card .stat{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-top:10px;display:block}
+
+/* flashcards */
+.fc-wrap{max-width:640px;margin:0 auto}
+.fc-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.fcard{
+  border:2px solid var(--ink);background:#fffdf8;min-height:300px;padding:34px;cursor:pointer;
+  box-shadow:5px 5px 0 rgba(28,42,68,.15);display:flex;flex-direction:column;justify-content:center;
+  text-align:center;position:relative;user-select:none;
+}
+.fcard .topic{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blue)}
+.fcard .flip-hint{position:absolute;bottom:12px;right:14px;font-family:var(--mono);font-size:.6rem;color:var(--line)}
+.fcard .word{font-family:var(--display);font-weight:900;font-size:2.4rem;letter-spacing:-.01em}
+.fcard .pos{font-family:var(--mono);font-size:.72rem;color:var(--signal);margin-top:4px}
+.fcard .def{font-size:1.05rem;margin-bottom:12px}
+.fcard .ex{font-style:italic;color:var(--ink-soft);font-size:.95rem;margin-bottom:12px}
+.fcard .coll{font-family:var(--mono);font-size:.72rem;color:var(--blue)}
+.fcard .up{font-size:.85rem;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.fcard .up b{color:var(--green)}
+.fc-actions{display:flex;gap:10px;margin-top:16px;justify-content:center}
+.fc-actions .btn{flex:1;max-width:200px;padding:13px}
+.boxbar{display:flex;gap:4px;margin-top:16px;justify-content:center}
+.boxbar span{font-family:var(--mono);font-size:.62rem;padding:4px 10px;border:1px solid var(--line);color:var(--ink-soft)}
+.boxbar span b{color:var(--ink)}
+
+/* matching game */
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:18px}
+.mtile{
+  font-size:.9rem;padding:16px 12px;border:1px solid var(--ink);background:#fffdf8;cursor:pointer;
+  text-align:center;transition:all .12s;min-height:74px;display:flex;align-items:center;justify-content:center;
+}
+.mtile:hover{background:var(--blueprint)}
+.mtile.sel{background:var(--ink);color:var(--paper)}
+.mtile.matched{background:var(--green);color:var(--paper);border-color:var(--green);pointer-events:none;opacity:.75}
+.mtile.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* grammar quiz */
+.gq{margin-bottom:22px;padding:16px 18px;background:#fffdf8;border:1px solid var(--line)}
+.gq .cat{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blue)}
+.gq p.stem{font-size:1rem;margin:6px 0 12px}
+.gq .opts{display:flex;flex-wrap:wrap;gap:8px}
+.gq .opts button{font-family:var(--serif);font-size:.92rem;padding:8px 16px;border:1px solid var(--ink);background:var(--paper);cursor:pointer;transition:all .12s}
+.gq .opts button:hover{background:var(--blueprint)}
+.gq.answered .opts button{pointer-events:none;opacity:.55}
+.gq.answered .opts button.right{background:var(--green);color:var(--paper);border-color:var(--green);opacity:1}
+.gq.answered .opts button.picked-wrong{background:var(--signal);color:var(--paper);border-color:var(--signal);opacity:1}
+.gq .why{display:none;font-size:.85rem;margin-top:10px;padding:8px 12px;background:var(--blueprint);border-left:3px solid var(--blue)}
+.gq.answered .why{display:block}
+.catbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.catbar span{font-family:var(--mono);font-size:.64rem;padding:5px 10px;border:1px solid var(--line);background:var(--paper-deep)}
+.catbar span b.good{color:var(--green)} .catbar span b.bad{color:var(--signal)}
+
+/* reveal blocks (paraphrase gym / task1) */
+.reveal-item{margin-bottom:30px;padding:18px 20px;background:#fffdf8;border:1px solid var(--line)}
+.reveal-item .src{font-size:1.02rem;padding:10px 14px;background:var(--paper-deep);border-left:3px solid var(--signal);margin:8px 0 12px}
+.model{display:none;margin-top:12px;padding:12px 14px;background:var(--blueprint);border-left:3px solid var(--green);font-size:.93rem}
+.model.show{display:block}
+.model .tag{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--green);display:block;margin-bottom:4px}
+
+/* dictation */
+.dict-box{max-width:680px;margin:0 auto}
+.dict-controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.diff{font-size:1.05rem;line-height:2;margin-top:14px;padding:14px 16px;background:#fffdf8;border:1px solid var(--line);display:none}
+.diff.show{display:block}
+.diff .ok{color:var(--green)}
+.diff .miss{background:#fbdcd2;color:var(--signal);text-decoration:line-through;padding:0 3px}
+.diff .extra{background:#fdeccf;color:var(--amber);padding:0 3px}
+.lvlpick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.lvlpick button.on{background:var(--blue);border-color:var(--blue);color:var(--paper)}
+
+/* speaking */
+.phrase-func{margin-bottom:20px}
+.phrase-func h4{font-family:var(--display);font-size:1rem;margin-bottom:6px}
+.phrase-func ul{margin-left:22px;font-size:.94rem}
+.phrase-func li b{color:var(--blue)}
+.qgen{border:2px solid var(--ink);background:var(--blueprint);padding:26px;text-align:center;margin:18px 0;box-shadow:4px 4px 0 rgba(36,86,166,.2)}
+.qgen .q{font-family:var(--display);font-size:1.3rem;font-weight:700;min-height:60px}
+.qgen .src{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-bottom:8px}
+.timerbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px dashed var(--ink);padding:10px 16px;margin:18px 0;background:var(--paper-deep)}
+.timerbar .clock{font-family:var(--mono);font-size:1.5rem;font-weight:600;min-width:96px}
+.timerbar.crit .clock{color:var(--signal);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
+.timerbar .tlabel{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
+.progress-note{font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div class="brand"><h1>IELTS <em>Practice Gym</em></h1></div>
+    <div class="candidate">Band 7 skill training · daily 15–30 min<br><a href="index.html">→ back to Mock Test 01</a></div>
+  </div>
+  <nav id="nav">
+    <button data-sec="home" class="active">Gym Floor</button>
+    <button data-sec="vocab">Vocab</button>
+    <button data-sec="para">Paraphrase</button>
+    <button data-sec="grammar">Grammar</button>
+    <button data-sec="task1">Task 1 Gym</button>
+    <button data-sec="dictation">Listening</button>
+    <button data-sec="speaking">Speaking</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ======== HOME ======== -->
+<section id="home" class="active">
+  <div class="sheet">
+    <span class="stamp">Training Plan</span>
+    <p class="kicker">Skill work between mock tests</p>
+    <h2>The gym floor</h2>
+    <p style="max-width:72ch;margin-top:10px">
+      Mocks measure; drills build. Each station below attacks one thing that separates band 6 from band 7.
+      A good daily session is <b>15–30 minutes: one vocab round, one grammar set, one dictation</b> — then
+      rotate paraphrase / Task 1 / speaking across the week. Your streak and accuracy are tracked in this browser.
+    </p>
+    <div class="ov-grid">
+      <div class="ov-card" data-go="vocab"><span class="num">A</span><h4>Vocabulary</h4><p>48 band-7 words in 6 IELTS topics — flashcards with collocations and the band-6 word each one upgrades.</p><span class="stat" id="st-vocab">0 / 48 mastered</span></div>
+      <div class="ov-card" data-go="para"><span class="num">B</span><h4>Paraphrase</h4><p>Match academic paraphrases — the core skill behind TFNG questions and Writing lexical resource.</p><span class="stat" id="st-para">best: — moves</span></div>
+      <div class="ov-card" data-go="grammar"><span class="num">C</span><h4>Grammar</h4><p>36 questions on the exact traps Thai speakers hit: articles, agreement, tense, prepositions.</p><span class="stat" id="st-grammar">no attempt yet</span></div>
+      <div class="ov-card" data-go="task1"><span class="num">D</span><h4>Task 1 Gym</h4><p>Write the overview sentence for 6 chart types, then compare against a band-7 model.</p><span class="stat" id="st-task1">0 / 6 done</span></div>
+      <div class="ov-card" data-go="dictation"><span class="num">E</span><h4>Listening</h4><p>Dictation drills — the browser reads an academic sentence aloud (British voice), you type it, get word-level marking.</p><span class="stat" id="st-dict">avg accuracy: —</span></div>
+      <div class="ov-card" data-go="speaking"><span class="num">F</span><h4>Speaking</h4><p>Band-7 functional phrases + a random question generator with a 45-second response timer.</p><span class="stat" id="st-speak">0 questions drawn</span></div>
+    </div>
+    <p class="progress-note" id="streak-note"></p>
+  </div>
+</section>
+
+<!-- ======== VOCAB ======== -->
+<section id="vocab">
+  <div class="sheet">
+    <span class="stamp">Station A</span>
+    <p class="kicker">Lexical resource · band 7 = precision + collocation</p>
+    <h2>Vocabulary flashcards</h2>
+    <p class="rubric">Click the card to flip. "Got it" moves a word up a box (3 boxes = mastered); "Again" sends it back to box 1. The deck always serves your weakest words first. Learn the <b>collocation</b>, not just the word — examiners award "less common lexical items used with collocation awareness", not isolated big words.</p>
+    <div class="fc-wrap">
+      <div class="fc-meta"><span id="fc-pos">Card – / –</span><span id="fc-filter-label">All topics</span></div>
+      <div class="lvlpick" id="topic-pick" style="justify-content:center;margin-bottom:14px"></div>
+      <div class="fcard" id="fcard">
+        <span class="topic" id="fc-topic"></span>
+        <div id="fc-face"></div>
+        <span class="flip-hint">click to flip</span>
+      </div>
+      <div class="fc-actions">
+        <button class="btn ghost" id="fc-again">✗ Again</button>
+        <button class="btn" id="fc-got">✓ Got it</button>
+      </div>
+      <div class="boxbar" id="boxbar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== PARAPHRASE ======== -->
+<section id="para">
+  <div class="sheet">
+    <span class="stamp">Station B</span>
+    <p class="kicker">Paraphrase recognition · the engine of Reading & Writing</p>
+    <h2>Paraphrase match</h2>
+    <p class="rubric">Every TFNG and matching question is a paraphrase hunt, and Task 2 introductions live or die on rephrasing the prompt. Click two tiles that mean the same thing. Fewer moves = better. New shuffle each round.</p>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn" id="para-new">New round</button>
+      <span style="font-family:var(--mono);font-size:.72rem" id="para-stats">moves: 0 · matched: 0/8</span>
+    </div>
+    <div class="match-grid" id="match-grid"></div>
+  </div>
+</section>
+
+<!-- ======== GRAMMAR ======== -->
+<section id="grammar">
+  <div class="sheet">
+    <span class="stamp">Station C</span>
+    <p class="kicker">Grammatical range & accuracy · kill the band-6 errors</p>
+    <h2>Grammar drills</h2>
+    <p class="rubric">Band 7 grammar means "frequent error-free sentences". These 36 questions target the errors that appear constantly in Thai speakers' writing: articles, subject–verb agreement, tense with time markers, prepositions after common academic words, and complex-sentence machinery. Answer honestly at speed — the category scoreboard shows where your points are leaking.</p>
+    <div class="catbar" id="catbar"></div>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <button class="btn" id="gq-new">New set of 12</button>
+      <button class="btn ghost" id="gq-resetstats">Reset category stats</button>
+    </div>
+    <div id="gq-list"></div>
+  </div>
+</section>
+
+<!-- ======== TASK 1 GYM ======== -->
+<section id="task1">
+  <div class="sheet">
+    <span class="stamp">Station D</span>
+    <p class="kicker">Task achievement · the overview is worth more than any number</p>
+    <h2>Overview trainer</h2>
+    <p class="rubric">A clear overview is the difference between band 5 and band 7 Task Achievement — it's the first thing examiners look for. For each data scenario, write ONE or TWO sentences capturing the main trends <b>without any specific figures</b>. Then reveal the model and compare: did you synthesise (group the trends), use trend language, and avoid numbers?</p>
+    <div id="t1-list"></div>
+  </div>
+</section>
+
+<!-- ======== DICTATION ======== -->
+<section id="dictation">
+  <div class="sheet">
+    <span class="stamp">Station E</span>
+    <p class="kicker">Listening · dictation builds decoding + spelling under pressure</p>
+    <h2>Dictation drill</h2>
+    <p class="rubric">IELTS Listening loses marks two ways: mishearing connected speech, and misspelling what you heard. Dictation trains both. Press play (British voice), listen ONCE at normal speed, type exactly what you heard, then mark. Use "slow" only to review after marking. Section 4 of the real test is a monologue full of sentences like these.</p>
+    <div class="dict-box">
+      <div class="lvlpick" id="dict-lvl">
+        <button class="btn ghost on" data-lvl="0">Level 1 · short</button>
+        <button class="btn ghost" data-lvl="1">Level 2 · medium</button>
+        <button class="btn ghost" data-lvl="2">Level 3 · lecture</button>
+      </div>
+      <div class="dict-controls">
+        <button class="btn" id="dict-play">▶ Play</button>
+        <button class="btn ghost" id="dict-slow">🐢 Slow replay</button>
+        <button class="btn ghost" id="dict-next">Next sentence →</button>
+      </div>
+      <textarea id="dict-input" style="min-height:90px" placeholder="Type exactly what you hear — punctuation ignored, spelling counts…"></textarea>
+      <div style="margin-top:10px"><button class="btn signal" id="dict-mark">Mark dictation</button></div>
+      <div class="diff" id="dict-diff"></div>
+      <p class="progress-note" id="dict-note">If nothing plays, your browser has no speech voices — try Edge or Chrome.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======== SPEAKING ======== -->
+<section id="speaking">
+  <div class="sheet">
+    <span class="stamp">Station F</span>
+    <p class="kicker">Fluency & coherence · sound spoken, not written</p>
+    <h2>Speaking drills</h2>
+
+    <h3>Random question generator</h3>
+    <p style="font-size:.93rem;max-width:70ch">Draw a question, hit the timer, and answer OUT LOUD for the full 45 seconds (Part 1) or 60 seconds (Part 3) — even alone at your desk. Typing was for the mock; the gym is for your mouth. Record yourself on your phone and listen back for fillers and flat intonation.</p>
+    <div class="qgen">
+      <p class="src" id="qg-src">—</p>
+      <p class="q" id="qg-q">Press "Draw question" to begin.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+        <button class="btn signal" id="qg-draw">🎲 Draw question</button>
+      </div>
+    </div>
+    <div class="timerbar" id="tb-speak">
+      <span class="clock">00:45</span>
+      <span class="tlabel">Response timer</span>
+      <button class="btn" id="speak-timer">Start 45s</button>
+      <button class="btn ghost" id="speak-timer60">Start 60s</button>
+    </div>
+
+    <h3>Band-7 functional phrases — steal these</h3>
+    <p style="font-size:.9rem;color:var(--ink-soft);margin-bottom:14px">Part 3 rewards <i>functions</i>: speculating, conceding, comparing. One natural phrase per function beats five memorised idioms. Practise dropping one of each into your timed answers.</p>
+    <div class="phrase-func"><h4>Giving a measured opinion</h4><ul>
+      <li><b>As far as I can see,</b> the main issue is…</li>
+      <li><b>I'd say it largely depends on</b> whether…</li>
+      <li><b>My gut feeling is that…</b> although I can see the other side.</li>
+    </ul></div>
+    <div class="phrase-func"><h4>Speculating about the future</h4><ul>
+      <li><b>I suspect we'll see</b> more of this over the next decade.</li>
+      <li><b>It wouldn't surprise me if</b> cities started to…</li>
+      <li><b>It's hard to say, but if I had to guess,</b> I'd say…</li>
+    </ul></div>
+    <div class="phrase-func"><h4>Conceding before countering (band-7 gold)</h4><ul>
+      <li><b>That's true up to a point, but…</b></li>
+      <li><b>I take the point that… , having said that,</b> …</li>
+      <li><b>Admittedly … , but on balance</b> I still think…</li>
+    </ul></div>
+    <div class="phrase-func"><h4>Comparing & contrasting</h4><ul>
+      <li><b>Whereas my parents' generation…, people my age tend to…</b></li>
+      <li><b>It's nowhere near as … as it used to be.</b></li>
+      <li><b>There's a world of difference between … and …</b></li>
+    </ul></div>
+    <div class="phrase-func"><h4>Buying thinking time (without "umm")</h4><ul>
+      <li><b>That's a good question — I've never really thought about it, but…</b></li>
+      <li><b>Off the top of my head,</b> I'd say…</li>
+      <li><b>Let me think… I suppose the honest answer is…</b></li>
+    </ul></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>IELTS Practice Gym · companion to Mock Test 01</span>
+  <span>Progress saved locally · nothing leaves this browser</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ shared ============ */
+const LS='ielts-gym';
+const S=JSON.parse(localStorage.getItem(LS)||'{}');
+function save(){localStorage.setItem(LS,JSON.stringify(S))}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const nav=document.getElementById('nav');
+function go(sec){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('active',s.id===sec));
+  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.sec===sec));window.scrollTo({top:0});
+  if(sec==='home')refreshStats()}
+nav.addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.sec)});
+document.querySelectorAll('.ov-card').forEach(c=>c.addEventListener('click',()=>go(c.dataset.go)));
+// streak
+(function(){const today=new Date().toISOString().slice(0,10);
+  if(S.lastDay!==today){S.streak=(S.lastDay===new Date(Date.now()-864e5).toISOString().slice(0,10))?(S.streak||0)+1:1;S.lastDay=today;save()}
+})();
+
+/* ============ VOCAB (48 cards) ============ */
+const DECK=[
+// Urban & Architecture
+{w:'retrofit',pos:'verb',t:'Urban',d:'to add new systems or features to an existing building',ex:'Older towers can be retrofitted with external shading at modest cost.',c:'retrofit a building with X · energy retrofit',up:'renovate (generic)'},
+{w:'dilapidated',pos:'adj',t:'Urban',d:'in poor condition from age and neglect',ex:'Dilapidated shophouses were restored rather than demolished.',c:'dilapidated housing / infrastructure',up:'old and broken'},
+{w:'congestion',pos:'noun',t:'Urban',d:'severe overcrowding, especially of traffic',ex:'Congestion charges have cut inner-city traffic in several capitals.',c:'traffic congestion · ease/relieve congestion',up:'traffic jam'},
+{w:'sprawl',pos:'noun',t:'Urban',d:'uncontrolled outward expansion of a city',ex:'Urban sprawl forces residents into long car commutes.',c:'urban sprawl · unchecked sprawl',up:'the city getting bigger'},
+{w:'amenity',pos:'noun',t:'Urban',d:'a useful facility that makes a place pleasant to live in',ex:'Parks and libraries are amenities that raise nearby property values.',c:'public/local amenities',up:'facilities (vaguer)'},
+{w:'pedestrianise',pos:'verb',t:'Urban',d:'to close a street to vehicles for walkers',ex:'Pedestrianising the old quarter revived street-level commerce.',c:'pedestrianised zone',up:'ban cars from'},
+{w:'heritage',pos:'noun',t:'Urban',d:'buildings and traditions inherited from the past',ex:'Listed status protects architectural heritage from demolition.',c:'cultural/architectural heritage · heritage site',up:'old things'},
+{w:'high-density',pos:'adj',t:'Urban',d:'housing many people in a compact area',ex:'High-density housing near transit reduces car dependence.',c:'high-density development/housing',up:'crowded (negative tone)'},
+// Environment
+{w:'mitigate',pos:'verb',t:'Environment',d:'to make something harmful less severe',ex:'Green roofs mitigate the urban heat island effect.',c:'mitigate the effects/impact of',up:'reduce'},
+{w:'deplete',pos:'verb',t:'Environment',d:'to use up a resource faster than it renews',ex:'Groundwater is being depleted faster than it can recharge.',c:'deplete resources/reserves · resource depletion',up:'use up'},
+{w:'finite',pos:'adj',t:'Environment',d:'limited; having an end',ex:'Fossil fuels are finite, so a transition is inevitable rather than optional.',c:'finite resources',up:'limited'},
+{w:'emission',pos:'noun',t:'Environment',d:'gas or substance released into the air',ex:'Buildings account for nearly forty percent of carbon emissions.',c:'carbon/greenhouse-gas emissions · cut emissions',up:'pollution (vaguer)'},
+{w:'resilient',pos:'adj',t:'Environment',d:'able to withstand or recover from shocks',ex:'Flood-resilient design is now standard in Dutch cities.',c:'resilient to X · climate resilience',up:'strong'},
+{w:'irreversible',pos:'adj',t:'Environment',d:'impossible to undo',ex:'Some ecosystem losses are irreversible, whatever we spend later.',c:'irreversible damage/change',up:'permanent'},
+{w:'degradation',pos:'noun',t:'Environment',d:'the process of something being damaged or made worse',ex:'Soil degradation threatens food security in the region.',c:'environmental degradation',up:'damage'},
+{w:'offset',pos:'verb',t:'Environment',d:'to balance or compensate for something',ex:'Tree planting cannot fully offset aviation emissions.',c:'offset emissions · offset by',up:'make up for'},
+// Education
+{w:'curriculum',pos:'noun',t:'Education',d:'the set of subjects taught in a course',ex:'Critical thinking sits awkwardly in an exam-driven curriculum.',c:'national/school curriculum · broaden the curriculum',up:'what schools teach'},
+{w:'vocational',pos:'adj',t:'Education',d:'relating to skills for a specific trade or job',ex:'Vocational training is undervalued relative to university degrees.',c:'vocational training/education',up:'job-related'},
+{w:'rote learning',pos:'noun',t:'Education',d:'memorisation without understanding',ex:'Rote learning produces exam results but not adaptable graduates.',c:'rely on rote learning',up:'memorising'},
+{w:'literacy',pos:'noun',t:'Education',d:'the ability to read and write; competence in a field',ex:'Digital literacy is now as fundamental as numeracy.',c:'digital/financial literacy · literacy rate',up:'reading skill'},
+{w:'compulsory',pos:'adj',t:'Education',d:'required by law or rules',ex:'Making a second language compulsory raises overall attainment.',c:'compulsory education/subject',up:'must / required'},
+{w:'well-rounded',pos:'adj',t:'Education',d:'educated broadly, not narrowly',ex:'Employers increasingly favour well-rounded graduates over specialists.',c:'well-rounded education/individual',up:'good at many things'},
+{w:'tuition',pos:'noun',t:'Education',d:'teaching, or the fee paid for it',ex:'Rising tuition fees deter students from low-income families.',c:'tuition fees · private tuition',up:'school money'},
+{w:'attainment',pos:'noun',t:'Education',d:'the level of achievement reached',ex:'The attainment gap widens where schooling depends on postcode.',c:'educational attainment · attainment gap',up:'results'},
+// Technology
+{w:'automation',pos:'noun',t:'Technology',d:'the use of machines to do work without humans',ex:'Automation displaces routine jobs while creating technical ones.',c:'automation of X · widespread automation',up:'robots doing work'},
+{w:'obsolete',pos:'adj',t:'Technology',d:'no longer used because something better exists',ex:'Skills can become obsolete within a decade of graduation.',c:'become/render obsolete',up:'out of date'},
+{w:'breakthrough',pos:'noun',t:'Technology',d:'a sudden major advance',ex:'Battery breakthroughs made electric vehicles commercially viable.',c:'scientific/medical breakthrough · achieve a breakthrough',up:'big discovery'},
+{w:'surveillance',pos:'noun',t:'Technology',d:'close observation, especially by authorities',ex:'Smart-city sensors blur the line between service and surveillance.',c:'mass surveillance · under surveillance',up:'watching people'},
+{w:'the digital divide',pos:'noun',t:'Technology',d:'the gap between people with and without technology access',ex:'Remote learning exposed the digital divide within a single city.',c:'bridge/widen the digital divide',up:'unequal internet access'},
+{w:'streamline',pos:'verb',t:'Technology',d:'to make a process simpler and more efficient',ex:'Digital permits streamlined a process that once took months.',c:'streamline a process/procedure',up:'make faster'},
+{w:'cutting-edge',pos:'adj',t:'Technology',d:'the most advanced stage of development',ex:'Cutting-edge simulation tools revived centuries-old cooling techniques.',c:'cutting-edge technology/research',up:'newest'},
+{w:'proliferation',pos:'noun',t:'Technology',d:'rapid increase in number or spread',ex:'The proliferation of delivery apps reshaped ground-floor retail.',c:'the proliferation of X',up:'fast growth in number'},
+// Society & Economy
+{w:'disparity',pos:'noun',t:'Society',d:'a great and unfair difference',ex:'Regional disparities in income drive migration to the capital.',c:'income/regional disparity · widening disparity',up:'gap / difference'},
+{w:'subsidise',pos:'verb',t:'Society',d:'to support financially, usually by government',ex:'Governments subsidise public transport to keep fares affordable.',c:'heavily subsidised · subsidise X for Y',up:'give money to'},
+{w:'incentive',pos:'noun',t:'Society',d:'something that motivates a particular action',ex:'Tax incentives could tip developers toward passive design.',c:'financial/tax incentive · create an incentive',up:'reason to do something'},
+{w:'demographic',pos:'adj/noun',t:'Society',d:'relating to population structure',ex:'Demographic change — an ageing society — reshapes housing demand.',c:'demographic shift/trend',up:'about population'},
+{w:'affluent',pos:'adj',t:'Society',d:'wealthy',ex:'Affluent districts capture a disproportionate share of green space.',c:'affluent households/neighbourhoods',up:'rich'},
+{w:'marginalised',pos:'adj',t:'Society',d:'pushed to the edge of society; excluded',ex:'Redevelopment often displaces marginalised communities first.',c:'marginalised groups/communities',up:'poor and ignored'},
+{w:'livelihood',pos:'noun',t:'Society',d:'the way a person earns money to live',ex:'Street vendors’ livelihoods depend on foot traffic that malls remove.',c:'earn/threaten a livelihood',up:'job / income'},
+{w:'purchasing power',pos:'noun',t:'Society',d:'how much people can afford to buy',ex:'Stagnant wages eroded the purchasing power of the middle class.',c:'the purchasing power of X',up:'how rich people feel'},
+// Academic verbs (essay engine)
+{w:'exacerbate',pos:'verb',t:'Academic',d:'to make a bad situation worse',ex:'Car-centric planning exacerbates both congestion and air pollution.',c:'exacerbate a problem/tension',up:'make worse'},
+{w:'undermine',pos:'verb',t:'Academic',d:'to weaken gradually, often indirectly',ex:'Cheap parking undermines every investment in public transport.',c:'undermine efforts/confidence',up:'weaken'},
+{w:'foster',pos:'verb',t:'Academic',d:'to encourage the development of something good',ex:'Mixed-use streets foster the casual contact that builds community.',c:'foster innovation/a sense of X',up:'help grow'},
+{w:'curb',pos:'verb',t:'Academic',d:'to control or limit something undesirable',ex:'Congestion pricing curbs private car use in dense centres.',c:'curb emissions/spending',up:'limit'},
+{w:'hinder',pos:'verb',t:'Academic',d:'to make progress difficult',ex:'Outdated building codes hinder the adoption of natural ventilation.',c:'hinder progress/development',up:'slow down / block'},
+{w:'advocate',pos:'verb',t:'Academic',d:'to publicly support an idea or policy',ex:'Many planners advocate a "passive first" approach to cooling.',c:'advocate (for) X · a strong advocate of',up:'support'},
+{w:'contend',pos:'verb',t:'Academic',d:'to argue or claim in debate',ex:'Critics contend that iconic towers serve investors, not residents.',c:'contend that…',up:'say / argue'},
+{w:'give rise to',pos:'verb',t:'Academic',d:'to cause or lead to',ex:'Rapid urbanisation gave rise to informal settlements on the periphery.',c:'give rise to problems/concerns',up:'cause'},
+];
+S.boxes=S.boxes||{};
+let fcQueue=[],fcIdx=-1,fcFlipped=false,fcTopic='All';
+const TOPICS=['All','Urban','Environment','Education','Technology','Society','Academic'];
+const topicPick=document.getElementById('topic-pick');
+TOPICS.forEach(t=>{const b=document.createElement('button');b.className='btn ghost'+(t==='All'?' on':'');b.textContent=t;
+  b.addEventListener('click',()=>{fcTopic=t;topicPick.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    document.getElementById('fc-filter-label').textContent=t==='All'?'All topics':t;buildQueue();nextCard()});
+  topicPick.appendChild(b)});
+function box(w){return S.boxes[w]||0}
+function buildQueue(){
+  const pool=DECK.filter(c=>fcTopic==='All'||c.t===fcTopic);
+  fcQueue=shuffle(pool).sort((a,b)=>box(a.w)-box(b.w));fcIdx=-1;
+}
+function renderBoxbar(){
+  const pool=DECK.filter(c=>fcTopic==='All'||c.t===fcTopic);
+  const counts=[0,0,0,0];pool.forEach(c=>counts[Math.min(box(c.w),3)]++);
+  document.getElementById('boxbar').innerHTML=
+    `<span>new <b>${counts[0]}</b></span><span>box 1 <b>${counts[1]}</b></span><span>box 2 <b>${counts[2]}</b></span><span style="border-color:var(--green)">mastered <b>${counts[3]}</b></span>`;
+}
+function showCard(){
+  const c=fcQueue[fcIdx];if(!c)return;
+  document.getElementById('fc-topic').textContent=c.t+' · box '+Math.min(box(c.w),3);
+  document.getElementById('fc-pos').textContent=`Card ${fcIdx+1} / ${fcQueue.length}`;
+  const f=document.getElementById('fc-face');
+  if(!fcFlipped){f.innerHTML=`<p class="word">${c.w}</p><p class="pos">${c.pos}</p>`}
+  else{f.innerHTML=`<p class="def">${c.d}</p><p class="ex">“${c.ex}”</p><p class="coll">${c.c}</p><p class="up">upgrades: <b>${c.up}</b></p>`}
+  renderBoxbar();
+}
+function nextCard(){fcFlipped=false;fcIdx=(fcIdx+1)%fcQueue.length;showCard()}
+document.getElementById('fcard').addEventListener('click',()=>{fcFlipped=!fcFlipped;showCard()});
+document.getElementById('fc-got').addEventListener('click',()=>{const c=fcQueue[fcIdx];S.boxes[c.w]=Math.min(box(c.w)+1,3);save();nextCard()});
+document.getElementById('fc-again').addEventListener('click',()=>{const c=fcQueue[fcIdx];S.boxes[c.w]=1;save();nextCard()});
+buildQueue();nextCard();
+
+/* ============ PARAPHRASE MATCH ============ */
+const PAIRS=[
+['a significant increase','a substantial rise'],
+['people who live in cities','urban dwellers'],
+['old buildings','historic structures'],
+['cheap','affordable'],
+['get worse','deteriorate'],
+['use up','deplete'],
+['deal with a problem','address an issue'],
+['because of','owing to'],
+['more and more','increasingly'],
+['stop from growing','curb'],
+['help to happen','facilitate'],
+['show clearly','demonstrate'],
+['think about','take into account'],
+['very important','crucial'],
+['not enough','insufficient'],
+['people with low incomes','low-income households'],
+['make worse','exacerbate'],
+['money given by government','public subsidies'],
+['children','minors'],
+['almost all','the vast majority of'],
+['go up and down','fluctuate'],
+['stay the same','remain stable'],
+['a very small number','a negligible proportion'],
+['jobs','employment opportunities'],
+];
+let mSel=null,mMoves=0,mMatched=0,mRound=[];
+function paraNew(){
+  mRound=shuffle(PAIRS).slice(0,8);mSel=null;mMoves=0;mMatched=0;
+  const tiles=shuffle(mRound.flatMap((p,i)=>[{txt:p[0],pair:i},{txt:p[1],pair:i}]));
+  const grid=document.getElementById('match-grid');grid.innerHTML='';
+  tiles.forEach(t=>{const d=document.createElement('div');d.className='mtile';d.textContent=t.txt;d.dataset.pair=t.pair;
+    d.addEventListener('click',()=>{
+      if(d.classList.contains('sel')){d.classList.remove('sel');mSel=null;return}
+      if(!mSel){mSel=d;d.classList.add('sel');return}
+      mMoves++;
+      if(mSel.dataset.pair===d.dataset.pair){mSel.classList.remove('sel');mSel.classList.add('matched');d.classList.add('matched');mSel=null;mMatched++;
+        if(mMatched===8){S.paraBest=Math.min(S.paraBest||99,mMoves);save();toast(`✓ Round complete in ${mMoves} moves${mMoves<=10?' — excellent':''}`);}}
+      else{const a=mSel;a.classList.remove('sel');a.classList.add('shake');d.classList.add('shake');
+        setTimeout(()=>{a.classList.remove('shake');d.classList.remove('shake')},320);mSel=null}
+      updParaStats();
+    });grid.appendChild(d)});
+  updParaStats();
+}
+function updParaStats(){document.getElementById('para-stats').textContent=`moves: ${mMoves} · matched: ${mMatched}/8`+(S.paraBest?` · best: ${S.paraBest}`:'')}
+document.getElementById('para-new').addEventListener('click',paraNew);
+paraNew();
+
+/* ============ GRAMMAR (36 Qs) ============ */
+const GQ=[
+// Articles
+{c:'Articles',s:'___ number of high-rise buildings in Bangkok has doubled since 2000.',o:['The','A','(no article)'],a:0,w:'"The number of X" = the quantity itself (singular verb). "A number of X" = "several" (plural verb). Here "has doubled" tells you it’s the quantity → The.'},
+{c:'Articles',s:'Air pollution is ___ serious problem in many Asian capitals.',o:['a','the','(no article)'],a:0,w:'First mention of a singular countable noun (problem) → "a". Thai has no articles, so singular countable nouns without a/the are the #1 visible error to examiners.'},
+{c:'Articles',s:'___ governments should invest more in public transport.',o:['(no article)','The','A'],a:0,w:'Generalising about a plural noun (all governments in general) takes NO article. "The governments" would point to specific, already-mentioned ones.'},
+{c:'Articles',s:'She is studying ___ architecture at ___ university in London.',o:['(no article) / a','the / the','an / (no article)'],a:0,w:'Fields of study take no article. "A university in London" = one unnamed university. "The university" only if we both know which one.'},
+{c:'Articles',s:'___ rich should pay higher taxes than ___ poor.',o:['The / the','(no article) / (no article)','A / a'],a:0,w:'"The + adjective" = the group of people ("the rich", "the elderly", "the unemployed"). Very useful in Task 2 essays.'},
+{c:'Articles',s:'It was ___ most interesting lecture I attended last term.',o:['the','a','(no article)'],a:0,w:'Superlatives always take "the": the most interesting, the largest, the least effective.'},
+// Subject–verb agreement
+{c:'Agreement',s:'Neither of the two proposals ___ realistic in the current budget.',o:['is','are','were'],a:0,w:'"Neither of + plural noun" is grammatically singular → is. Same with "each of", "either of", "none of" (in formal writing).'},
+{c:'Agreement',s:'The majority of residents ___ the new zoning plan.',o:['support','supports','is supporting'],a:0,w:'"The majority of + plural noun" takes a plural verb (we mean the residents themselves). Compare: "The majority is slim" (the majority as a single quantity).'},
+{c:'Agreement',s:'A wide range of factors ___ housing prices in the capital.',o:['influences','influence','are influencing'],a:0,w:'The head noun is "a range" (singular) → influences. Don’t let the nearest noun ("factors") hijack the verb — examiners spot this instantly.'},
+{c:'Agreement',s:'Everyone who lives in these districts ___ affected by the flooding.',o:['is','are','have been'],a:0,w:'"Everyone / everybody / each person" is singular → is. The plural idea is in the meaning, not the grammar.'},
+{c:'Agreement',s:'The government, together with several developers, ___ announced a new scheme.',o:['has','have','are'],a:0,w:'"Together with / along with / as well as" does NOT make the subject plural. The subject is still "the government" → has.'},
+{c:'Agreement',s:'There ___ a number of reasons why this policy failed.',o:['are','is','was'],a:0,w:'"A number of reasons" = several reasons (plural) → there are. (Contrast: "The number of reasons is small.")'},
+// Tense & passive
+{c:'Tense',s:'House prices ___ steadily since the metro line opened.',o:['have risen','rose','are rising'],a:0,w:'"Since + past event" with a trend continuing to now → present perfect. "Rose" would cut the trend off in the past. Task 1 with "since 2010" data needs this.'},
+{c:'Tense',s:'Between 1990 and 2010, car ownership ___ threefold.',o:['increased','has increased','increases'],a:0,w:'A finished period ("between 1990 and 2010") → past simple. Present perfect with a closed time period is a classic band-6 error.'},
+{c:'Tense',s:'A new terminal ___ at the airport at the moment.',o:['is being constructed','is constructing','has constructed'],a:0,w:'The terminal doesn’t construct anything — it receives the action → present continuous passive: is being constructed.'},
+{c:'Tense',s:'By 2050, the number of AC units worldwide ___ tripled.',o:['will have','will','would have'],a:0,w:'Completed by a future date → future perfect: will have tripled. Perfect for Task 1 projections.'},
+{c:'Tense',s:'If the city ___ the tram network in the 1960s, congestion would be lower today.',o:['had not removed','did not remove','would not remove'],a:0,w:'Mixed conditional: past cause (had not removed) → present result (would be). Shows band-7+ grammatical range when used accurately.'},
+{c:'Tense',s:'The report recommends that the ministry ___ stricter energy codes.',o:['adopt','adopts','will adopt'],a:0,w:'Subjunctive after recommend/suggest/insist: "recommends that X adopt" (base form, no -s). "Suggests that the government adopts" is widely heard, but the subjunctive is safest formal usage.'},
+// Prepositions & collocation
+{c:'Prepositions',s:'The mayor is responsible ___ approving all major developments.',o:['for','of','to'],a:0,w:'responsible FOR doing something; responsible TO a person/body ("responsible to parliament").'},
+{c:'Prepositions',s:'The new policy will have a significant impact ___ low-income households.',o:['on','to','for'],a:0,w:'impact ON, effect ON, influence ON. "Impact to" is a common Thai-English transfer error.'},
+{c:'Prepositions',s:'Success in the test depends largely ___ consistent daily practice.',o:['on','of','with'],a:0,w:'depend ON. Also: rely ON, insist ON, concentrate ON.'},
+{c:'Prepositions',s:'Rising rents are closely associated ___ the arrival of the new metro line.',o:['with','to','by'],a:0,w:'associated WITH. Also: linked TO, connected TO/WITH, correlated WITH.'},
+{c:'Prepositions',s:'Many rural students still lack access ___ reliable internet.',o:['to','of','for'],a:0,w:'access TO something (noun). As a verb, no preposition: "students cannot access the internet" — never "access to the internet" after the verb.'},
+{c:'Prepositions',s:'In the essay, I will discuss ___ both perspectives before giving my view.',o:['(no preposition)','about','on'],a:0,w:'"Discuss" is transitive: discuss the issue. "Discuss about" is one of the most common—and most visible—errors. Same trap: "emphasise on" ✗, "mention about" ✗.'},
+// Complex sentences
+{c:'Complex',s:'___ heavy investment in flood defences, parts of the city still flood annually.',o:['Despite','Although','However'],a:0,w:'Despite + noun phrase. Although + clause (subject+verb). However + full stop/semicolon before it. Mixing these three costs cohesion AND grammar marks.'},
+{c:'Complex',s:'The hospital, ___ was completed in 2014, uses no air conditioning in its wards.',o:['which','that','what'],a:0,w:'Non-defining relative clause (extra information, between commas) → which, never that. "That" is for defining clauses without commas.'},
+{c:'Complex',s:'___ in the 1960s, the tower now requires a complete energy retrofit.',o:['Built','Building','Having built'],a:0,w:'Past participle for passive meaning: "(Because it was) built in the 1960s…". "Having built" would mean the tower built something. Dangling participles are a band-6 ceiling.'},
+{c:'Complex',s:'The higher the density, ___ the public transport provision needs to be.',o:['the better','better','the best'],a:0,w:'Parallel comparative: "the + comparative, the + comparative". A compact structure that reads as effortless band-7 range.'},
+{c:'Complex',s:'Not only ___ money, but it also reduces emissions.',o:['does passive design save','passive design saves','passive design does save'],a:0,w:'Negative adverbial openers (Not only, Rarely, Under no circumstances) force inversion: "Not only DOES passive design save…". Without inversion it’s a grammar error, not a style choice.'},
+{c:'Complex',s:'It is essential that every new building ___ with the fire code.',o:['comply','complies','will comply'],a:0,w:'"It is essential/vital/crucial that X + base verb" (subjunctive). "Complies" is acceptable in informal British usage, but the base form is the safe formal choice.'},
+// Hedging & academic style
+{c:'Hedging',s:'Overcrowding ___ to higher stress levels among commuters.',o:['may well lead','is leading surely','leads certainly'],a:0,w:'"May well + verb" = strong but hedged claim — exactly the register Task 2 wants. Adverb placement in the other options is also unnatural.'},
+{c:'Hedging',s:'___ that remote work will permanently reduce office demand.',o:['It could be argued','It can argue','It is arguing'],a:0,w:'"It could/might be argued that…" — impersonal passive hedge. The subject "it" is a dummy; the argument is what’s argued.'},
+{c:'Hedging',s:'The data ___ that cooling demand will triple by mid-century.',o:['suggest','suggests strongly certain','is suggesting'],a:0,w:'"The data suggest" (formal, data as plural) — "the data suggests" is also accepted now. But suggest/indicate/imply are the hedge verbs; "prove" overclaims and costs TR points.'},
+{c:'Hedging',s:'This is, ___ , a question of political will rather than technology.',o:['to a large extent','at a large extent','in large extent'],a:0,w:'Fixed phrase: "to a large extent / to some extent". Prepositions in fixed academic phrases must be exact — approximation reads as band 6.'},
+{c:'Hedging',s:'___ the evidence, the policy appears to have failed.',o:['Judging by','According with','As looking',],a:0,w:'"Judging by / according to + evidence". "According with" doesn’t exist; "according to me" is also wrong — use "in my view".'},
+{c:'Hedging',s:'The scheme was, ___ , a costly failure.',o:['on balance','in balance','by the balance'],a:0,w:'"On balance" = weighing everything up — a perfect Part 3 and conclusion phrase. Fixed preposition again.'},
+];
+S.gcat=S.gcat||{};
+let gSet=[];
+function gqNew(){
+  gSet=shuffle(GQ).slice(0,12);
+  const list=document.getElementById('gq-list');list.innerHTML='';
+  gSet.forEach((q,qi)=>{
+    const div=document.createElement('div');div.className='gq';
+    div.innerHTML=`<span class="cat">${q.c}</span><p class="stem">${q.s.replace('___','＿＿＿')}</p>`;
+    const opts=document.createElement('div');opts.className='opts';
+    shuffle(q.o.map((t,i)=>({t,i}))).forEach(o=>{
+      const b=document.createElement('button');b.textContent=o.t;
+      b.addEventListener('click',()=>{
+        if(div.classList.contains('answered'))return;
+        div.classList.add('answered');
+        const cat=S.gcat[q.c]=S.gcat[q.c]||{r:0,n:0};cat.n++;
+        if(o.i===q.a){b.classList.add('right');cat.r++}
+        else{b.classList.add('picked-wrong');
+          opts.querySelectorAll('button').forEach(x=>{if(x.textContent===q.o[q.a])x.classList.add('right')})}
+        save();renderCatbar();
+      });
+      opts.appendChild(b);
+    });
+    div.appendChild(opts);
+    const why=document.createElement('div');why.className='why';why.textContent=q.w;div.appendChild(why);
+    list.appendChild(div);
+  });
+  window.scrollTo({top:0});
+}
+function renderCatbar(){
+  const bar=document.getElementById('catbar');
+  const cats=['Articles','Agreement','Tense','Prepositions','Complex','Hedging'];
+  bar.innerHTML=cats.map(c=>{
+    const s=S.gcat[c];if(!s||!s.n)return `<span>${c} <b>—</b></span>`;
+    const pct=Math.round(100*s.r/s.n);
+    return `<span>${c} <b class="${pct>=75?'good':'bad'}">${pct}%</b> (${s.r}/${s.n})</span>`;
+  }).join('');
+}
+document.getElementById('gq-new').addEventListener('click',gqNew);
+document.getElementById('gq-resetstats').addEventListener('click',()=>{S.gcat={};save();renderCatbar();toast('Category stats reset')});
+renderCatbar();gqNew();
+
+/* ============ TASK 1 GYM ============ */
+const T1=[
+{title:'Line graph · car ownership',data:'Cars per 1,000 people, 1990–2020: Country A rises 200→580 (steady). Country B flat around 480. Country C rises 150→510, overtaking B in 2018.',
+ model:'Overall, car ownership rose markedly in Countries A and C while remaining broadly unchanged in Country B, with C overtaking B by the end of the period.',
+ note:'Groups the two risers together, names the exception (B), and captures the crossover — three trends in one sentence, zero figures.'},
+{title:'Bar chart · energy mix',data:'Electricity by source, 2000 vs 2020: coal falls 55%→30%; gas steady ~25%; solar+wind rise 2%→28%; nuclear falls slightly 18%→14%.',
+ model:'Overall, the country’s electricity mix shifted decisively away from coal towards renewables, which grew from a negligible share to rival coal by 2020, while gas and nuclear changed comparatively little.',
+ note:'"Shifted away from X towards Y" is the single best verb pattern for before/after comparisons. Minor players are dismissed in one clause.'},
+{title:'Pie charts · household spending',data:'Household budget 2000 vs 2020: housing 25%→38%; food 30%→22%; transport 15%→17%; leisure 10%→12%; other 20%→11%.',
+ model:'Overall, housing came to dominate household budgets over the period, largely at the expense of food and miscellaneous spending, whereas transport and leisure shares were relatively stable.',
+ note:'"At the expense of" shows you understand shares must sum to 100% — pie charts are about redistribution, not growth.'},
+{title:'Table · student enrolment',data:'University enrolment by field (2010→2020, thousands): Engineering 120→180; Business 200→190; Health 80→150; Arts 90→70; IT 60→160.',
+ model:'Overall, enrolment grew strongly in technical and health-related fields — most dramatically in IT — while business held steady and the arts were the only field to decline.',
+ note:'Tables tempt you to list every row. The band-7 move is grouping: risers / stable / faller, with one superlative ("most dramatically").'},
+{title:'Process · glass recycling',data:'Stages: collection → sorting by colour → crushing into cullet → melting in furnace → moulding into new bottles → distribution to retailers.',
+ model:'Overall, the recycling of glass is a six-stage linear process in which used bottles are collected and progressively transformed into raw material, before being remanufactured and returned to shops.',
+ note:'Process overviews state: (1) number of stages, (2) linear or cyclical, (3) start and end point. No stage-by-stage detail — that’s the body.'},
+{title:'Maps · town before/after',data:'1990 vs present: farmland north of river → housing estate; town-centre market → shopping mall + car park; new bridge added; riverside factories → park.',
+ model:'Overall, the town expanded northwards and was transformed from a semi-rural, industrial settlement into a largely residential and commercial one, with its riverside converted to leisure use.',
+ note:'Map overviews describe the character of change (rural→urban, industrial→leisure) and direction of growth — not a feature-by-feature list.'},
+];
+S.t1done=S.t1done||{};
+(function(){
+  const list=document.getElementById('t1-list');
+  T1.forEach((t,i)=>{
+    const d=document.createElement('div');d.className='reveal-item';
+    d.innerHTML=`<p class="kicker">${i+1} / 6 · ${t.title}</p><div class="src">${t.data}</div>
+      <textarea class="small" style="min-height:70px" placeholder="Write your overview — trends only, no figures…" id="t1-in-${i}">${S['t1a'+i]||''}</textarea>
+      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" data-rev="${i}">Reveal model</button>
+      </div>
+      <div class="model" id="t1-model-${i}"><span class="tag">Band-7 model overview</span>${t.model}<br><br><span class="tag">Why it works</span>${t.note}</div>`;
+    list.appendChild(d);
+    d.querySelector('textarea').addEventListener('input',e=>{S['t1a'+i]=e.target.value;save()});
+    d.querySelector('[data-rev]').addEventListener('click',()=>{
+      document.getElementById('t1-model-'+i).classList.add('show');
+      S.t1done[i]=true;save();
+    });
+  });
+})();
+
+/* ============ DICTATION ============ */
+const DICT=[
+[ // level 1 — short, numbers & spellings
+'The seminar has been moved to room two hundred and fourteen.',
+'Please hand in your assignment by Thursday the twelfth of March.',
+'The library opens at half past eight on weekdays.',
+'You will need a deposit of forty-five pounds for the key.',
+'The museum is closed on Mondays throughout the winter.',
+],
+[ // level 2 — medium, connected speech
+'Students who register early will receive a discount on their accommodation fees.',
+'The city council has approved plans for a new pedestrian bridge across the river.',
+'Recycling rates have improved considerably since the scheme was introduced last year.',
+'The lecture on sustainable design has been postponed until further notice.',
+'Applicants must provide evidence of their English proficiency before enrolment.',
+],
+[ // level 3 — lecture style (Section 4)
+'Traditional builders developed sophisticated cooling techniques long before electricity existed.',
+'The growth of air conditioning has been driven largely by rising incomes in hot and populous countries.',
+'Thick masonry walls absorb heat during the day and release it gradually throughout the night.',
+'Computer simulation allows designers to model airflow and solar radiation before construction begins.',
+'Whether these methods become standard practice again is a question of incentives rather than knowledge.',
+],
+];
+let dictLvl=0,dictIdx=0,dictScores=S.dictScores||[];
+document.querySelectorAll('#dict-lvl button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#dict-lvl button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  dictLvl=+b.dataset.lvl;dictIdx=0;resetDict();
+}));
+function speak(rate){
+  const u=new SpeechSynthesisUtterance(DICT[dictLvl][dictIdx]);
+  u.rate=rate;u.lang='en-GB';
+  const vs=speechSynthesis.getVoices();
+  const v=vs.find(v=>v.lang==='en-GB')||vs.find(v=>v.lang.startsWith('en'));
+  if(v)u.voice=v;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+document.getElementById('dict-play').addEventListener('click',()=>speak(0.95));
+document.getElementById('dict-slow').addEventListener('click',()=>speak(0.6));
+document.getElementById('dict-next').addEventListener('click',()=>{dictIdx=(dictIdx+1)%DICT[dictLvl].length;resetDict();toast(`Sentence ${dictIdx+1} of ${DICT[dictLvl].length}`)});
+function resetDict(){document.getElementById('dict-input').value='';document.getElementById('dict-diff').classList.remove('show')}
+function tokens(s){return s.toLowerCase().replace(/[.,!?;:'"—-]/g,'').split(/\s+/).filter(Boolean)}
+function lcsDiff(a,b){ // a=target, b=typed
+  const m=a.length,n=b.length,dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--)dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+  const out=[];let i=0,j=0;
+  while(i<m&&j<n){
+    if(a[i]===b[j]){out.push({t:a[i],k:'ok'});i++;j++}
+    else if(dp[i+1][j]>=dp[i][j+1]){out.push({t:a[i],k:'miss'});i++}
+    else{out.push({t:b[j],k:'extra'});j++}
+  }
+  while(i<m)out.push({t:a[i++],k:'miss'});
+  while(j<n)out.push({t:b[j++],k:'extra'});
+  return out;
+}
+document.getElementById('dict-mark').addEventListener('click',()=>{
+  const target=tokens(DICT[dictLvl][dictIdx]),typed=tokens(document.getElementById('dict-input').value);
+  if(!typed.length){toast('Type what you heard first');return}
+  const diff=lcsDiff(target,typed);
+  const okCount=diff.filter(d=>d.k==='ok').length;
+  const acc=Math.round(100*okCount/target.length);
+  dictScores.push(acc);if(dictScores.length>30)dictScores.shift();
+  S.dictScores=dictScores;save();
+  const el=document.getElementById('dict-diff');
+  el.innerHTML=`<b style="font-family:var(--mono);font-size:.8rem">${acc}% accuracy (${okCount}/${target.length} words)</b><br>`+
+    diff.map(d=>`<span class="${d.k}">${d.t}</span>`).join(' ')+
+    `<br><span style="font-family:var(--mono);font-size:.62rem;color:var(--ink-soft)">green = correct · red strikethrough = missed/wrong · orange = extra word you added</span>`;
+  el.classList.add('show');
+});
+if('speechSynthesis' in window){speechSynthesis.getVoices()} else {document.getElementById('dict-note').textContent='⚠ This browser does not support speech synthesis — dictation needs Chrome or Edge.'}
+
+/* ============ SPEAKING GENERATOR ============ */
+const SPEAKQ=[
+['Part 1','Do you prefer working in the morning or the evening? Why?'],
+['Part 1','What kind of buildings are common in your hometown?'],
+['Part 1','How do you usually travel around your city?'],
+['Part 1','Do you enjoy hot weather? Why or why not?'],
+['Part 1','What did you enjoy drawing or making as a child?'],
+['Part 1','Is there a park or green space near your home? Do you use it?'],
+['Part 1','Do you prefer to shop in markets or shopping malls?'],
+['Part 1','How has your daily routine changed in the last few years?'],
+['Part 3','Why do people in some countries prefer to live in city centres while others prefer suburbs?'],
+['Part 3','Should old buildings always be preserved, even when preservation is expensive?'],
+['Part 3','How might working from home change the design of cities?'],
+['Part 3','Do you think air conditioning has changed the way people live in hot countries?'],
+['Part 3','Is it the government’s job to make housing affordable, or should the market decide?'],
+['Part 3','Why are some cities more walkable than others?'],
+['Part 3','Will technology make traditional skills disappear, or help preserve them?'],
+['Part 3','Should there be limits on how tall buildings can be in historic areas?'],
+['Part 3','How does the design of a neighbourhood affect people’s health?'],
+['Part 3','Do international styles of architecture make cities less interesting?'],
+['Part 3','What can rich countries learn from developing countries about building design?'],
+['Part 3','Is it more important for a home to be beautiful or practical?'],
+];
+document.getElementById('qg-draw').addEventListener('click',()=>{
+  const q=SPEAKQ[Math.floor(Math.random()*SPEAKQ.length)];
+  document.getElementById('qg-src').textContent=q[0];
+  document.getElementById('qg-q').textContent=q[1];
+  S.speakDrawn=(S.speakDrawn||0)+1;save();
+});
+let spTimer=null;
+function startSpeakTimer(secs){
+  const bar=document.getElementById('tb-speak'),clock=bar.querySelector('.clock');
+  clearInterval(spTimer);let sec=secs;
+  const tick=()=>{clock.textContent='00:'+String(sec).padStart(2,'0');
+    bar.classList.toggle('crit',sec<=10);
+    if(sec<=0){clearInterval(spTimer);toast('⏱ Time — wrap up your answer')}sec--};
+  tick();spTimer=setInterval(tick,1000);
+}
+document.getElementById('speak-timer').addEventListener('click',()=>startSpeakTimer(45));
+document.getElementById('speak-timer60').addEventListener('click',()=>startSpeakTimer(60));
+
+/* ============ HOME STATS ============ */
+function refreshStats(){
+  const mastered=DECK.filter(c=>box(c.w)>=3).length;
+  document.getElementById('st-vocab').textContent=`${mastered} / ${DECK.length} mastered`;
+  document.getElementById('st-para').textContent=S.paraBest?`best round: ${S.paraBest} moves`:'best: — moves';
+  const g=Object.values(S.gcat||{});
+  if(g.length){const r=g.reduce((s,c)=>s+c.r,0),n=g.reduce((s,c)=>s+c.n,0);
+    document.getElementById('st-grammar').textContent=`${Math.round(100*r/n)}% over ${n} answered`}
+  document.getElementById('st-task1').textContent=`${Object.keys(S.t1done||{}).length} / 6 done`;
+  if((S.dictScores||[]).length){const a=Math.round(S.dictScores.reduce((x,y)=>x+y,0)/S.dictScores.length);
+    document.getElementById('st-dict').textContent=`avg accuracy: ${a}% (last ${S.dictScores.length})`}
+  document.getElementById('st-speak').textContent=`${S.speakDrawn||0} questions drawn`;
+  document.getElementById('streak-note').textContent=S.streak>1?`🔥 ${S.streak}-day streak — keep it alive`:`Come back tomorrow to start a streak.`;
+}
+refreshStats();
+</script>
+</body>
+</html>
