@@ -12,6 +12,17 @@ Self-contained IELTS Academic practice mock (single `index.html`, no build, no b
 - **Speaking** — Parts 1–3 typed simulation with 1-min prep and 2-min talk timers.
 - **Results** — compiles all answers into one copy-paste **assessment package** with strict IELTS-examiner marking instructions, ready to paste into a fresh Claude chat for banded feedback (4 criteria per skill, cross-task error patterns, next-session drills).
 
+## Practice Gym (`practice.html`)
+
+Daily skill training between mocks — six stations with progress tracked in `localStorage`:
+
+- **Vocabulary** — 48 band-7 words across 6 IELTS topics; Leitner-box flashcards with collocations and the band-6 word each upgrades.
+- **Paraphrase match** — tile-matching game for academic paraphrase recognition (the skill behind TFNG questions).
+- **Grammar drills** — 36 questions on Thai-speaker traps (articles, agreement, tense, prepositions, complex sentences, hedging) with a per-category accuracy scoreboard.
+- **Task 1 Gym** — write the overview sentence for 6 chart types, compare against band-7 models.
+- **Listening dictation** — browser TTS (British voice) reads academic sentences; word-level diff marking, 3 difficulty levels.
+- **Speaking** — random Part 1/Part 3 question generator with response timers, plus a band-7 functional phrase bank.
+
 All answers autosave to `localStorage` — nothing leaves the browser.
 
 ## Adding more mocks
