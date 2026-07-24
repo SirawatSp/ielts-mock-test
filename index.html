@@ -218,6 +218,7 @@ textarea.small{min-height:90px}
 .checklist .state{font-weight:600}
 .checklist .state.done{color:var(--green)}
 .checklist .state.todo{color:var(--signal)}
+.checklist li.hist-empty{color:var(--ink-soft);font-style:italic;background:transparent;border-style:dashed}
 
 /* overview cards */
 .ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:26px}
@@ -597,6 +598,17 @@ footer{
       <li><span>4 · Speaking (9 answers)</span><span class="state todo" id="ck-sp">0 / 9 answered</span></li>
     </ul>
 
+    <h3>Attempt history</h3>
+    <p style="max-width:70ch;font-size:.95rem">
+      Your current answers already autosave as you type. Click below to snapshot <i>this</i> attempt into a
+      running history, so redoing the test later doesn't erase how you did today.
+    </p>
+    <div style="display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;align-items:center">
+      <button class="btn" id="save-attempt">💾 Save this attempt to history</button>
+      <button class="btn ghost" id="clear-history">Clear history</button>
+    </div>
+    <div id="history-list"></div>
+
     <h3>Get your band scores</h3>
     <p style="max-width:70ch;font-size:.95rem">
       Writing and Speaking need a human-quality assessor. Click below to copy a single self-contained
@@ -610,6 +622,18 @@ footer{
       <button class="btn ghost" id="reset-all">⟲ Reset entire test</button>
     </div>
     <div class="pkg" id="pkg-preview" style="display:none"></div>
+
+    <h3>Backup &amp; transfer</h3>
+    <p style="max-width:70ch;font-size:.95rem">
+      Everything above already persists in this browser automatically — closing the tab or restarting your
+      computer won't lose it. It just won't follow you to a different browser or device. Export a backup file
+      to keep one safe, move to another device, or restore after clearing your browser data.
+    </p>
+    <div style="display:flex;gap:10px;margin:14px 0;flex-wrap:wrap">
+      <button class="btn ghost" id="export-progress">📤 Export progress (.json)</button>
+      <button class="btn ghost" id="import-progress">📥 Import progress</button>
+      <input type="file" id="import-file" accept="application/json" style="display:none">
+    </div>
   </div>
 </section>
 
@@ -811,10 +835,66 @@ document.getElementById('preview-pkg').addEventListener('click',()=>{
   p.textContent=buildPackage();
 });
 document.getElementById('reset-all').addEventListener('click',()=>{
-  if(confirm('Erase all answers and scores for this mock? This cannot be undone.')){
+  if(confirm('Erase all answers and scores for this mock? Saved history is kept. This cannot be undone.')){
     localStorage.removeItem(LS_KEY);location.reload();
   }
 });
+
+/* ================= attempt history ================= */
+const HIST_KEY='ielts-mock-history';
+function loadHistory(){try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch(e){return[]}}
+function saveHistoryArr(h){localStorage.setItem(HIST_KEY,JSON.stringify(h))}
+function renderHistory(){
+  const hist=loadHistory(),el=document.getElementById('history-list');
+  if(!hist.length){el.innerHTML='<ul class="checklist"><li class="hist-empty"><span>No saved attempts yet — finish a session and click "Save this attempt" above.</span></li></ul>';return}
+  el.innerHTML='<ul class="checklist">'+hist.slice().reverse().map(h=>
+    `<li><span>${h.date}</span><span class="state done">Reading ${h.readingRaw!=null?h.readingRaw+'/13 (band '+h.band+')':'—'} · W1 ${h.w1}w · W2 ${h.w2}w · Speaking ${h.sp}/9</span></li>`
+  ).join('')+'</ul>';
+}
+document.getElementById('save-attempt').addEventListener('click',()=>{
+  const hist=loadHistory();
+  hist.push({
+    date:new Date().toLocaleString(),
+    readingRaw:state.readingDone?state.readingRaw:null,
+    band:state.readingDone?BAND[state.readingRaw].toFixed(1):null,
+    w1:wc(document.getElementById('essay1').value),
+    w2:wc(document.getElementById('essay2').value),
+    sp:['sp1a','sp1b','sp1c','sp1d','sp2','sp3a','sp3b','sp3c','sp3d'].filter(i=>wc(document.getElementById(i).value)>0).length
+  });
+  if(hist.length>50)hist.shift();
+  saveHistoryArr(hist);renderHistory();toast('✓ Attempt saved to history');
+});
+document.getElementById('clear-history').addEventListener('click',()=>{
+  if(confirm('Delete all saved attempt history? This cannot be undone.')){
+    localStorage.removeItem(HIST_KEY);renderHistory();
+  }
+});
+
+/* ================= export / import ================= */
+document.getElementById('export-progress').addEventListener('click',()=>{
+  const payload={exportedAt:new Date().toISOString(),answers:state,history:loadHistory()};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`ielts-mock-progress-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  toast('✓ Progress exported');
+});
+document.getElementById('import-progress').addEventListener('click',()=>document.getElementById('import-file').click());
+document.getElementById('import-file').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(data.answers)localStorage.setItem(LS_KEY,JSON.stringify(data.answers));
+      if(data.history)saveHistoryArr(data.history);
+      toast('✓ Progress imported — reloading…');
+      setTimeout(()=>location.reload(),900);
+    }catch(err){toast('Import failed — invalid file')}
+  };
+  reader.readAsText(file);e.target.value='';
+});
+renderHistory();
 </script>
 </body>
 </html>

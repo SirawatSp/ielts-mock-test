@@ -189,6 +189,11 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 .spark-row{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
 .spark-row:last-child{margin-bottom:0}
 .spark-label{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);min-width:150px}
+
+/* session history */
+.hist-list{list-style:none}
+.hist-list li{font-family:var(--mono);font-size:.72rem;padding:9px 12px;border:1px solid var(--line);margin-bottom:6px;background:var(--paper-deep);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hist-list li.hist-empty{color:var(--ink-soft);font-style:italic;border-style:dashed;background:transparent}
 </style>
 </head>
 <body>
@@ -247,6 +252,18 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
       <h3 style="margin-top:0">Your trend</h3>
       <div class="spark-row"><span class="spark-label">Dictation accuracy</span><span id="spark-dict"></span></div>
       <div class="spark-row"><span class="spark-label">Shadowing match</span><span id="spark-shadow"></span></div>
+    </div>
+
+    <h3>Session history</h3>
+    <p style="font-size:.86rem;color:var(--ink-soft);max-width:70ch">Every station above already remembers your progress automatically — vocab boxes, grammar stats, dictation and shadowing scores all persist in this browser, even after closing the tab. This log is just a visible record of your Quick Test circuits over time.</p>
+    <div id="session-history" style="margin-top:10px"></div>
+
+    <h3>Backup &amp; transfer</h3>
+    <p style="font-size:.86rem;color:var(--ink-soft);max-width:70ch">Your progress stays in this browser only — it won't follow you to a different browser or device, and clearing browser data would erase it. Export a backup file to keep one safe or move your progress elsewhere.</p>
+    <div style="display:flex;gap:10px;margin:12px 0;flex-wrap:wrap">
+      <button class="btn ghost" id="export-gym">📤 Export progress (.json)</button>
+      <button class="btn ghost" id="import-gym">📥 Import progress</button>
+      <input type="file" id="import-gym-file" accept="application/json" style="display:none">
     </div>
   </div>
 </section>
@@ -1136,7 +1153,17 @@ function qtEnd(){
   if(qtStats.dictScores.length)rows.push(`<div><b>${Math.round(qtStats.dictScores.reduce((a,b)=>a+b,0)/qtStats.dictScores.length)}%</b><span>dictation avg</span></div>`);
   if(qtStats.speakSeen)rows.push(`<div><b>${qtStats.speakSeen}</b><span>speaking prompts</span></div>`);
   document.getElementById('qt-stats').innerHTML=rows.join('');
-  S.quickSessions=(S.quickSessions||0)+1;S.quickMinutesTotal=(S.quickMinutesTotal||0)+qtMinutes;save();
+  S.quickSessions=(S.quickSessions||0)+1;S.quickMinutesTotal=(S.quickMinutesTotal||0)+qtMinutes;
+  S.sessionHistory=S.sessionHistory||[];
+  S.sessionHistory.push({
+    date:new Date().toLocaleString(),minutes:qtMinutes,items:qtItemCount,
+    vocab:qtStats.vocabSeen?`${qtStats.vocabGot}/${qtStats.vocabSeen}`:'—',
+    grammar:qtStats.grammarTotal?`${Math.round(100*qtStats.grammarRight/qtStats.grammarTotal)}%`:'—',
+    para:qtStats.paraTotal?`${Math.round(100*qtStats.paraRight/qtStats.paraTotal)}%`:'—',
+    dict:qtStats.dictScores.length?`${Math.round(qtStats.dictScores.reduce((a,b)=>a+b,0)/qtStats.dictScores.length)}%`:'—'
+  });
+  if(S.sessionHistory.length>20)S.sessionHistory.shift();
+  save();
   refreshStats();
 }
 
@@ -1226,7 +1253,41 @@ function refreshStats(){
     document.getElementById('spark-dict').innerHTML=sparkline(S.dictScores||[]);
     document.getElementById('spark-shadow').innerHTML=sparkline(S.shadowScores||[]);
   }else panel.style.display='none';
+  renderSessionHistory();
 }
+
+function renderSessionHistory(){
+  const hist=S.sessionHistory||[],el=document.getElementById('session-history');
+  if(!el)return;
+  if(!hist.length){el.innerHTML='<ul class="hist-list"><li class="hist-empty"><span>No Quick Test circuits logged yet.</span></li></ul>';return}
+  el.innerHTML='<ul class="hist-list">'+hist.slice().reverse().map(h=>
+    `<li><span>${h.date} · ${h.minutes} min · ${h.items} items</span><span>vocab ${h.vocab} · grammar ${h.grammar} · para ${h.para} · dict ${h.dict}</span></li>`
+  ).join('')+'</ul>';
+}
+
+/* ============ EXPORT / IMPORT ============ */
+document.getElementById('export-gym').addEventListener('click',()=>{
+  const payload={exportedAt:new Date().toISOString(),progress:S};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`ielts-gym-progress-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  toast('✓ Progress exported');
+});
+document.getElementById('import-gym').addEventListener('click',()=>document.getElementById('import-gym-file').click());
+document.getElementById('import-gym-file').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(data.progress){localStorage.setItem(LS,JSON.stringify(data.progress));toast('✓ Progress imported — reloading…');setTimeout(()=>location.reload(),900)}
+      else toast('Import failed — no progress data found in file');
+    }catch(err){toast('Import failed — invalid file')}
+  };
+  reader.readAsText(file);e.target.value='';
+});
+
 refreshStats();
 </script>
 </body>
