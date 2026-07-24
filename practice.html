@@ -53,6 +53,14 @@ textarea:focus,input[type=text]:focus{outline:2px solid var(--blue);outline-offs
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
+/* quick test banner */
+.qt-banner{
+  margin-top:24px;background:var(--signal);border:1px solid var(--signal);padding:20px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  box-shadow:5px 5px 0 rgba(28,42,68,.15);
+}
+.qt-banner-kicker{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.12em;color:#fbdcd2}
+
 /* home cards */
 .ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:26px}
 .ov-card{border:1px solid var(--ink);background:var(--paper);padding:20px;cursor:pointer;transition:all .15s}
@@ -145,6 +153,42 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 @keyframes blink{50%{opacity:.35}}
 .timerbar .tlabel{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
 .progress-note{font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);margin-top:10px}
+
+/* quick test player */
+.qt-setup{text-align:center;padding:20px 0}
+.qt-card{
+  border:2px solid var(--ink);background:#fffdf8;padding:26px 28px;min-height:200px;
+  box-shadow:5px 5px 0 rgba(28,42,68,.14);
+}
+.qt-card .qtag{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);display:block;margin-bottom:10px}
+.qt-card .word{font-family:var(--display);font-weight:900;font-size:2rem}
+.qt-card .pos{font-family:var(--mono);font-size:.7rem;color:var(--signal);margin-top:2px}
+.qt-card .def{font-size:1.02rem;margin-bottom:10px}
+.qt-card .ex{font-style:italic;color:var(--ink-soft);font-size:.93rem;margin-bottom:10px}
+.qt-card .coll{font-family:var(--mono);font-size:.7rem;color:var(--blue)}
+.qt-card .stem{font-size:1.02rem;margin-bottom:14px}
+.qt-card .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.qt-card .opts button{font-family:var(--serif);font-size:.92rem;padding:9px 16px;border:1px solid var(--ink);background:var(--paper);cursor:pointer}
+.qt-card .opts button:hover{background:var(--blueprint)}
+.qt-card .opts button.right{background:var(--green);color:var(--paper);border-color:var(--green)}
+.qt-card .opts button.picked-wrong{background:var(--signal);color:var(--paper);border-color:var(--signal)}
+.qt-card .why{font-size:.85rem;margin-top:10px;padding:8px 12px;background:var(--blueprint);border-left:3px solid var(--blue)}
+.qt-card .qt-next{margin-top:16px}
+.qt-card .diff{display:block;margin-top:12px}
+.qt-summary-box{text-align:center;padding:10px 0}
+.qt-summary-box .big{font-family:var(--display);font-weight:900;font-size:2.2rem;color:var(--signal)}
+.qt-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0}
+.qt-stats div{border:1px solid var(--line);background:var(--paper-deep);padding:12px;text-align:center}
+.qt-stats div b{display:block;font-family:var(--display);font-size:1.4rem}
+.qt-stats div span{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+
+/* shadowing */
+#shadow-record.listening{background:var(--signal);animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(200,69,31,.5)}70%{box-shadow:0 0 0 12px rgba(200,69,31,0)}100%{box-shadow:0 0 0 0 rgba(200,69,31,0)}}
+.progress-panel{border:1px dashed var(--ink);padding:16px 20px;background:var(--paper-deep)}
+.spark-row{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.spark-row:last-child{margin-bottom:0}
+.spark-label{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);min-width:150px}
 </style>
 </head>
 <body>
@@ -156,12 +200,14 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
   </div>
   <nav id="nav">
     <button data-sec="home" class="active">Gym Floor</button>
+    <button data-sec="quick" style="background:var(--signal);color:var(--paper);border-color:var(--signal)">⚡ Quick Test</button>
     <button data-sec="vocab">Vocab</button>
     <button data-sec="para">Paraphrase</button>
     <button data-sec="grammar">Grammar</button>
     <button data-sec="task1">Task 1 Gym</button>
     <button data-sec="dictation">Listening</button>
     <button data-sec="speaking">Speaking</button>
+    <button data-sec="shadow">Shadowing</button>
   </nav>
 </header>
 
@@ -178,6 +224,14 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
       A good daily session is <b>15–30 minutes: one vocab round, one grammar set, one dictation</b> — then
       rotate paraphrase / Task 1 / speaking across the week. Your streak and accuracy are tracked in this browser.
     </p>
+    <div class="qt-banner" id="qt-banner">
+      <div>
+        <p class="qt-banner-kicker">Only got a few minutes?</p>
+        <h3 style="margin:2px 0 0;color:var(--paper)">Run a Quick Test instead</h3>
+        <p style="font-size:.86rem;color:var(--blueprint);margin-top:4px">One mixed circuit — vocab, grammar, paraphrase, listening, speaking — sized to whatever time you actually have. No setup, no scrolling.</p>
+      </div>
+      <button class="btn" id="qt-banner-btn" style="background:var(--paper);color:var(--signal);border-color:var(--paper)">⚡ Start now</button>
+    </div>
     <div class="ov-grid">
       <div class="ov-card" data-go="vocab"><span class="num">A</span><h4>Vocabulary</h4><p>48 band-7 words in 6 IELTS topics — flashcards with collocations and the band-6 word each one upgrades.</p><span class="stat" id="st-vocab">0 / 48 mastered</span></div>
       <div class="ov-card" data-go="para"><span class="num">B</span><h4>Paraphrase</h4><p>Match academic paraphrases — the core skill behind TFNG questions and Writing lexical resource.</p><span class="stat" id="st-para">best: — moves</span></div>
@@ -185,8 +239,57 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
       <div class="ov-card" data-go="task1"><span class="num">D</span><h4>Task 1 Gym</h4><p>Write the overview sentence for 6 chart types, then compare against a band-7 model.</p><span class="stat" id="st-task1">0 / 6 done</span></div>
       <div class="ov-card" data-go="dictation"><span class="num">E</span><h4>Listening</h4><p>Dictation drills — the browser reads an academic sentence aloud (British voice), you type it, get word-level marking.</p><span class="stat" id="st-dict">avg accuracy: —</span></div>
       <div class="ov-card" data-go="speaking"><span class="num">F</span><h4>Speaking</h4><p>Band-7 functional phrases + a random question generator with a 45-second response timer.</p><span class="stat" id="st-speak">0 questions drawn</span></div>
+      <div class="ov-card" data-go="shadow"><span class="num">G</span><h4>Shadowing</h4><p>Listen to a native voice, repeat immediately, and get a word-by-word match score.</p><span class="stat" id="st-shadow">avg match: —</span></div>
     </div>
     <p class="progress-note" id="streak-note"></p>
+    <p class="progress-note" id="quick-note" style="margin-top:4px"></p>
+    <div class="progress-panel" id="progress-panel" style="margin-top:26px;display:none">
+      <h3 style="margin-top:0">Your trend</h3>
+      <div class="spark-row"><span class="spark-label">Dictation accuracy</span><span id="spark-dict"></span></div>
+      <div class="spark-row"><span class="spark-label">Shadowing match</span><span id="spark-shadow"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== QUICK TEST ======== -->
+<section id="quick">
+  <div class="sheet">
+    <span class="stamp">Quick Circuit</span>
+    <p class="kicker">For short free time — the BTS platform, a coffee break, between meetings</p>
+    <h2>Quick Test</h2>
+    <p class="rubric">One continuous mixed circuit pulled from every station — vocab, grammar, paraphrase, listening, speaking. Pick how long you actually have, press start, and keep answering until the timer ends. No station-hopping, no scrolling.</p>
+
+    <div class="qt-setup" id="qt-setup">
+      <div class="lvlpick" id="qt-len" style="justify-content:center">
+        <button class="btn ghost on" data-len="5">5 min</button>
+        <button class="btn ghost" data-len="10">10 min</button>
+        <button class="btn ghost" data-len="15">15 min</button>
+      </div>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin-top:14px" id="qt-len-desc">~9 quick items: vocab, grammar, paraphrase, speaking.</p>
+      <button class="btn signal" id="qt-start" style="margin-top:10px;padding:14px 32px">⚡ Start quick test</button>
+    </div>
+
+    <div id="qt-player" style="display:none">
+      <div class="timerbar" id="tb-qt">
+        <span class="clock">05:00</span>
+        <span class="tlabel">Quick test running</span>
+        <button class="btn ghost" id="qt-stop">End now</button>
+      </div>
+      <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:10px;text-transform:uppercase" id="qt-progress">Item 1</div>
+      <div class="qt-card" id="qt-card"></div>
+    </div>
+
+    <div id="qt-summary" style="display:none">
+      <div class="qt-summary-box">
+        <p class="kicker">Circuit complete</p>
+        <p class="big" id="qt-sum-headline">Nice work</p>
+      </div>
+      <div class="qt-stats" id="qt-stats"></div>
+      <div style="text-align:center">
+        <button class="btn" id="qt-again">⚡ Run another circuit</button>
+        <button class="btn ghost" id="qt-home">Back to Gym Floor</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -335,6 +438,31 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
   </div>
 </section>
 
+<!-- ======== SHADOWING ======== -->
+<section id="shadow">
+  <div class="sheet">
+    <span class="stamp">Station G</span>
+    <p class="kicker">Fluency & rhythm · listen, then echo almost instantly</p>
+    <h2>Shadowing</h2>
+    <p class="rubric">Shadowing means repeating a native speaker as they speak, or a beat behind — matching their rhythm and stress rather than translating in your head first. Press play, then record yourself saying the same sentence; your browser transcribes what it heard and shows how closely it matched, word for word. This builds the fluent, natural rhythm examiners register before they even judge your grammar.</p>
+    <div class="lvlpick" id="shadow-lvl">
+      <button class="btn ghost on" data-lvl="0">Short</button>
+      <button class="btn ghost" data-lvl="1">Medium</button>
+      <button class="btn ghost" data-lvl="2">Long / academic</button>
+    </div>
+    <div class="dict-controls">
+      <button class="btn" id="shadow-play">▶ Play native audio</button>
+      <button class="btn ghost" id="shadow-next">Next sentence →</button>
+    </div>
+    <div class="cuecard" style="background:var(--paper-deep);text-align:center;font-size:1.05rem" id="shadow-target"></div>
+    <div style="text-align:center;margin:18px 0">
+      <button class="btn signal" id="shadow-record">🎙 Record & shadow</button>
+    </div>
+    <div class="diff" id="shadow-diff"></div>
+    <p class="progress-note" id="shadow-note">Needs microphone access and a browser with speech recognition (Chrome or Edge, desktop or Android). Nothing is uploaded — recognition happens in your browser only.</p>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -418,6 +546,26 @@ const DECK=[
 {w:'advocate',pos:'verb',t:'Academic',d:'to publicly support an idea or policy',ex:'Many planners advocate a "passive first" approach to cooling.',c:'advocate (for) X · a strong advocate of',up:'support'},
 {w:'contend',pos:'verb',t:'Academic',d:'to argue or claim in debate',ex:'Critics contend that iconic towers serve investors, not residents.',c:'contend that…',up:'say / argue'},
 {w:'give rise to',pos:'verb',t:'Academic',d:'to cause or lead to',ex:'Rapid urbanisation gave rise to informal settlements on the periphery.',c:'give rise to problems/concerns',up:'cause'},
+// Extra vocab — added for a wider daily rotation
+{w:'gentrification',pos:'noun',t:'Urban',d:'redevelopment of a poorer area that attracts wealthier residents and displaces the original ones',ex:'Gentrification priced long-term residents out of the neighbourhood they grew up in.',c:'gentrification of an area · drive gentrification',up:'area getting more expensive'},
+{w:'infrastructure',pos:'noun',t:'Urban',d:'the basic physical systems of a place — roads, power, water',ex:'Ageing infrastructure struggles to cope with the city\'s rapid growth.',c:'infrastructure investment/development',up:'roads and systems'},
+{w:'zoning',pos:'noun',t:'Urban',d:'dividing land into areas designated for different uses',ex:'Strict zoning laws separate industrial and residential districts.',c:'zoning regulations/laws',up:'area-use rules'},
+{w:'carbon footprint',pos:'noun',t:'Environment',d:'the amount of carbon dioxide produced by a person or activity',ex:'Building materials account for a large share of a structure\'s carbon footprint.',c:'reduce/calculate a carbon footprint',up:'pollution caused by'},
+{w:'biodiversity',pos:'noun',t:'Environment',d:'the variety of plant and animal life in an area',ex:'Urban parks can support surprising levels of biodiversity.',c:'biodiversity loss/hotspot',up:'variety of wildlife'},
+{w:'renewable',pos:'adj',t:'Environment',d:'(of energy) naturally replenished, not depleted by use',ex:'Renewable sources now supply almost a third of the region\'s electricity.',c:'renewable energy/resources',up:'green energy'},
+{w:'pedagogy',pos:'noun',t:'Education',d:'the method and practice of teaching',ex:'Modern pedagogy favours discussion over passive listening.',c:'teaching pedagogy · a shift in pedagogy',up:'teaching method'},
+{w:'extracurricular',pos:'adj',t:'Education',d:'outside the normal school curriculum',ex:'Extracurricular activities build skills that exams rarely measure.',c:'extracurricular activities/clubs',up:'after-school activities'},
+{w:'aptitude',pos:'noun',t:'Education',d:'a natural ability or talent for something',ex:'Standardised tests measure aptitude imperfectly at best.',c:'aptitude for X · an aptitude test',up:'natural skill'},
+{w:'algorithm',pos:'noun',t:'Technology',d:'a set of rules a computer follows to solve a problem',ex:'An algorithm now decides which applicants get shortlisted.',c:'an algorithm determines/decides',up:'computer program logic'},
+{w:'redundant',pos:'adj',t:'Technology',d:'no longer needed, especially because replaced by technology',ex:'Automation has made entire categories of clerical work redundant.',c:'render/become redundant',up:'no longer needed'},
+{w:'scalable',pos:'adj',t:'Technology',d:'able to be expanded easily to a larger size',ex:'The pilot scheme proved scalable across the whole transport network.',c:'a scalable solution/model',up:'able to grow easily'},
+{w:'stakeholder',pos:'noun',t:'Society',d:'a person or group with an interest in a decision',ex:'Planners consulted local stakeholders before approving the redevelopment.',c:'key/local stakeholders',up:'person affected/involved'},
+{w:'welfare',pos:'noun',t:'Society',d:'the general health, happiness and safety of a person or group',ex:'Public welfare should outweigh short-term commercial interest.',c:'social/public welfare',up:'wellbeing'},
+{w:'entrenched',pos:'adj',t:'Society',d:'firmly established and hard to change',ex:'Entrenched attitudes towards car ownership are hard to shift through policy alone.',c:'entrenched attitudes/inequality',up:'fixed and hard to change'},
+{w:'underscore',pos:'verb',t:'Academic',d:'to emphasise the importance of something',ex:'The flooding underscored the need for better drainage design.',c:'underscore the importance/need for',up:'emphasise'},
+{w:'conducive',pos:'adj',t:'Academic',d:'making a certain outcome likely; favourable',ex:'Narrow streets are more conducive to walking than six-lane roads.',c:'conducive to X',up:'good for / helps'},
+{w:'a caveat',pos:'noun',t:'Academic',d:'a warning or qualification attached to a statement',ex:'This is effective, with the caveat that it requires strict enforcement.',c:'with the caveat that',up:'a warning/exception'},
+{w:'counterintuitive',pos:'adj',t:'Academic',d:'contrary to what you would instinctively expect',ex:'It seems counterintuitive, but narrower roads can actually reduce accidents.',c:'counterintuitively, … · a counterintuitive finding',up:'surprising / unexpected'},
 ];
 S.boxes=S.boxes||{};
 let fcQueue=[],fcIdx=-1,fcFlipped=false,fcTopic='All';
@@ -479,6 +627,14 @@ const PAIRS=[
 ['stay the same','remain stable'],
 ['a very small number','a negligible proportion'],
 ['jobs','employment opportunities'],
+['scarce','in short supply'],
+['long-lasting','durable'],
+['a drawback','a downside'],
+['widely accepted','commonly acknowledged'],
+['make something legal','legalise'],
+['a rough estimate','an approximate figure'],
+['closely linked','strongly correlated'],
+['gradually','over time'],
 ];
 let mSel=null,mMoves=0,mMatched=0,mRound=[];
 function paraNew(){
@@ -546,6 +702,19 @@ const GQ=[
 {c:'Hedging',s:'This is, ___ , a question of political will rather than technology.',o:['to a large extent','at a large extent','in large extent'],a:0,w:'Fixed phrase: "to a large extent / to some extent". Prepositions in fixed academic phrases must be exact — approximation reads as band 6.'},
 {c:'Hedging',s:'___ the evidence, the policy appears to have failed.',o:['Judging by','According with','As looking',],a:0,w:'"Judging by / according to + evidence". "According with" doesn’t exist; "according to me" is also wrong — use "in my view".'},
 {c:'Hedging',s:'The scheme was, ___ , a costly failure.',o:['on balance','in balance','by the balance'],a:0,w:'"On balance" = weighing everything up — a perfect Part 3 and conclusion phrase. Fixed preposition again.'},
+// Extra grammar questions — added for a wider daily rotation
+{c:'Articles',s:'___ education is the single strongest predictor of lifetime earnings in most economies.',o:['(no article)','The','An'],a:0,w:'Generalising about an abstract/uncountable noun (education) in general takes no article. Add "the" only if referring to one specific, already-mentioned education system.'},
+{c:'Articles',s:'We visited ___ old town on our first afternoon, then ___ museum the next day.',o:['the / the','a / a','the / a'],a:0,w:'Both are specific, identifiable places already established by context (the old town of the city we\'re visiting, the museum we planned to see) → the / the.'},
+{c:'Agreement',s:'Statistics ___ that youth unemployment has fallen for three consecutive years.',o:['show','shows','is showing'],a:0,w:'"Statistics" meaning a body of data is treated as plural → show. (Contrast: "Statistics is a compulsory module," where it names the academic subject.)'},
+{c:'Agreement',s:'Each of the proposed sites ___ its own advantages and drawbacks.',o:['has','have','are having'],a:0,w:'"Each of + plural noun" takes a singular verb → has. Compare "Both of the sites have…" (plural).'},
+{c:'Tense',s:'The committee ___ its decision by the time the press conference begins.',o:['will have announced','will announce','announces'],a:0,w:'An action completed before another future point ("by the time…") needs the future perfect: will have announced.'},
+{c:'Tense',s:'I ___ in this neighbourhood for almost a decade now.',o:['have been living','am living','lived'],a:0,w:'Present perfect continuous for an ongoing situation with stated duration that continues to now → have been living.'},
+{c:'Prepositions',s:'The proposal was criticised ___ its high cost and long timeline.',o:['for','of','about'],a:0,w:'criticise/criticised FOR a reason. Also: praised FOR, blamed FOR.'},
+{c:'Prepositions',s:'Housing supply has failed to keep pace ___ population growth.',o:['with','to','of'],a:0,w:'keep pace WITH something. Also: in line WITH, consistent WITH.'},
+{c:'Complex',s:'___ the plan is approved, construction could begin as early as next spring.',o:['Provided that','Despite','Otherwise'],a:0,w:'"Provided that / as long as" introduces a condition, like "if". "Despite" needs a noun phrase and signals contrast, not condition; "Otherwise" is an adverb, not a conjunction.'},
+{c:'Complex',s:'The report, the findings of ___ were widely reported, sparked immediate debate.',o:['which','that','it'],a:0,w:'"…the findings of which…" is the correct relative structure (= "whose findings"). "That" cannot follow a preposition this way, and "it" cannot introduce a relative clause.'},
+{c:'Hedging',s:'___ , the scheme has delivered fewer homes than promised.',o:['By most accounts','By the most account','With most account'],a:0,w:'Fixed phrase: "by most accounts / by all accounts" — a natural hedge meaning "according to most reports".'},
+{c:'Hedging',s:'The findings ___ be generalised to other cities without further research.',o:['should not','should not to','are not should'],a:0,w:'Modal + bare infinitive: "should not be generalised." Inserting "to" after a modal verb is a very common Thai-L1 error.'},
 ];
 S.gcat=S.gcat||{};
 let gSet=[];
@@ -608,6 +777,12 @@ const T1=[
 {title:'Maps · town before/after',data:'1990 vs present: farmland north of river → housing estate; town-centre market → shopping mall + car park; new bridge added; riverside factories → park.',
  model:'Overall, the town expanded northwards and was transformed from a semi-rural, industrial settlement into a largely residential and commercial one, with its riverside converted to leisure use.',
  note:'Map overviews describe the character of change (rural→urban, industrial→leisure) and direction of growth — not a feature-by-feature list.'},
+{title:'Line graph · daily internet use by age group',data:'Percentage of each age group using the internet daily, 2005–2025: 18–29 rises 40%→98%; 30–49 rises 25%→95%; 50–69 rises 8%→80%; 70+ rises 2%→45%.',
+ model:'Overall, daily internet use rose sharply across all four age groups over the period, and although the gap between younger and older users narrowed considerably, it was never fully closed.',
+ note:'"Narrowed considerably… never fully closed" captures the shared trend AND the persisting difference in one sentence — the kind of nuance that separates band 7 from band 6.'},
+{title:'Bar chart · mode of commute',data:'Commuting method in a mid-sized city, 2000 vs 2020: car 60%→38%; public transport 20%→34%; cycling 5%→18%; walking 15%→10%.',
+ model:'Overall, car use fell substantially over the two decades while public transport and cycling both gained ground, and walking was the only method to decline further from an already modest base.',
+ note:'Groups four categories into risers / faller / exception cleanly, and "gained ground" avoids repeating "increased" for a third time — the lexical variety examiners are listening for.'},
 ];
 S.t1done=S.t1done||{};
 (function(){
@@ -637,6 +812,9 @@ const DICT=[
 'The library opens at half past eight on weekdays.',
 'You will need a deposit of forty-five pounds for the key.',
 'The museum is closed on Mondays throughout the winter.',
+'The workshop starts promptly at nine and finishes by noon.',
+'Could you confirm your appointment for Wednesday afternoon?',
+'The office will be closed for the public holiday on Monday.',
 ],
 [ // level 2 — medium, connected speech
 'Students who register early will receive a discount on their accommodation fees.',
@@ -644,6 +822,9 @@ const DICT=[
 'Recycling rates have improved considerably since the scheme was introduced last year.',
 'The lecture on sustainable design has been postponed until further notice.',
 'Applicants must provide evidence of their English proficiency before enrolment.',
+'Local authorities have introduced new measures to reduce noise pollution near schools.',
+'The survey found that most residents support the proposed cycling lanes.',
+'Funding for the renovation project was approved after months of negotiation.',
 ],
 [ // level 3 — lecture style (Section 4)
 'Traditional builders developed sophisticated cooling techniques long before electricity existed.',
@@ -651,6 +832,9 @@ const DICT=[
 'Thick masonry walls absorb heat during the day and release it gradually throughout the night.',
 'Computer simulation allows designers to model airflow and solar radiation before construction begins.',
 'Whether these methods become standard practice again is a question of incentives rather than knowledge.',
+'Property valuations rarely reward low running costs as strongly as they penalise unconventional appearance.',
+'Cities that modernise too quickly risk losing the character that once defined them.',
+'Researchers argue that combining traditional knowledge with modern analysis produces the most durable solutions.',
 ],
 ];
 let dictLvl=0,dictIdx=0,dictScores=S.dictScores||[];
@@ -722,6 +906,16 @@ const SPEAKQ=[
 ['Part 3','Do international styles of architecture make cities less interesting?'],
 ['Part 3','What can rich countries learn from developing countries about building design?'],
 ['Part 3','Is it more important for a home to be beautiful or practical?'],
+['Part 1',"What's your favourite season of the year, and why?"],
+['Part 1','Do you usually eat breakfast before work or study?'],
+['Part 1','How often do you use public transport?'],
+['Part 1','Do you prefer reading books or watching documentaries?'],
+['Part 1',"What's one skill you'd like to improve this year?"],
+['Part 3','Do you think cities will look very different in fifty years?'],
+['Part 3','Should historic city centres be closed to cars entirely?'],
+['Part 3','What role should local communities play in planning decisions?'],
+['Part 3','Are international building standards a good or a bad thing?'],
+['Part 3','How important is it for young people to learn about their local history?'],
 ];
 document.getElementById('qg-draw').addEventListener('click',()=>{
   const q=SPEAKQ[Math.floor(Math.random()*SPEAKQ.length)];
@@ -741,6 +935,239 @@ function startSpeakTimer(secs){
 document.getElementById('speak-timer').addEventListener('click',()=>startSpeakTimer(45));
 document.getElementById('speak-timer60').addEventListener('click',()=>startSpeakTimer(60));
 
+/* ============ QUICK TEST ============ */
+let qtMinutes=5,qtTimer=null,qtSecLeft=0,qtActive=false,qtItemCount=0;
+let qtStats={},qtVocabQueue=[],qtGrammarQueue=[];
+const QT_DESC={5:'~9 quick items: vocab, grammar, paraphrase, speaking.',10:'~16 items — adds listening dictation.',15:'~22 items — the fullest mixed circuit.'};
+document.querySelectorAll('#qt-len button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#qt-len button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  qtMinutes=+b.dataset.len;document.getElementById('qt-len-desc').textContent=QT_DESC[qtMinutes];
+}));
+document.getElementById('qt-banner-btn').addEventListener('click',()=>go('quick'));
+
+function qtRefillVocab(){qtVocabQueue=shuffle(DECK).sort((a,b)=>box(a.w)-box(b.w))}
+function qtRefillGrammar(){qtGrammarQueue=shuffle(GQ)}
+function qtPickType(){
+  const pool=qtMinutes>=10?['vocab','vocab','grammar','grammar','para','para','dict','speak']:['vocab','vocab','grammar','grammar','para','speak'];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function qtSpeak(text,rate){
+  if(!('speechSynthesis' in window))return;
+  const u=new SpeechSynthesisUtterance(text);u.rate=rate;u.lang='en-GB';
+  const vs=speechSynthesis.getVoices();const v=vs.find(v=>v.lang==='en-GB')||vs.find(v=>v.lang.startsWith('en'));
+  if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+
+function qtStart(){
+  qtStats={vocabSeen:0,vocabGot:0,grammarRight:0,grammarTotal:0,paraRight:0,paraTotal:0,dictScores:[],speakSeen:0};
+  qtItemCount=0;qtActive=true;qtRefillVocab();qtRefillGrammar();
+  document.getElementById('qt-setup').style.display='none';
+  document.getElementById('qt-summary').style.display='none';
+  document.getElementById('qt-player').style.display='block';
+  qtSecLeft=qtMinutes*60;
+  const bar=document.getElementById('tb-qt'),clock=bar.querySelector('.clock');
+  clearInterval(qtTimer);
+  const tick=()=>{
+    const m=String(Math.floor(qtSecLeft/60)).padStart(2,'0'),s=String(qtSecLeft%60).padStart(2,'0');
+    clock.textContent=`${m}:${s}`;bar.classList.toggle('crit',qtSecLeft<=30);
+    if(qtSecLeft<=0){clearInterval(qtTimer);qtEnd();return}
+    qtSecLeft--;
+  };
+  tick();qtTimer=setInterval(tick,1000);
+  qtNextCard();
+}
+document.getElementById('qt-start').addEventListener('click',qtStart);
+document.getElementById('qt-stop').addEventListener('click',()=>{clearInterval(qtTimer);qtEnd()});
+document.getElementById('qt-again').addEventListener('click',qtStart);
+document.getElementById('qt-home').addEventListener('click',()=>go('home'));
+
+function qtNextCard(){
+  if(!qtActive)return;
+  qtItemCount++;
+  document.getElementById('qt-progress').textContent=`Item ${qtItemCount} · ${Math.ceil(qtSecLeft/60)} min left`;
+  const card=document.getElementById('qt-card');
+  card.removeAttribute('data-answered');
+  const type=qtPickType();
+  if(type==='vocab')qtCardVocab(card);
+  else if(type==='grammar')qtCardGrammar(card);
+  else if(type==='para')qtCardPara(card);
+  else if(type==='dict')qtCardDict(card);
+  else qtCardSpeak(card);
+}
+
+function qtCardVocab(card){
+  if(!qtVocabQueue.length)qtRefillVocab();
+  const c=qtVocabQueue.shift();
+  card.innerHTML=`<span class="qtag">Vocab</span><p class="word">${c.w}</p><p class="pos">${c.pos}</p>
+    <div id="qt-vocab-back" style="display:none;margin-top:10px">
+      <p class="def">${c.d}</p><p class="ex">"${c.ex}"</p><p class="coll">${c.c}</p>
+    </div>
+    <div style="margin-top:16px" id="qt-vocab-actions"><button class="btn" id="qt-vocab-show">Show answer</button></div>`;
+  card.querySelector('#qt-vocab-show').addEventListener('click',()=>{
+    card.querySelector('#qt-vocab-back').style.display='block';
+    const actions=document.getElementById('qt-vocab-actions');
+    actions.innerHTML=`<button class="btn ghost" id="qt-vocab-again">✗ Again</button> <button class="btn" id="qt-vocab-got">✓ Got it</button>`;
+    actions.querySelector('#qt-vocab-got').addEventListener('click',()=>{S.boxes[c.w]=Math.min(box(c.w)+1,3);qtStats.vocabGot++;qtStats.vocabSeen++;save();qtNextCard()});
+    actions.querySelector('#qt-vocab-again').addEventListener('click',()=>{S.boxes[c.w]=1;qtStats.vocabSeen++;save();qtNextCard()});
+  });
+}
+
+function qtCardGrammar(card){
+  if(!qtGrammarQueue.length)qtRefillGrammar();
+  const q=qtGrammarQueue.shift();
+  card.innerHTML=`<span class="qtag">Grammar · ${q.c}</span><p class="stem">${q.s.replace('___','＿＿＿')}</p><div class="opts" id="qt-g-opts"></div>`;
+  const opts=card.querySelector('#qt-g-opts');
+  shuffle(q.o.map((t,i)=>({t,i}))).forEach(o=>{
+    const b=document.createElement('button');b.textContent=o.t;
+    b.addEventListener('click',()=>{
+      if(card.dataset.answered)return;card.dataset.answered='1';
+      qtStats.grammarTotal++;
+      const catS=S.gcat[q.c]=S.gcat[q.c]||{r:0,n:0};catS.n++;
+      if(o.i===q.a){b.classList.add('right');qtStats.grammarRight++;catS.r++}
+      else{b.classList.add('picked-wrong');[...opts.children].forEach(x=>{if(x.textContent===q.o[q.a])x.classList.add('right')})}
+      save();
+      const why=document.createElement('div');why.className='why';why.textContent=q.w;card.appendChild(why);
+      const next=document.createElement('button');next.className='btn qt-next';next.textContent='Next →';
+      next.addEventListener('click',qtNextCard);card.appendChild(next);
+    });
+    opts.appendChild(b);
+  });
+}
+
+function qtCardPara(card){
+  const pair=PAIRS[Math.floor(Math.random()*PAIRS.length)];
+  const distractors=shuffle(PAIRS.filter(p=>p!==pair)).slice(0,2).map(p=>p[1]);
+  const opts=shuffle([pair[1],...distractors]);
+  card.innerHTML=`<span class="qtag">Paraphrase</span><p class="stem">Which phrase means the same as: <b>"${pair[0]}"</b>?</p><div class="opts" id="qt-p-opts"></div>`;
+  const optsEl=card.querySelector('#qt-p-opts');
+  opts.forEach(t=>{
+    const b=document.createElement('button');b.textContent=t;
+    b.addEventListener('click',()=>{
+      if(card.dataset.answered)return;card.dataset.answered='1';
+      qtStats.paraTotal++;
+      if(t===pair[1]){b.classList.add('right');qtStats.paraRight++}
+      else{b.classList.add('picked-wrong');[...optsEl.children].forEach(x=>{if(x.textContent===pair[1])x.classList.add('right')})}
+      const next=document.createElement('button');next.className='btn qt-next';next.textContent='Next →';
+      next.addEventListener('click',qtNextCard);card.appendChild(next);
+    });
+    optsEl.appendChild(b);
+  });
+}
+
+function qtCardDict(card){
+  const all=DICT.flat();
+  const sentence=all[Math.floor(Math.random()*all.length)];
+  card.innerHTML=`<span class="qtag">Listening</span>
+    <div style="display:flex;gap:10px;margin-bottom:12px"><button class="btn" id="qt-d-play">▶ Play</button></div>
+    <textarea id="qt-d-input" style="min-height:70px" placeholder="Type exactly what you hear…"></textarea>
+    <div style="margin-top:10px"><button class="btn signal" id="qt-d-mark">Mark</button></div>
+    <div class="diff" id="qt-d-diff" style="display:none"></div>`;
+  card.querySelector('#qt-d-play').addEventListener('click',()=>qtSpeak(sentence,0.95));
+  card.querySelector('#qt-d-mark').addEventListener('click',()=>{
+    if(card.dataset.answered)return;
+    const typed=tokens(card.querySelector('#qt-d-input').value);
+    if(!typed.length){toast('Type what you heard first');return}
+    card.dataset.answered='1';
+    const target=tokens(sentence),diff=lcsDiff(target,typed);
+    const ok=diff.filter(d=>d.k==='ok').length,acc=Math.round(100*ok/target.length);
+    qtStats.dictScores.push(acc);
+    S.dictScores=S.dictScores||[];S.dictScores.push(acc);if(S.dictScores.length>30)S.dictScores.shift();save();
+    const el=card.querySelector('#qt-d-diff');
+    el.innerHTML=`<b style="font-family:var(--mono);font-size:.78rem">${acc}% accuracy</b><br>`+diff.map(d=>`<span class="${d.k}">${d.t}</span>`).join(' ');
+    el.style.display='block';
+    const next=document.createElement('button');next.className='btn qt-next';next.textContent='Next →';
+    next.addEventListener('click',qtNextCard);card.appendChild(next);
+  });
+}
+
+function qtCardSpeak(card){
+  const q=SPEAKQ[Math.floor(Math.random()*SPEAKQ.length)];
+  qtStats.speakSeen++;S.speakDrawn=(S.speakDrawn||0)+1;save();
+  card.innerHTML=`<span class="qtag">Speaking · ${q[0]}</span><p class="word" style="font-size:1.3rem">${q[1]}</p>
+    <p style="font-size:.82rem;color:var(--ink-soft);margin-top:10px">Answer out loud for 20–30 seconds, then move on.</p>
+    <button class="btn qt-next" id="qt-s-next">Next →</button>`;
+  card.querySelector('#qt-s-next').addEventListener('click',qtNextCard);
+}
+
+function qtEnd(){
+  qtActive=false;clearInterval(qtTimer);
+  document.getElementById('qt-player').style.display='none';
+  document.getElementById('qt-summary').style.display='block';
+  document.getElementById('qt-sum-headline').textContent=`${qtItemCount} item${qtItemCount===1?'':'s'} in ${qtMinutes} min`;
+  const rows=[];
+  if(qtStats.vocabSeen)rows.push(`<div><b>${qtStats.vocabGot}/${qtStats.vocabSeen}</b><span>vocab known</span></div>`);
+  if(qtStats.grammarTotal)rows.push(`<div><b>${Math.round(100*qtStats.grammarRight/qtStats.grammarTotal)}%</b><span>grammar (${qtStats.grammarRight}/${qtStats.grammarTotal})</span></div>`);
+  if(qtStats.paraTotal)rows.push(`<div><b>${Math.round(100*qtStats.paraRight/qtStats.paraTotal)}%</b><span>paraphrase (${qtStats.paraRight}/${qtStats.paraTotal})</span></div>`);
+  if(qtStats.dictScores.length)rows.push(`<div><b>${Math.round(qtStats.dictScores.reduce((a,b)=>a+b,0)/qtStats.dictScores.length)}%</b><span>dictation avg</span></div>`);
+  if(qtStats.speakSeen)rows.push(`<div><b>${qtStats.speakSeen}</b><span>speaking prompts</span></div>`);
+  document.getElementById('qt-stats').innerHTML=rows.join('');
+  S.quickSessions=(S.quickSessions||0)+1;S.quickMinutesTotal=(S.quickMinutesTotal||0)+qtMinutes;save();
+  refreshStats();
+}
+
+/* ============ SHADOWING ============ */
+let shadowLvl=0,shadowIdx=0;
+document.querySelectorAll('#shadow-lvl button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#shadow-lvl button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  shadowLvl=+b.dataset.lvl;shadowIdx=0;shadowRenderTarget();
+}));
+function shadowRenderTarget(){
+  document.getElementById('shadow-target').textContent=DICT[shadowLvl][shadowIdx];
+  document.getElementById('shadow-diff').classList.remove('show');
+}
+document.getElementById('shadow-next').addEventListener('click',()=>{
+  shadowIdx=(shadowIdx+1)%DICT[shadowLvl].length;shadowRenderTarget();
+});
+document.getElementById('shadow-play').addEventListener('click',()=>qtSpeak(DICT[shadowLvl][shadowIdx],0.95));
+S.shadowScores=S.shadowScores||[];
+(function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const recordBtn=document.getElementById('shadow-record');
+  if(!SR){
+    document.getElementById('shadow-note').textContent='⚠ Speech recognition is not supported in this browser — try Chrome or Edge on desktop or Android.';
+    recordBtn.disabled=true;return;
+  }
+  let recognition=null,listening=false;
+  recordBtn.addEventListener('click',()=>{
+    if(listening){recognition&&recognition.stop();return}
+    recognition=new SR();
+    recognition.lang='en-US';recognition.interimResults=false;recognition.maxAlternatives=1;
+    recognition.onstart=()=>{listening=true;recordBtn.classList.add('listening');recordBtn.textContent='● Listening… tap to stop'};
+    recognition.onerror=(e)=>{
+      listening=false;recordBtn.classList.remove('listening');recordBtn.textContent='🎙 Record & shadow';
+      toast(e.error==='not-allowed'?'Microphone permission was blocked — allow it and try again.':`Recognition error: ${e.error}`);
+    };
+    recognition.onend=()=>{listening=false;recordBtn.classList.remove('listening');recordBtn.textContent='🎙 Record & shadow'};
+    recognition.onresult=(e)=>{
+      const said=e.results[0][0].transcript;
+      const target=tokens(DICT[shadowLvl][shadowIdx]),typed=tokens(said);
+      const diff=lcsDiff(target,typed);
+      const ok=diff.filter(d=>d.k==='ok').length,acc=Math.round(100*ok/target.length);
+      S.shadowScores.push(acc);if(S.shadowScores.length>30)S.shadowScores.shift();save();
+      const el=document.getElementById('shadow-diff');
+      el.innerHTML=`<b style="font-family:var(--mono);font-size:.8rem">${acc}% word match · heard: "${said}"</b><br>`+diff.map(d=>`<span class="${d.k}">${d.t}</span>`).join(' ');
+      el.classList.add('show');
+      refreshStats();
+    };
+    try{recognition.start()}catch(err){toast('Could not start microphone: '+err.message)}
+  });
+})();
+shadowRenderTarget();
+
+/* ============ PROGRESS SPARKLINES ============ */
+function sparkline(data){
+  const w=220,h=44;
+  if(!data.length)return '<span style="font-family:var(--mono);font-size:.66rem;color:var(--ink-soft)">no data yet</span>';
+  const d=data.slice(-15);
+  const pt=(v,i)=>{const x=d.length>1?(i/(d.length-1))*w:w/2;const y=h-(v/100)*h;return [x,y]};
+  const pts=d.map((v,i)=>pt(v,i).map(n=>n.toFixed(1)).join(',')).join(' ');
+  const dots=d.map((v,i)=>{const[x,y]=pt(v,i);return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.5" fill="var(--signal)"/>`}).join('');
+  const last=d[d.length-1];
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" style="overflow:visible;vertical-align:middle">
+    <polyline points="${pts}" fill="none" stroke="var(--blue)" stroke-width="2"/>${dots}
+  </svg><span style="font-family:var(--mono);font-size:.72rem;margin-left:8px">${last}% latest</span>`;
+}
+
 /* ============ HOME STATS ============ */
 function refreshStats(){
   const mastered=DECK.filter(c=>box(c.w)>=3).length;
@@ -753,7 +1180,17 @@ function refreshStats(){
   if((S.dictScores||[]).length){const a=Math.round(S.dictScores.reduce((x,y)=>x+y,0)/S.dictScores.length);
     document.getElementById('st-dict').textContent=`avg accuracy: ${a}% (last ${S.dictScores.length})`}
   document.getElementById('st-speak').textContent=`${S.speakDrawn||0} questions drawn`;
+  if((S.shadowScores||[]).length){const a=Math.round(S.shadowScores.reduce((x,y)=>x+y,0)/S.shadowScores.length);
+    document.getElementById('st-shadow').textContent=`avg match: ${a}% (last ${S.shadowScores.length})`}
   document.getElementById('streak-note').textContent=S.streak>1?`🔥 ${S.streak}-day streak — keep it alive`:`Come back tomorrow to start a streak.`;
+  document.getElementById('quick-note').textContent=S.quickSessions?`⚡ ${S.quickSessions} quick test${S.quickSessions===1?'':'s'} completed · ${S.quickMinutesTotal} min total`:'';
+  const panel=document.getElementById('progress-panel');
+  const hasDict=(S.dictScores||[]).length,hasShadow=(S.shadowScores||[]).length;
+  if(hasDict||hasShadow){
+    panel.style.display='block';
+    document.getElementById('spark-dict').innerHTML=sparkline(S.dictScores||[]);
+    document.getElementById('spark-shadow').innerHTML=sparkline(S.shadowScores||[]);
+  }else panel.style.display='none';
 }
 refreshStats();
 </script>
