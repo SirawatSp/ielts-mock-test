@@ -238,10 +238,10 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
       <button class="btn" id="qt-banner-btn" style="background:var(--paper);color:var(--signal);border-color:var(--paper)">⚡ Start now</button>
     </div>
     <div class="ov-grid">
-      <div class="ov-card" data-go="vocab"><span class="num">A</span><h4>Vocabulary</h4><p>48 band-7 words in 6 IELTS topics — flashcards with collocations and the band-6 word each one upgrades.</p><span class="stat" id="st-vocab">0 / 48 mastered</span></div>
+      <div class="ov-card" data-go="vocab"><span class="num">A</span><h4>Vocabulary</h4><p>101 band-7 words across 8 IELTS topics — flashcards with collocations and the band-6 word each one upgrades.</p><span class="stat" id="st-vocab">0 / 101 mastered</span></div>
       <div class="ov-card" data-go="para"><span class="num">B</span><h4>Paraphrase</h4><p>Match academic paraphrases — the core skill behind TFNG questions and Writing lexical resource.</p><span class="stat" id="st-para">best: — moves</span></div>
-      <div class="ov-card" data-go="grammar"><span class="num">C</span><h4>Grammar</h4><p>36 questions on the exact traps Thai speakers hit: articles, agreement, tense, prepositions.</p><span class="stat" id="st-grammar">no attempt yet</span></div>
-      <div class="ov-card" data-go="task1"><span class="num">D</span><h4>Task 1 Gym</h4><p>Write the overview sentence for 6 chart types, then compare against a band-7 model.</p><span class="stat" id="st-task1">0 / 6 done</span></div>
+      <div class="ov-card" data-go="grammar"><span class="num">C</span><h4>Grammar</h4><p>72 questions on the exact traps Thai speakers hit: articles, agreement, tense, prepositions.</p><span class="stat" id="st-grammar">no attempt yet</span></div>
+      <div class="ov-card" data-go="task1"><span class="num">D</span><h4>Task 1 Gym</h4><p>Write the overview sentence for 10 chart types, then compare against a band-7 model.</p><span class="stat" id="st-task1">0 / 10 done</span></div>
       <div class="ov-card" data-go="dictation"><span class="num">E</span><h4>Listening</h4><p>Dictation drills — the browser reads an academic sentence aloud (British voice), you type it, get word-level marking.</p><span class="stat" id="st-dict">avg accuracy: —</span></div>
       <div class="ov-card" data-go="speaking"><span class="num">F</span><h4>Speaking</h4><p>Band-7 functional phrases + a random question generator with a 45-second response timer.</p><span class="stat" id="st-speak">0 questions drawn</span></div>
       <div class="ov-card" data-go="shadow"><span class="num">G</span><h4>Shadowing</h4><p>Listen to a native voice, repeat immediately, and get a word-by-word match score.</p><span class="stat" id="st-shadow">avg match: —</span></div>
@@ -355,7 +355,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
     <span class="stamp">Station C</span>
     <p class="kicker">Grammatical range & accuracy · kill the band-6 errors</p>
     <h2>Grammar drills</h2>
-    <p class="rubric">Band 7 grammar means "frequent error-free sentences". These 36 questions target the errors that appear constantly in Thai speakers' writing: articles, subject–verb agreement, tense with time markers, prepositions after common academic words, and complex-sentence machinery. Answer honestly at speed — the category scoreboard shows where your points are leaking.</p>
+    <p class="rubric">Band 7 grammar means "frequent error-free sentences". These 72 questions target the errors that appear constantly in Thai speakers' writing: articles, subject–verb agreement, tense with time markers, prepositions after common academic words, and complex-sentence machinery. Answer honestly at speed — the category scoreboard shows where your points are leaking.</p>
     <div class="catbar" id="catbar"></div>
     <div style="display:flex;gap:10px;margin-bottom:16px">
       <button class="btn" id="gq-new">New set of 12</button>
@@ -687,6 +687,18 @@ const PAIRS=[
 ['a rough estimate','an approximate figure'],
 ['closely linked','strongly correlated'],
 ['gradually','over time'],
+['essential','indispensable'],
+['a rise in','an upsurge in'],
+['very common','widespread'],
+['to a small degree','marginally'],
+['not clear','ambiguous'],
+['point out','highlight'],
+['stop something happening','prevent'],
+['a lack of','a shortage of'],
+['closely examine','scrutinise'],
+['bring together','consolidate'],
+['change gradually','evolve'],
+['a key factor','a decisive factor'],
 ];
 let mSel=null,mMoves=0,mMatched=0,mRound=[];
 function paraNew(){
@@ -767,6 +779,31 @@ const GQ=[
 {c:'Complex',s:'The report, the findings of ___ were widely reported, sparked immediate debate.',o:['which','that','it'],a:0,w:'"…the findings of which…" is the correct relative structure (= "whose findings"). "That" cannot follow a preposition this way, and "it" cannot introduce a relative clause.'},
 {c:'Hedging',s:'___ , the scheme has delivered fewer homes than promised.',o:['By most accounts','By the most account','With most account'],a:0,w:'Fixed phrase: "by most accounts / by all accounts" — a natural hedge meaning "according to most reports".'},
 {c:'Hedging',s:'The findings ___ be generalised to other cities without further research.',o:['should not','should not to','are not should'],a:0,w:'Modal + bare infinitive: "should not be generalised." Inserting "to" after a modal verb is a very common Thai-L1 error.'},
+// Extra grammar questions, round 3 — 4 more per category
+{c:'Articles',s:'Cities that invest in ___ public space tend to report higher resident satisfaction.',o:['(no article)','the','a'],a:0,w:'Generalising about an uncountable noun (public space) in general takes no article.'},
+{c:'Articles',s:'He gave ___ excellent presentation on renewable energy policy.',o:['an','a','the'],a:0,w:'"An" comes before a vowel sound (excellent starts with one) — "a excellent" is a very common slip.'},
+{c:'Articles',s:'___ Netherlands has long been a reference point for flood-resilient design.',o:['The','A','(no article)'],a:0,w:'Certain country names take "the" by convention: the Netherlands, the Philippines, the United States, the UK.'},
+{c:'Articles',s:'Access to clean water remains ___ challenge in several fast-growing cities.',o:['a','the','(no article)'],a:0,w:'First mention of a singular countable noun (challenge) → "a".'},
+{c:'Agreement',s:'The data collected over the past decade ___ a clear downward trend in car use.',o:['show','shows','showing'],a:0,w:'"Data" is conventionally treated as plural in academic writing → show. ("Datum" is the rarely-used singular.)'},
+{c:'Agreement',s:'Either the council or the developers ___ responsible for the delay.',o:['are','is','be'],a:0,w:'With "either…or", the verb agrees with the nearer subject — "developers" (plural) → are.'},
+{c:'Agreement',s:'What worries residents most ___ the loss of green space, not the construction noise.',o:['is','are','were'],a:0,w:'A noun clause subject ("What worries residents most") is treated as singular → is.'},
+{c:'Agreement',s:'The committee ___ divided over whether to approve the plan.',o:['is','are','being'],a:0,w:'"Committee" as a single unit takes a singular verb in most contexts → is.'},
+{c:'Tense',s:'By the time the survey closes next month, over ten thousand residents ___ responded.',o:['will have','will','would have'],a:0,w:'Completed before a specific future point ("by the time…closes") → future perfect: will have responded.'},
+{c:'Tense',s:'Researchers ___ tracking the site since the excavation began in 2019.',o:['have been','are','had been'],a:0,w:'Ongoing action starting in the past and continuing to now, with stated duration ("since 2019") → present perfect continuous.'},
+{c:'Tense',s:'While the report ___ being finalised, the committee already leaked its main conclusion.',o:['was','is','has been'],a:0,w:'Two past actions overlapping in a narrative → past continuous ("was being finalised") alongside past simple.'},
+{c:'Tense',s:'Had the city invested earlier, the flooding ___ so severe.',o:['would not have been','would not be','had not been'],a:0,w:'Third conditional: unreal past condition (Had the city invested…) → unreal past result: would not have been.'},
+{c:'Prepositions',s:'The findings are broadly consistent ___ earlier studies on the same topic.',o:['with','to','of'],a:0,w:'consistent WITH something. Also: compatible WITH, in line WITH.'},
+{c:'Prepositions',s:'The scheme was designed specifically ___ low-income households.',o:['for','to','with'],a:0,w:'designed FOR a target group/purpose. Also: intended FOR, suitable FOR.'},
+{c:'Prepositions',s:'Opinion is divided ___ whether the tower should be demolished or restored.',o:['on','about','of'],a:0,w:'divided ON an issue; also agree ON, decide ON, an opinion ON.'},
+{c:'Prepositions',s:'The new regulation applies ___ all buildings constructed after 2010.',o:['to','for','on'],a:0,w:'apply TO something. Also: relevant TO, relate TO.'},
+{c:'Complex',s:'___ well the policy is designed, it will fail without proper enforcement.',o:['However','Whatever','Wherever'],a:0,w:'"However + adjective/adverb" means "no matter how" — "However well designed…". "Whatever" needs a noun, not an adjective, so it doesn\'t fit here.'},
+{c:'Complex',s:'Rarely ___ a redevelopment project satisfy every stakeholder involved.',o:['does','do','did'],a:0,w:'The negative adverb "Rarely" at the start of a sentence forces inversion: Rarely DOES a project satisfy…'},
+{c:'Complex',s:'The proposal, ambitious ___ it was, still failed to secure funding.',o:['as','that','though'],a:0,w:'"Ambitious as it was" is a fixed inverted concessive structure meaning "although it was ambitious".'},
+{c:'Complex',s:'So severe was the flooding ___ three bridges had to be closed.',o:['that','which','so'],a:0,w:'"So + adjective + was + subject… that…" is an inverted result structure; the following clause is introduced by "that".'},
+{c:'Hedging',s:'The reform appears, ___ , to have reduced congestion slightly.',o:['on the whole','in the whole','by whole'],a:0,w:'Fixed phrase: "on the whole" = considering everything, generally speaking.'},
+{c:'Hedging',s:'___ speaking, older buildings tend to have thicker, more insulating walls.',o:['Generally','General','Generalised'],a:0,w:'"Generally speaking" is a fixed hedging phrase — an adverb, not an adjective, modifies "speaking".'},
+{c:'Hedging',s:'The scheme is not without merit, ___ its high cost is hard to justify.',o:['but','despite','however'],a:0,w:'"But" correctly joins two independent clauses. "However" would need a semicolon or full stop before it, and "despite" needs a noun phrase, not a clause.'},
+{c:'Hedging',s:'___ all accounts, the pilot scheme has been a modest success.',o:['By','In','On'],a:0,w:'Fixed phrase: "by all accounts" = according to what everyone says.'},
 ];
 S.gcat=S.gcat||{};
 let gSet=[];
@@ -835,13 +872,19 @@ const T1=[
 {title:'Bar chart · mode of commute',data:'Commuting method in a mid-sized city, 2000 vs 2020: car 60%→38%; public transport 20%→34%; cycling 5%→18%; walking 15%→10%.',
  model:'Overall, car use fell substantially over the two decades while public transport and cycling both gained ground, and walking was the only method to decline further from an already modest base.',
  note:'Groups four categories into risers / faller / exception cleanly, and "gained ground" avoids repeating "increased" for a third time — the lexical variety examiners are listening for.'},
+{title:'Table · average household size',data:'Average household size by country, 1990 vs 2020: Country A 4.2→3.1; Country B 3.8→3.6; Country C 2.9→2.2.',
+ model:'Overall, average household size fell in all three countries over the thirty-year period, most sharply in Country A, while Country B saw only a marginal decline.',
+ note:'"Most sharply" and "only a marginal decline" rank the three countries by degree of change rather than just listing numbers — the comparative language Task Achievement rewards.'},
+{title:'Bar chart · reasons for choosing a university',data:'Survey of first-year students on their main reason for choosing their university, 2023: reputation 35%; course content 28%; location 20%; cost 12%; other 5%.',
+ model:'Overall, academic factors — reputation and course content — together accounted for well over half of students\' decisions, far outweighing practical considerations such as location and cost.',
+ note:'Groups two related categories ("academic factors") rather than listing five bars separately, and "far outweighing" makes an explicit comparison — exactly what turns a list into an overview.'},
 ];
 S.t1done=S.t1done||{};
 (function(){
   const list=document.getElementById('t1-list');
   T1.forEach((t,i)=>{
     const d=document.createElement('div');d.className='reveal-item';
-    d.innerHTML=`<p class="kicker">${i+1} / 6 · ${t.title}</p><div class="src">${t.data}</div>
+    d.innerHTML=`<p class="kicker">${i+1} / ${T1.length} · ${t.title}</p><div class="src">${t.data}</div>
       <textarea class="small" style="min-height:70px" placeholder="Write your overview — trends only, no figures…" id="t1-in-${i}">${S['t1a'+i]||''}</textarea>
       <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn" data-rev="${i}">Reveal model</button>
@@ -867,6 +910,8 @@ const DICT=[
 'The workshop starts promptly at nine and finishes by noon.',
 'Could you confirm your appointment for Wednesday afternoon?',
 'The office will be closed for the public holiday on Monday.',
+'Please remember to bring your student ID card to the exam.',
+'The next train to the city centre departs in five minutes.',
 ],
 [ // level 2 — medium, connected speech
 'Students who register early will receive a discount on their accommodation fees.',
@@ -877,6 +922,8 @@ const DICT=[
 'Local authorities have introduced new measures to reduce noise pollution near schools.',
 'The survey found that most residents support the proposed cycling lanes.',
 'Funding for the renovation project was approved after months of negotiation.',
+'Councils across the country are reviewing their approach to affordable housing.',
+'The report recommends further investment in cycling infrastructure over the next five years.',
 ],
 [ // level 3 — lecture style (Section 4)
 'Traditional builders developed sophisticated cooling techniques long before electricity existed.',
@@ -887,6 +934,8 @@ const DICT=[
 'Property valuations rarely reward low running costs as strongly as they penalise unconventional appearance.',
 'Cities that modernise too quickly risk losing the character that once defined them.',
 'Researchers argue that combining traditional knowledge with modern analysis produces the most durable solutions.',
+'Institutional obstacles, rather than a lack of technical knowledge, are what prevent wider adoption.',
+'Urban planners increasingly rely on simulation tools to test design decisions before construction begins.',
 ],
 ];
 let dictLvl=0,dictIdx=0,dictScores=S.dictScores||[];
@@ -968,6 +1017,20 @@ const SPEAKQ=[
 ['Part 3','What role should local communities play in planning decisions?'],
 ['Part 3','Are international building standards a good or a bad thing?'],
 ['Part 3','How important is it for young people to learn about their local history?'],
+['Part 1','What kind of music do you usually listen to?'],
+['Part 1','Do you prefer to plan your day in advance or go with the flow?'],
+['Part 1','How do you usually spend your weekends?'],
+['Part 1','Is there a building in your city you find particularly ugly or beautiful?'],
+['Part 1','Do you enjoy cooking, or do you prefer eating out?'],
+['Part 1','What was your favourite subject at school?'],
+['Part 1','Do you use social media often? What for?'],
+['Part 3','Do you think social media has changed the way young people communicate?'],
+['Part 3','Should governments fund the arts, or should the arts support themselves financially?'],
+['Part 3','Is it better to specialise early in a career or to gain broad experience first?'],
+['Part 3','How do you think transport will change over the next twenty years?'],
+['Part 3','Are traditional skills at risk of disappearing? Does that matter?'],
+['Part 3','Should companies be required to disclose their environmental impact publicly?'],
+['Part 3','Do you think competition or cooperation drives more progress in society?'],
 ];
 document.getElementById('qg-draw').addEventListener('click',()=>{
   const q=SPEAKQ[Math.floor(Math.random()*SPEAKQ.length)];
@@ -1238,7 +1301,7 @@ function refreshStats(){
   const g=Object.values(S.gcat||{});
   if(g.length){const r=g.reduce((s,c)=>s+c.r,0),n=g.reduce((s,c)=>s+c.n,0);
     document.getElementById('st-grammar').textContent=`${Math.round(100*r/n)}% over ${n} answered`}
-  document.getElementById('st-task1').textContent=`${Object.keys(S.t1done||{}).length} / 6 done`;
+  document.getElementById('st-task1').textContent=`${Object.keys(S.t1done||{}).length} / ${T1.length} done`;
   if((S.dictScores||[]).length){const a=Math.round(S.dictScores.reduce((x,y)=>x+y,0)/S.dictScores.length);
     document.getElementById('st-dict').textContent=`avg accuracy: ${a}% (last ${S.dictScores.length})`}
   document.getElementById('st-speak').textContent=`${S.speakDrawn||0} questions drawn`;

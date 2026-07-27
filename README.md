@@ -17,12 +17,12 @@ Self-contained IELTS Academic practice mock (single `index.html`, no build, no b
 Daily skill training between mocks — seven stations plus a Quick Test mode, all progress tracked in `localStorage`:
 
 - **⚡ Quick Test** — a mixed circuit (vocab, grammar, paraphrase, listening, speaking) sized to 5/10/15 minutes for short free time — no station-hopping, one continuous card stream against a countdown timer.
-- **Vocabulary** — 67 band-7 words across 6 IELTS topics; Leitner-box flashcards with collocations and the band-6 word each upgrades.
-- **Paraphrase match** — tile-matching game for academic paraphrase recognition (the skill behind TFNG questions), 32 pairs.
-- **Grammar drills** — 48 questions on Thai-speaker traps (articles, agreement, tense, prepositions, complex sentences, hedging) with a per-category accuracy scoreboard.
-- **Task 1 Gym** — write the overview sentence for 8 chart types, compare against band-7 models.
-- **Listening dictation** — browser TTS (British voice) reads academic sentences; word-level diff marking, 3 difficulty levels, 24 sentences.
-- **Speaking** — random Part 1/Part 3 question generator (30 questions) with response timers, plus a band-7 functional phrase bank.
+- **Vocabulary** — 101 band-7 words across 8 IELTS topics; Leitner-box flashcards with collocations and the band-6 word each upgrades.
+- **Paraphrase match** — tile-matching game for academic paraphrase recognition (the skill behind TFNG questions), 44 pairs.
+- **Grammar drills** — 72 questions on Thai-speaker traps (articles, agreement, tense, prepositions, complex sentences, hedging) with a per-category accuracy scoreboard.
+- **Task 1 Gym** — write the overview sentence for 10 chart types, compare against band-7 models.
+- **Listening dictation** — browser TTS (British voice) reads academic sentences; word-level diff marking, 3 difficulty levels, 30 sentences.
+- **Speaking** — random Part 1/Part 3 question generator (44 questions) with response timers, plus a band-7 functional phrase bank.
 - **Shadowing** — plays a native-voice sentence via TTS, then uses the browser's speech recognition to transcribe your spoken echo and score the word-by-word match. Needs mic access; Chrome/Edge only.
 - **Progress trend** — sparklines on the home dashboard tracking dictation accuracy and shadowing match rate over your last 15 attempts of each.
 - **Session history & backup** — a running log of every Quick Test circuit (date, duration, per-skill accuracy), plus export/import to back up or transfer all gym progress as a `.json` file.
