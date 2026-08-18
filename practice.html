@@ -11,12 +11,18 @@
 :root{
   --paper:#f4efe4;--paper-deep:#ece5d4;--ink:#1c2a44;--ink-soft:#4a5670;--line:#c9bfa8;
   --blue:#2456a6;--blueprint:#dce6f5;--signal:#c8451f;--green:#2e6b45;--amber:#a86b1f;
+  --card:#fffdf8;--grid:rgba(36,86,166,.055);--miss:#fbdcd2;--extra:#fdeccf;
   --mono:'IBM Plex Mono',monospace;--serif:'Newsreader',serif;--display:'Fraunces',serif;
+}
+:root[data-theme="dark"]{
+  --paper:#161d2b;--paper-deep:#1f2838;--ink:#e9e4d7;--ink-soft:#a3adc0;--line:#3a4557;
+  --blue:#7fa9ec;--blueprint:#232f45;--signal:#e87d55;--green:#6cc08d;--amber:#d7a54a;
+  --card:#1b2333;--grid:rgba(127,169,236,.05);--miss:#4a2620;--extra:#453520;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   font-family:var(--serif);background:var(--paper);color:var(--ink);line-height:1.6;
-  background-image:linear-gradient(rgba(36,86,166,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(36,86,166,.055) 1px,transparent 1px);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:28px 28px;min-height:100vh;
 }
 header{border-bottom:3px double var(--ink);background:var(--paper);position:sticky;top:0;z-index:50}
@@ -47,7 +53,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.1rem;margin:26px 0 10p
 .btn.signal{background:var(--signal);border-color:var(--signal)}
 .btn.signal:hover{background:#a83817}
 .btn:disabled{opacity:.4;cursor:not-allowed}
-textarea,input[type=text]{font-family:var(--serif);font-size:1rem;line-height:1.6;padding:12px 14px;border:1px solid var(--ink);background:#fffdf8;color:var(--ink);width:100%}
+textarea,input[type=text]{font-family:var(--serif);font-size:1rem;line-height:1.6;padding:12px 14px;border:1px solid var(--ink);background:var(--card);color:var(--ink);width:100%}
 textarea:focus,input[type=text]:focus{outline:2px solid var(--blue);outline-offset:-1px}
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.74rem;padding:12px 22px;opacity:0;transition:all .3s;z-index:99;letter-spacing:.05em}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -74,7 +80,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 .fc-wrap{max-width:640px;margin:0 auto}
 .fc-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:12px;flex-wrap:wrap;gap:6px}
 .fcard{
-  border:2px solid var(--ink);background:#fffdf8;min-height:300px;padding:34px;cursor:pointer;
+  border:2px solid var(--ink);background:var(--card);min-height:300px;padding:34px;cursor:pointer;
   box-shadow:5px 5px 0 rgba(28,42,68,.15);display:flex;flex-direction:column;justify-content:center;
   text-align:center;position:relative;user-select:none;
 }
@@ -96,7 +102,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 /* matching game */
 .match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:18px}
 .mtile{
-  font-size:.9rem;padding:16px 12px;border:1px solid var(--ink);background:#fffdf8;cursor:pointer;
+  font-size:.9rem;padding:16px 12px;border:1px solid var(--ink);background:var(--card);cursor:pointer;
   text-align:center;transition:all .12s;min-height:74px;display:flex;align-items:center;justify-content:center;
 }
 .mtile:hover{background:var(--blueprint)}
@@ -106,7 +112,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
 /* grammar quiz */
-.gq{margin-bottom:22px;padding:16px 18px;background:#fffdf8;border:1px solid var(--line)}
+.gq{margin-bottom:22px;padding:16px 18px;background:var(--card);border:1px solid var(--line)}
 .gq .cat{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blue)}
 .gq p.stem{font-size:1rem;margin:6px 0 12px}
 .gq .opts{display:flex;flex-wrap:wrap;gap:8px}
@@ -122,7 +128,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 .catbar span b.good{color:var(--green)} .catbar span b.bad{color:var(--signal)}
 
 /* reveal blocks (paraphrase gym / task1) */
-.reveal-item{margin-bottom:30px;padding:18px 20px;background:#fffdf8;border:1px solid var(--line)}
+.reveal-item{margin-bottom:30px;padding:18px 20px;background:var(--card);border:1px solid var(--line)}
 .reveal-item .src{font-size:1.02rem;padding:10px 14px;background:var(--paper-deep);border-left:3px solid var(--signal);margin:8px 0 12px}
 .model{display:none;margin-top:12px;padding:12px 14px;background:var(--blueprint);border-left:3px solid var(--green);font-size:.93rem}
 .model.show{display:block}
@@ -131,11 +137,11 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 /* dictation */
 .dict-box{max-width:680px;margin:0 auto}
 .dict-controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
-.diff{font-size:1.05rem;line-height:2;margin-top:14px;padding:14px 16px;background:#fffdf8;border:1px solid var(--line);display:none}
+.diff{font-size:1.05rem;line-height:2;margin-top:14px;padding:14px 16px;background:var(--card);border:1px solid var(--line);display:none}
 .diff.show{display:block}
 .diff .ok{color:var(--green)}
-.diff .miss{background:#fbdcd2;color:var(--signal);text-decoration:line-through;padding:0 3px}
-.diff .extra{background:#fdeccf;color:var(--amber);padding:0 3px}
+.diff .miss{background:var(--miss);color:var(--signal);text-decoration:line-through;padding:0 3px}
+.diff .extra{background:var(--extra);color:var(--amber);padding:0 3px}
 .lvlpick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 .lvlpick button.on{background:var(--blue);border-color:var(--blue);color:var(--paper)}
 
@@ -157,7 +163,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 /* quick test player */
 .qt-setup{text-align:center;padding:20px 0}
 .qt-card{
-  border:2px solid var(--ink);background:#fffdf8;padding:26px 28px;min-height:200px;
+  border:2px solid var(--ink);background:var(--card);padding:26px 28px;min-height:200px;
   box-shadow:5px 5px 0 rgba(28,42,68,.14);
 }
 .qt-card .qtag{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);display:block;margin-bottom:10px}
@@ -190,18 +196,47 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 .spark-row:last-child{margin-bottom:0}
 .spark-label{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);min-width:150px}
 
+/* vocab browse */
+.bw-item{border:1px solid var(--line);background:var(--card);padding:12px 15px;margin-bottom:7px}
+.bw-head{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.bw-head b{font-family:var(--display);font-size:1.08rem;font-weight:700}
+.bw-head .pos{font-family:var(--mono);font-size:.64rem;color:var(--signal)}
+.bw-head .tp{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);border:1px solid var(--line);padding:1px 6px}
+.bw-head .bx{font-family:var(--mono);font-size:.6rem;margin-left:auto;color:var(--ink-soft)}
+.bw-head .bx.done{color:var(--green);font-weight:600}
+.bw-item .d{font-size:.93rem;margin-top:3px}
+.bw-item .ex-line{font-size:.89rem;font-style:italic;color:var(--ink-soft);margin-top:4px}
+.bw-item .c{font-family:var(--mono);font-size:.68rem;color:var(--blue);margin-top:4px}
+.bw-empty{font-family:var(--mono);font-size:.74rem;color:var(--ink-soft);font-style:italic;padding:16px;border:1px dashed var(--line);text-align:center}
+
+/* theme toggle */
+#theme-toggle{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--line);color:var(--ink-soft);
+  padding:5px 11px;cursor:pointer;margin-top:6px;transition:all .15s;
+}
+#theme-toggle:hover{background:var(--blueprint);color:var(--blue);border-color:var(--blue)}
+
 /* session history */
 .hist-list{list-style:none}
 .hist-list li{font-family:var(--mono);font-size:.72rem;padding:9px 12px;border:1px solid var(--line);margin-bottom:6px;background:var(--paper-deep);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .hist-list li.hist-empty{color:var(--ink-soft);font-style:italic;border-style:dashed;background:transparent}
 </style>
+<script>
+/* set theme before first paint to avoid a flash of the wrong palette */
+(function(){try{
+  var t=localStorage.getItem('ielts-theme');
+  if(!t)t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  if(t==='dark')document.documentElement.setAttribute('data-theme','dark');
+}catch(e){}})();
+</script>
 </head>
 <body>
 
 <header>
   <div class="head-inner">
     <div class="brand"><h1>IELTS <em>Practice Gym</em></h1></div>
-    <div class="candidate">Band 7 skill training · daily 15–30 min<br><a href="index.html">→ back to Mock Test 01</a></div>
+    <div class="candidate">Band 7 skill training · daily 15–30 min<br><a href="index.html">→ back to Mock Test 01</a><br><button id="theme-toggle" title="Toggle light / dark">◐ Theme</button></div>
   </div>
   <nav id="nav">
     <button data-sec="home" class="active">Gym Floor</button>
@@ -238,7 +273,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
       <button class="btn" id="qt-banner-btn" style="background:var(--paper);color:var(--signal);border-color:var(--paper)">⚡ Start now</button>
     </div>
     <div class="ov-grid">
-      <div class="ov-card" data-go="vocab"><span class="num">A</span><h4>Vocabulary</h4><p>101 band-7 words across 8 IELTS topics — flashcards with collocations and the band-6 word each one upgrades.</p><span class="stat" id="st-vocab">0 / 101 mastered</span></div>
+      <div class="ov-card" data-go="vocab"><span class="num">A</span><h4>Vocabulary</h4><p>201 band-7 words across 13 IELTS topics — flashcards, active-recall testing, and a searchable word list.</p><span class="stat" id="st-vocab">0 / 201 mastered</span></div>
       <div class="ov-card" data-go="para"><span class="num">B</span><h4>Paraphrase</h4><p>Match academic paraphrases — the core skill behind TFNG questions and Writing lexical resource.</p><span class="stat" id="st-para">best: — moves</span></div>
       <div class="ov-card" data-go="grammar"><span class="num">C</span><h4>Grammar</h4><p>72 questions on the exact traps Thai speakers hit: articles, agreement, tense, prepositions.</p><span class="stat" id="st-grammar">no attempt yet</span></div>
       <div class="ov-card" data-go="task1"><span class="num">D</span><h4>Task 1 Gym</h4><p>Write the overview sentence for 10 chart types, then compare against a band-7 model.</p><span class="stat" id="st-task1">0 / 10 done</span></div>
@@ -315,11 +350,18 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
   <div class="sheet">
     <span class="stamp">Station A</span>
     <p class="kicker">Lexical resource · band 7 = precision + collocation</p>
-    <h2>Vocabulary flashcards</h2>
-    <p class="rubric">Click the card to flip. "Got it" moves a word up a box (3 boxes = mastered); "Again" sends it back to box 1. The deck always serves your weakest words first. Learn the <b>collocation</b>, not just the word — examiners award "less common lexical items used with collocation awareness", not isolated big words.</p>
-    <div class="fc-wrap">
+    <h2>Vocabulary</h2>
+    <p class="rubric">Learn the <b>collocation</b>, not just the word — examiners award "less common lexical items used with collocation awareness", not isolated big words. <b>Flashcards</b> build recognition; <b>Recall</b> forces you to produce the word from its meaning, which is what Writing and Speaking actually demand. Boxes: "Got it" promotes a word (3 = mastered), "Again" sends it back to box 1, and the deck always serves your weakest words first.</p>
+
+    <div class="lvlpick" id="vocab-mode" style="margin-bottom:12px">
+      <button class="btn ghost on" data-mode="cards">🃏 Flashcards</button>
+      <button class="btn ghost" data-mode="recall">✍ Recall</button>
+      <button class="btn ghost" data-mode="browse">📖 Browse all</button>
+    </div>
+    <div class="lvlpick" id="topic-pick" style="margin-bottom:14px"></div>
+
+    <div class="fc-wrap" id="vocab-cards">
       <div class="fc-meta"><span id="fc-pos">Card – / –</span><span id="fc-filter-label">All topics</span></div>
-      <div class="lvlpick" id="topic-pick" style="justify-content:center;margin-bottom:14px"></div>
       <div class="fcard" id="fcard">
         <span class="topic" id="fc-topic"></span>
         <div id="fc-face"></div>
@@ -330,6 +372,30 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
         <button class="btn" id="fc-got">✓ Got it</button>
       </div>
       <div class="boxbar" id="boxbar"></div>
+    </div>
+
+    <div class="fc-wrap" id="vocab-recall" style="display:none">
+      <div class="fc-meta"><span id="rc-pos">Card – / –</span><span id="rc-score"></span></div>
+      <div class="fcard" style="cursor:default;min-height:auto;padding:28px">
+        <span class="topic" id="rc-topic"></span>
+        <p style="font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-bottom:8px">Which word means…</p>
+        <p class="def" id="rc-def" style="font-size:1.15rem"></p>
+        <p class="coll" id="rc-hint" style="margin-top:6px"></p>
+        <input type="text" id="rc-input" placeholder="type the word…" autocomplete="off" autocapitalize="off" spellcheck="false"
+          style="margin-top:16px;font-family:var(--mono);font-size:1rem;padding:11px 14px;border:1px solid var(--ink);background:var(--card);color:var(--ink);width:100%;max-width:340px;align-self:center;text-align:center">
+        <div id="rc-feedback" style="margin-top:14px"></div>
+      </div>
+      <div class="fc-actions">
+        <button class="btn ghost" id="rc-skip">Skip / show</button>
+        <button class="btn" id="rc-check">Check answer</button>
+      </div>
+    </div>
+
+    <div id="vocab-browse" style="display:none">
+      <input type="text" id="browse-search" placeholder="Search word, meaning or collocation…" autocomplete="off"
+        style="font-family:var(--serif);font-size:1rem;padding:11px 14px;border:1px solid var(--ink);background:var(--card);color:var(--ink);width:100%;margin-bottom:12px">
+      <p class="progress-note" id="browse-count" style="margin-top:0"></p>
+      <div id="browse-list"></div>
     </div>
   </div>
 </section>
@@ -495,6 +561,12 @@ const LS='ielts-gym';
 const S=JSON.parse(localStorage.getItem(LS)||'{}');
 function save(){localStorage.setItem(LS,JSON.stringify(S))}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
+document.getElementById('theme-toggle').addEventListener('click',()=>{
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  if(dark)document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme','dark');
+  try{localStorage.setItem('ielts-theme',dark?'light':'dark')}catch(e){}
+});
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const nav=document.getElementById('nav');
 function go(sec){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('active',s.id===sec));
@@ -618,14 +690,116 @@ const DECK=[
 {w:'malnutrition',pos:'noun',t:'Health',d:'a lack of proper nutrition, caused by insufficient or unbalanced diet',ex:'Malnutrition rates remain high in areas with limited access to fresh produce.',c:'childhood/widespread malnutrition',up:'not getting enough proper food'},
 {w:'epidemic',pos:'noun',t:'Health',d:'a widespread occurrence of a disease or undesirable phenomenon',ex:'Public health officials describe loneliness among the elderly as a hidden epidemic.',c:'an epidemic of X · a growing epidemic',up:'something spreading rapidly and widely'},
 {w:'resilience',pos:'noun',t:'Health',d:'the capacity to recover quickly from difficulties',ex:'Community support networks build resilience against economic shocks.',c:'build/show resilience',up:'ability to bounce back'},
+// ---- Round 3: five new topics + top-ups across the original eight ----
+{w:'remuneration',pos:'noun',t:'Work',d:'payment or compensation received for work',ex:'The role offers modest remuneration but excellent training.',c:'generous/competitive remuneration',up:'pay / salary'},
+{w:'a vocation',pos:'noun',t:'Work',d:'a job or calling one feels particularly suited to',ex:'For many architects the work is a vocation rather than simply employment.',c:'a true vocation · a sense of vocation',up:'a job you love'},
+{w:'burnout',pos:'noun',t:'Work',d:'physical and mental exhaustion caused by prolonged stress',ex:'Long hours and tight deadlines have driven many young professionals to burnout.',c:'suffer/experience burnout · burnout rates',up:'being very tired from work'},
+{w:'delegate',pos:'verb',t:'Work',d:'to give a task or responsibility to someone else',ex:'Effective managers delegate routine tasks and concentrate on strategy.',c:'delegate responsibility/authority to',up:'give work to someone'},
+{w:'a perk',pos:'noun',t:'Work',d:'an extra benefit given in addition to salary',ex:'Flexible hours are the perk employees value most.',c:'perks of the job · offer perks',up:'extra benefit'},
+{w:'redundancy',pos:'noun',t:'Work',d:'job loss because the position is no longer needed',ex:'Automation has led to widespread redundancies in manufacturing.',c:'face/make redundancies · voluntary redundancy',up:'losing a job'},
+{w:'morale',pos:'noun',t:'Work',d:'the confidence and enthusiasm of a person or group',ex:'Transparent communication from leadership improved staff morale considerably.',c:'boost/damage morale · low morale',up:'how happy staff feel'},
+{w:'mentor',pos:'verb',t:'Work',d:'to advise and guide a less experienced person',ex:'Senior architects mentor graduates through their first major project.',c:'mentor a junior colleague · a mentoring scheme',up:'teach / help someone learn'},
+{w:'workload',pos:'noun',t:'Work',d:'the amount of work a person is expected to do',ex:'An unmanageable workload is the most common reason staff resign.',c:'a heavy/manageable workload',up:'amount of work'},
+{w:'flexible working',pos:'noun',t:'Work',d:'an arrangement allowing staff to choose their hours or location',ex:'Flexible working has reshaped demand for office space in city centres.',c:'offer/request flexible working',up:'choosing your own hours'},
+{w:'career progression',pos:'noun',t:'Work',d:'advancement through increasingly senior roles over time',ex:'Clear career progression keeps talented staff from moving to competitors.',c:'career progression opportunities',up:'getting promoted'},
+{w:'tenure',pos:'noun',t:'Work',d:'the period someone holds a position, or guaranteed permanent employment',ex:'During her tenure as chief planner, three major districts were redeveloped.',c:'during X\'s tenure · secure tenure',up:'time in a job'},
+{w:'bias',pos:'noun',t:'Media',d:'unfair preference for or against something',ex:'Readers increasingly assume that every outlet reports with some bias.',c:'political/editorial bias · show bias towards',up:'unfairness / one-sidedness'},
+{w:'censorship',pos:'noun',t:'Media',d:'the suppression of information considered unacceptable',ex:'Censorship of online content raises difficult questions about free expression.',c:'state/media censorship · impose censorship',up:'blocking information'},
+{w:'coverage',pos:'noun',t:'Media',d:'the reporting of an event by news organisations',ex:'The demolition received extensive coverage in the national press.',c:'extensive/media coverage',up:'news reporting'},
+{w:'sensationalism',pos:'noun',t:'Media',d:'presenting stories to provoke excitement at the expense of accuracy',ex:'Sensationalism attracts clicks but erodes public trust in journalism.',c:'tabloid sensationalism',up:'making news dramatic'},
+{w:'credible',pos:'adj',t:'Media',d:'able to be believed; trustworthy',ex:'Distinguishing credible sources from fabricated ones is now a basic literacy.',c:'a credible source/claim',up:'believable'},
+{w:'misinformation',pos:'noun',t:'Media',d:'false information spread regardless of intent to deceive',ex:'Misinformation spreads faster than corrections on most social platforms.',c:'spread/combat misinformation',up:'wrong information'},
+{w:'an outlet',pos:'noun',t:'Media',d:'a newspaper, channel or website that publishes news',ex:'Several independent outlets challenged the official account of events.',c:'a news/media outlet',up:'newspaper or channel'},
+{w:'scrutiny',pos:'noun',t:'Media',d:'close and critical examination',ex:'Public projects should be subject to far greater scrutiny than private ones.',c:'come under scrutiny · public/close scrutiny',up:'careful checking'},
+{w:'propaganda',pos:'noun',t:'Media',d:'information spread to promote a political cause, often misleadingly',ex:'The campaign was dismissed by critics as government propaganda.',c:'state propaganda · a propaganda campaign',up:'biased political messaging'},
+{w:'transparency',pos:'noun',t:'Media',d:'openness about decisions and how they were made',ex:'Greater transparency in planning decisions would reduce public suspicion.',c:'financial/greater transparency · a lack of transparency',up:'being open'},
+{w:'an echo chamber',pos:'noun',t:'Media',d:'an environment where people only encounter views like their own',ex:'Recommendation algorithms can trap users in an echo chamber.',c:'create/live in an echo chamber',up:'only hearing similar opinions'},
+{w:'go viral',pos:'verb',t:'Media',d:'to spread very rapidly online',ex:'A short clip of the collapsing facade went viral within hours.',c:'go viral · a viral video/post',up:'become popular online quickly'},
+{w:'assimilate',pos:'verb',t:'Culture',d:'to absorb, or be absorbed into, a wider culture',ex:'Second-generation migrants often assimilate more readily than their parents.',c:'assimilate into a culture',up:'fit in / become part of'},
+{w:'indigenous',pos:'adj',t:'Culture',d:'originating naturally in a particular place; native',ex:'Indigenous building techniques suited the climate far better than imported ones.',c:'indigenous people/knowledge/species',up:'native / local'},
+{w:'a custom',pos:'noun',t:'Culture',d:'a traditional and widely accepted way of behaving',ex:'Removing shoes indoors is a custom observed throughout the region.',c:'a local/ancient custom · observe a custom',up:'tradition'},
+{w:'cosmopolitan',pos:'adj',t:'Culture',d:'containing or familiar with people from many countries',ex:'Bangkok has become markedly more cosmopolitan over the past two decades.',c:'a cosmopolitan city/outlook',up:'international'},
+{w:'authentic',pos:'adj',t:'Culture',d:'genuine; not an imitation',ex:'Tourists increasingly seek authentic neighbourhoods rather than curated attractions.',c:'an authentic experience/cuisine',up:'real / genuine'},
+{w:'a taboo',pos:'noun',t:'Culture',d:'something prohibited or avoided by social custom',ex:'Discussing salary openly remains a taboo in many workplaces.',c:'break a taboo · a social taboo',up:'something not allowed socially'},
+{w:'multiculturalism',pos:'noun',t:'Culture',d:'the coexistence of several cultures within one society',ex:'Multiculturalism has reshaped the food, festivals and architecture of the capital.',c:'embrace/promote multiculturalism',up:'many cultures together'},
+{w:'safeguard',pos:'verb',t:'Culture',d:'to protect something from harm or loss',ex:'Listed status safeguards historic buildings from unsympathetic alteration.',c:'safeguard heritage/rights',up:'protect'},
+{w:'cultural identity',pos:'noun',t:'Culture',d:'the sense of belonging to a particular culture',ex:'Rapid redevelopment can erode a neighbourhood\'s cultural identity.',c:'preserve/lose cultural identity',up:'sense of who your culture is'},
+{w:'commercialised',pos:'adj',t:'Culture',d:'changed in order to make money, often losing authenticity',ex:'The festival has become so commercialised that its original meaning is obscured.',c:'heavily commercialised',up:'made into a business'},
+{w:'a ritual',pos:'noun',t:'Culture',d:'a set of actions performed regularly in a fixed way',ex:'Morning almsgiving remains a daily ritual in many Thai communities.',c:'perform a ritual · a religious ritual',up:'ceremony'},
+{w:'hospitality',pos:'noun',t:'Culture',d:'friendly and generous treatment of guests',ex:'The region is known for hospitality towards visitors, however brief their stay.',c:'warm hospitality · the hospitality industry',up:'being welcoming'},
+{w:'a deterrent',pos:'noun',t:'Law',d:'something that discourages an action through fear of consequences',ex:'Heavier fines have proved a weak deterrent against illegal dumping.',c:'act as a deterrent · an effective deterrent',up:'something that stops people'},
+{w:'rehabilitation',pos:'noun',t:'Law',d:'restoring someone to normal life after imprisonment or illness',ex:'Prison systems focused on rehabilitation report lower reoffending rates.',c:'rehabilitation programmes · offender rehabilitation',up:'helping people change'},
+{w:'legislation',pos:'noun',t:'Law',d:'laws considered collectively',ex:'New legislation requires all public buildings to meet accessibility standards.',c:'introduce/pass legislation',up:'laws'},
+{w:'enforce',pos:'verb',t:'Law',d:'to make sure a rule or law is obeyed',ex:'Building codes are only as effective as the authority that enforces them.',c:'enforce a law/rule · strictly enforced',up:'make people follow'},
+{w:'a loophole',pos:'noun',t:'Law',d:'an ambiguity in a rule that allows it to be legally avoided',ex:'Developers exploited a loophole to exceed the permitted building height.',c:'exploit/close a loophole · a legal loophole',up:'a gap in the rules'},
+{w:'lenient',pos:'adj',t:'Law',d:'more merciful or tolerant than expected',ex:'Critics argued the penalty was far too lenient given the damage caused.',c:'a lenient sentence/approach',up:'not strict'},
+{w:'an offender',pos:'noun',t:'Law',d:'a person who has committed a crime',ex:'First-time offenders are usually given community sentences.',c:'a repeat/first-time offender',up:'criminal'},
+{w:'liability',pos:'noun',t:'Law',d:'legal responsibility for something, especially costs or damage',ex:'The contractor accepted liability for the structural defects.',c:'accept/deny liability · legal liability',up:'legal responsibility'},
+{w:'mandate',pos:'verb',t:'Law',d:'to require something officially',ex:'Several cities now mandate solar panels on all new-build homes.',c:'mandate that … · a legal mandate',up:'officially require'},
+{w:'comply',pos:'verb',t:'Law',d:'to act in accordance with a rule or request',ex:'Older buildings often struggle to comply with modern fire regulations.',c:'comply with regulations/standards',up:'follow the rules'},
+{w:'jurisdiction',pos:'noun',t:'Law',d:'the official authority to make legal decisions in an area',ex:'Planning disputes fall under the jurisdiction of the local authority.',c:'fall under/outside a jurisdiction',up:'area of legal power'},
+{w:'with impunity',pos:'phrase',t:'Law',d:'without facing punishment for wrongdoing',ex:'Where enforcement is weak, developers breach planning rules with impunity.',c:'act with impunity',up:'without being punished'},
+{w:'a hypothesis',pos:'noun',t:'Science',d:'a proposed explanation tested by research',ex:'The hypothesis that green roofs lower ambient temperature has been repeatedly confirmed.',c:'test/support a hypothesis',up:'an idea to test'},
+{w:'empirical',pos:'adj',t:'Science',d:'based on observation or experiment rather than theory',ex:'There is now substantial empirical evidence that passive design reduces energy use.',c:'empirical evidence/data/research',up:'based on real observation'},
+{w:'a variable',pos:'noun',t:'Science',d:'a factor that can change and may affect a result',ex:'Orientation and shading are the two variables with the greatest impact.',c:'control for a variable · a key variable',up:'a factor that changes'},
+{w:'replicate',pos:'verb',t:'Science',d:'to repeat a study to check its results',ex:'Findings that cannot be replicated should be treated with caution.',c:'replicate a study/result',up:'repeat to check'},
+{w:'peer review',pos:'noun',t:'Science',d:'evaluation of research by other experts before publication',ex:'The paper passed peer review but its sample size remains small.',c:'undergo/survive peer review',up:'expert checking'},
+{w:'a correlation',pos:'noun',t:'Science',d:'a mutual relationship between two measured things',ex:'There is a strong correlation between street trees and pedestrian numbers.',c:'a strong/weak correlation between',up:'a link between two things'},
+{w:'causation',pos:'noun',t:'Science',d:'the relationship in which one thing directly produces another',ex:'A correlation was observed, but causation has not been demonstrated.',c:'establish/demonstrate causation',up:'one thing causing another'},
+{w:'methodology',pos:'noun',t:'Science',d:'the system of methods used in a study',ex:'The conclusions are questionable because the methodology was never disclosed.',c:'research methodology · a flawed methodology',up:'research method'},
+{w:'a sample',pos:'noun',t:'Science',d:'a smaller group selected to represent a larger population',ex:'A sample of two hundred households is too small to generalise from.',c:'a representative/random sample · sample size',up:'a small group studied'},
+{w:'rigorous',pos:'adj',t:'Science',d:'extremely thorough and careful',ex:'Rigorous testing revealed flaws the initial survey had missed.',c:'rigorous testing/analysis/standards',up:'very careful'},
+{w:'an anomaly',pos:'noun',t:'Science',d:'something that deviates from what is standard or expected',ex:'The unusually low reading was dismissed as an anomaly.',c:'a statistical anomaly · an apparent anomaly',up:'something unusual'},
+{w:'inconclusive',pos:'adj',t:'Science',d:'not leading to a firm conclusion',ex:'Early trials were inconclusive, so the study was extended by two years.',c:'inconclusive results/evidence',up:'not clear / undecided'},
+{w:'austerity',pos:'noun',t:'Economy',d:'government policy of severe spending cuts',ex:'A decade of austerity left public infrastructure visibly neglected.',c:'austerity measures/policies',up:'government spending cuts'},
+{w:'a deficit',pos:'noun',t:'Economy',d:'the amount by which spending exceeds income',ex:'The city ran a substantial deficit after the transport project overran.',c:'a budget/trade deficit · run a deficit',up:'spending more than you earn'},
+{w:'disposable income',pos:'noun',t:'Economy',d:'money remaining after tax and essential costs',ex:'Rising rents have squeezed disposable income for younger households.',c:'household disposable income',up:'spare money'},
+{w:'speculation',pos:'noun',t:'Economy',d:'buying assets hoping to profit from price rises rather than use',ex:'Property speculation has pushed prices well beyond local earnings.',c:'property/financial speculation',up:'buying to resell for profit'},
+{w:'viable',pos:'adj',t:'Economy',d:'capable of working successfully, especially financially',ex:'The scheme is only viable if the government underwrites part of the cost.',c:'commercially/economically viable',up:'workable / possible'},
+{w:'overheads',pos:'noun',t:'Economy',d:'the ongoing running costs of a business',ex:'Remote working allowed the firm to cut its overheads sharply.',c:'reduce/cover overheads · high overheads',up:'running costs'},
+{w:'a downturn',pos:'noun',t:'Economy',d:'a decline in economic activity',ex:'Construction is usually the first sector to feel an economic downturn.',c:'an economic downturn · a sharp downturn',up:'economy getting worse'},
+{w:'a living wage',pos:'noun',t:'Economy',d:'pay high enough to meet basic living costs',ex:'Campaigners argue that a living wage should be legally guaranteed.',c:'pay/earn a living wage',up:'enough money to live on'},
+{w:'immunity',pos:'noun',t:'Health',d:'the body\'s ability to resist a particular infection',ex:'Vaccination programmes build immunity across the whole population.',c:'build/acquire immunity · herd immunity',up:'protection from disease'},
+{w:'obesity',pos:'noun',t:'Health',d:'the condition of being severely overweight',ex:'Neighbourhoods without safe walking routes show higher rates of obesity.',c:'childhood obesity · obesity rates',up:'being very overweight'},
+{w:'a regimen',pos:'noun',t:'Health',d:'a prescribed routine of exercise, diet or treatment',ex:'Recovery required a strict regimen of physiotherapy and rest.',c:'a strict/daily regimen',up:'routine / plan'},
+{w:'diagnose',pos:'verb',t:'Health',d:'to identify an illness from its symptoms',ex:'Conditions diagnosed early are far cheaper and easier to treat.',c:'diagnose a condition · be diagnosed with',up:'find out what illness someone has'},
+{w:'longevity',pos:'noun',t:'Health',d:'long life; the length of time something lasts',ex:'Diet and air quality both contribute to the longevity of city residents.',c:'increase/affect longevity',up:'living a long time'},
+{w:'contagious',pos:'adj',t:'Health',d:'spread from one person to another by close contact',ex:'Poorly ventilated interiors accelerate the spread of contagious illness.',c:'a contagious disease · highly contagious',up:'catching / spreads easily'},
+{w:'holistic',pos:'adj',t:'Health',d:'treating the whole person or system rather than isolated parts',ex:'A holistic approach considers noise, light and air quality together.',c:'a holistic approach/view',up:'whole-picture / complete'},
+{w:'screening',pos:'noun',t:'Health',d:'testing people for a disease before symptoms appear',ex:'Routine screening detects many conditions at a treatable stage.',c:'health screening · routine screening',up:'early testing'},
+{w:'vernacular',pos:'adj',t:'Urban',d:'built in the local traditional style using local materials',ex:'Vernacular architecture evolved over centuries to suit the local climate.',c:'vernacular architecture/design',up:'traditional local style'},
+{w:'footfall',pos:'noun',t:'Urban',d:'the number of people passing through a place',ex:'Pedestrianising the street tripled footfall for nearby shops.',c:'high/low footfall · increase footfall',up:'number of people walking past'},
+{w:'a thoroughfare',pos:'noun',t:'Urban',d:'a main road or route through a place',ex:'What was once a quiet lane is now a six-lane thoroughfare.',c:'a busy/main thoroughfare',up:'main road'},
+{w:'urban renewal',pos:'noun',t:'Urban',d:'redevelopment of rundown areas of a city',ex:'Urban renewal improved the district but displaced many original residents.',c:'an urban renewal scheme/project',up:'fixing up old city areas'},
+{w:'conservation',pos:'noun',t:'Environment',d:'protection of the natural environment or resources',ex:'Water conservation measures cut consumption by nearly a fifth.',c:'wildlife/water/energy conservation',up:'protecting nature'},
+{w:'a habitat',pos:'noun',t:'Environment',d:'the natural home of an animal or plant',ex:'The development destroyed a habitat that had supported rare birds.',c:'destroy/protect a habitat · natural habitat',up:'where animals live'},
+{w:'run-off',pos:'noun',t:'Environment',d:'water that flows over the ground into rivers and drains',ex:'Paved surfaces increase run-off and worsen urban flooding.',c:'surface/rainwater run-off',up:'water flowing off surfaces'},
+{w:'carbon-neutral',pos:'adj',t:'Environment',d:'releasing no net carbon dioxide overall',ex:'The council has pledged to make all public buildings carbon-neutral by 2035.',c:'carbon-neutral by [year] · go carbon-neutral',up:'not adding carbon overall'},
+{w:'a cohort',pos:'noun',t:'Education',d:'a group of people sharing a characteristic, especially a starting year',ex:'This year\'s cohort is the largest the department has ever admitted.',c:'a student/graduating cohort',up:'a group of students'},
+{w:'plagiarism',pos:'noun',t:'Education',d:'presenting someone else\'s work as your own',ex:'Universities now screen every submission for plagiarism automatically.',c:'commit/detect plagiarism',up:'copying someone\'s work'},
+{w:'lifelong learning',pos:'noun',t:'Education',d:'continuing to study and gain skills throughout adult life',ex:'Rapid technological change makes lifelong learning a practical necessity.',c:'promote/encourage lifelong learning',up:'learning your whole life'},
+{w:'streaming',pos:'noun',t:'Education',d:'grouping students by ability',ex:'Critics argue that streaming entrenches disadvantage from an early age.',c:'streaming by ability · academic streaming',up:'putting students in ability groups'},
+{w:'encryption',pos:'noun',t:'Technology',d:'converting data into code to prevent unauthorised access',ex:'End-to-end encryption protects messages even from the service provider.',c:'end-to-end/data encryption',up:'coding data for security'},
+{w:'a prototype',pos:'noun',t:'Technology',d:'an early model built to test a design',ex:'The studio builds physical prototypes before committing to a final design.',c:'build/test a prototype · a working prototype',up:'a first test version'},
+{w:'seamless',pos:'adj',t:'Technology',d:'working smoothly without noticeable joins or interruptions',ex:'Commuters expect a seamless transition between bus, train and payment systems.',c:'a seamless experience/integration',up:'smooth / without problems'},
+{w:'obsolescence',pos:'noun',t:'Technology',d:'the process of becoming outdated and no longer useful',ex:'Planned obsolescence forces consumers to replace devices unnecessarily.',c:'planned/built-in obsolescence',up:'becoming out of date'},
+{w:'social mobility',pos:'noun',t:'Society',d:'the ability to move between social or economic classes',ex:'Education is often described as the main engine of social mobility.',c:'upward social mobility · limited social mobility',up:'moving up in society'},
+{w:'an ageing population',pos:'noun',t:'Society',d:'a population in which the proportion of older people is rising',ex:'An ageing population will reshape housing demand within two decades.',c:'cope with an ageing population',up:'more old people'},
+{w:'urbanisation',pos:'noun',t:'Society',d:'the movement of populations from rural areas into cities',ex:'Rapid urbanisation has outpaced the construction of adequate housing.',c:'rapid/unplanned urbanisation',up:'people moving to cities'},
+{w:'a norm',pos:'noun',t:'Society',d:'a standard of behaviour typical of a group',ex:'Remote work has shifted from an exception to a social norm.',c:'a social/cultural norm · become the norm',up:'normal behaviour'},
+{w:'a premise',pos:'noun',t:'Academic',d:'a statement assumed to be true as the basis of an argument',ex:'The argument rests on the premise that growth and sustainability are compatible.',c:'the basic premise · rest on a premise',up:'starting assumption'},
+{w:'tenuous',pos:'adj',t:'Academic',d:'weak; based on very slight evidence',ex:'The link between the two policies is tenuous at best.',c:'a tenuous link/connection/grasp',up:'weak'},
+{w:'substantiate',pos:'verb',t:'Academic',d:'to provide evidence supporting a claim',ex:'The report makes bold claims it never fully substantiates.',c:'substantiate a claim/allegation',up:'prove / back up'},
+{w:'notwithstanding',pos:'prep',t:'Academic',d:'in spite of',ex:'Notwithstanding these objections, the scheme was approved unanimously.',c:'notwithstanding X · X notwithstanding',up:'despite'},
 ];
 S.boxes=S.boxes||{};
 let fcQueue=[],fcIdx=-1,fcFlipped=false,fcTopic='All';
-const TOPICS=['All','Urban','Environment','Education','Technology','Society','Academic','Economy','Health'];
+const TOPICS=['All','Urban','Environment','Education','Technology','Society','Academic','Economy','Health','Work','Media','Culture','Law','Science'];
 const topicPick=document.getElementById('topic-pick');
 TOPICS.forEach(t=>{const b=document.createElement('button');b.className='btn ghost'+(t==='All'?' on':'');b.textContent=t;
   b.addEventListener('click',()=>{fcTopic=t;topicPick.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
-    document.getElementById('fc-filter-label').textContent=t==='All'?'All topics':t;buildQueue();nextCard()});
+    document.getElementById('fc-filter-label').textContent=t==='All'?'All topics':t;
+    buildQueue();nextCard();buildRecall();nextRecall();renderBrowse()});
   topicPick.appendChild(b)});
 function box(w){return S.boxes[w]||0}
 function buildQueue(){
@@ -652,6 +826,78 @@ document.getElementById('fcard').addEventListener('click',()=>{fcFlipped=!fcFlip
 document.getElementById('fc-got').addEventListener('click',()=>{const c=fcQueue[fcIdx];S.boxes[c.w]=Math.min(box(c.w)+1,3);save();nextCard()});
 document.getElementById('fc-again').addEventListener('click',()=>{const c=fcQueue[fcIdx];S.boxes[c.w]=1;save();nextCard()});
 buildQueue();nextCard();
+
+/* ---- vocab mode switching ---- */
+const VIEWS={cards:'vocab-cards',recall:'vocab-recall',browse:'vocab-browse'};
+document.querySelectorAll('#vocab-mode button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#vocab-mode button').forEach(x=>x.classList.toggle('on',x===b));
+  const mode=b.dataset.mode;
+  Object.entries(VIEWS).forEach(([k,id])=>{document.getElementById(id).style.display=k===mode?(k==='browse'?'block':'block'):'none'});
+  if(mode==='recall'){buildRecall();nextRecall()}
+  if(mode==='browse')renderBrowse();
+}));
+
+/* ---- recall mode (produce the word from its meaning) ---- */
+let rcQueue=[],rcIdx=-1,rcAnswered=false,rcRight=0,rcTotal=0;
+function normalise(s){return s.toLowerCase().trim().replace(/^(a|an|the)\s+/,'').replace(/[^a-z\s-]/g,'').replace(/\s+/g,' ')}
+function buildRecall(){
+  const pool=DECK.filter(c=>fcTopic==='All'||c.t===fcTopic);
+  rcQueue=shuffle(pool).sort((a,b)=>box(a.w)-box(b.w));rcIdx=-1;
+}
+function showRecall(){
+  const c=rcQueue[rcIdx];if(!c)return;
+  rcAnswered=false;
+  document.getElementById('rc-topic').textContent=c.t+' · box '+Math.min(box(c.w),3);
+  document.getElementById('rc-pos').textContent=`Card ${rcIdx+1} / ${rcQueue.length}`;
+  document.getElementById('rc-score').textContent=rcTotal?`${rcRight}/${rcTotal} correct`:'';
+  document.getElementById('rc-def').textContent=c.d;
+  document.getElementById('rc-hint').textContent=`${c.pos} · ${c.w.split(' ').length>1?c.w.split(' ').length+' words':c.w.replace(/^(a|an|the)\s+/,'').length+' letters'} · goes with: ${c.c}`;
+  const inp=document.getElementById('rc-input');inp.value='';inp.disabled=false;
+  document.getElementById('rc-feedback').innerHTML='';
+  document.getElementById('rc-check').textContent='Check answer';
+  inp.focus();
+}
+function nextRecall(){rcIdx=(rcIdx+1)%rcQueue.length;showRecall()}
+function revealRecall(gotIt){
+  const c=rcQueue[rcIdx];rcAnswered=true;
+  document.getElementById('rc-input').disabled=true;
+  rcTotal++;if(gotIt){rcRight++;S.boxes[c.w]=Math.min(box(c.w)+1,3)}else{S.boxes[c.w]=1}
+  S.recallRight=(S.recallRight||0)+(gotIt?1:0);S.recallTotal=(S.recallTotal||0)+1;save();
+  document.getElementById('rc-feedback').innerHTML=
+    `<p style="font-family:var(--mono);font-size:.8rem;color:${gotIt?'var(--green)':'var(--signal)'};font-weight:600">${gotIt?'✓ Correct':'✗ The word was'}</p>`+
+    `<p class="word" style="font-size:1.7rem;margin-top:4px">${c.w}</p>`+
+    `<p class="ex" style="margin-top:8px">“${c.ex}”</p>`+
+    `<p class="up" style="margin-top:8px">upgrades: <b>${c.up}</b></p>`;
+  document.getElementById('rc-check').textContent='Next word →';
+  document.getElementById('rc-score').textContent=`${rcRight}/${rcTotal} correct`;
+  renderBoxbar();
+}
+document.getElementById('rc-check').addEventListener('click',()=>{
+  if(rcAnswered){nextRecall();return}
+  const typed=document.getElementById('rc-input').value;
+  if(!typed.trim()){toast('Type your answer, or use "Skip / show"');return}
+  revealRecall(normalise(typed)===normalise(rcQueue[rcIdx].w));
+});
+document.getElementById('rc-skip').addEventListener('click',()=>{if(!rcAnswered)revealRecall(false);else nextRecall()});
+document.getElementById('rc-input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('rc-check').click()});
+
+/* ---- browse mode ---- */
+function renderBrowse(){
+  const q=(document.getElementById('browse-search').value||'').toLowerCase().trim();
+  let pool=DECK.filter(c=>fcTopic==='All'||c.t===fcTopic);
+  if(q)pool=pool.filter(c=>(c.w+' '+c.d+' '+c.c+' '+c.up+' '+c.t+' '+c.ex).toLowerCase().includes(q));
+  pool=pool.slice().sort((a,b)=>a.w.replace(/^(a|an|the)\s+/,'').localeCompare(b.w.replace(/^(a|an|the)\s+/,'')));
+  document.getElementById('browse-count').textContent=`${pool.length} word${pool.length===1?'':'s'}${fcTopic==='All'?'':' in '+fcTopic}${q?' matching “'+q+'”':''} · ${DECK.length} in the full deck`;
+  const list=document.getElementById('browse-list');
+  if(!pool.length){list.innerHTML='<p class="bw-empty">No words match that search.</p>';return}
+  list.innerHTML=pool.map(c=>{
+    const b=Math.min(box(c.w),3);
+    return `<div class="bw-item"><div class="bw-head"><b>${c.w}</b><span class="pos">${c.pos}</span><span class="tp">${c.t}</span>
+      <span class="bx ${b>=3?'done':''}">${b>=3?'★ mastered':'box '+b}</span></div>
+      <p class="d">${c.d}</p><p class="ex-line">“${c.ex}”</p><p class="c">${c.c} · upgrades: ${c.up}</p></div>`;
+  }).join('');
+}
+document.getElementById('browse-search').addEventListener('input',renderBrowse);
 
 /* ============ PARAPHRASE MATCH ============ */
 const PAIRS=[

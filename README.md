@@ -17,7 +17,7 @@ Self-contained IELTS Academic practice mock (single `index.html`, no build, no b
 Daily skill training between mocks — seven stations plus a Quick Test mode, all progress tracked in `localStorage`:
 
 - **⚡ Quick Test** — a mixed circuit (vocab, grammar, paraphrase, listening, speaking) sized to 5/10/15 minutes for short free time — no station-hopping, one continuous card stream against a countdown timer.
-- **Vocabulary** — 101 band-7 words across 8 IELTS topics; Leitner-box flashcards with collocations and the band-6 word each upgrades.
+- **Vocabulary** — 201 band-7 words across 13 IELTS topics, in three modes: **Flashcards** (Leitner boxes, weakest words first), **Recall** (produce the word from its definition — active production, which is what Writing and Speaking actually test), and **Browse** (searchable, alphabetised reference list of the whole deck with box status).
 - **Paraphrase match** — tile-matching game for academic paraphrase recognition (the skill behind TFNG questions), 44 pairs.
 - **Grammar drills** — 72 questions on Thai-speaker traps (articles, agreement, tense, prepositions, complex sentences, hedging) with a per-category accuracy scoreboard.
 - **Task 1 Gym** — write the overview sentence for 10 chart types, compare against band-7 models.
@@ -28,6 +28,8 @@ Daily skill training between mocks — seven stations plus a Quick Test mode, al
 - **Session history & backup** — a running log of every Quick Test circuit (date, duration, per-skill accuracy), plus export/import to back up or transfer all gym progress as a `.json` file.
 
 All answers autosave to `localStorage` — nothing leaves the browser. Speech recognition (Shadowing) runs entirely client-side too; no audio is uploaded anywhere.
+
+**Dark mode** — both pages have a `◐ Theme` toggle in the header. It follows your system preference on first visit and remembers your choice after that, applied before first paint so there's no flash of the wrong palette. The Task 1 chart deliberately stays on white, as it would be on a real exam paper.
 
 ## How persistence works
 

@@ -19,9 +19,16 @@
   --signal:#c8451f;
   --green:#2e6b45;
   --amber:#a86b1f;
+  --card:#fffdf8;
+  --grid:rgba(36,86,166,.055);
   --mono:'IBM Plex Mono',monospace;
   --serif:'Newsreader',serif;
   --display:'Fraunces',serif;
+}
+:root[data-theme="dark"]{
+  --paper:#161d2b;--paper-deep:#1f2838;--ink:#e9e4d7;--ink-soft:#a3adc0;--line:#3a4557;
+  --blue:#7fa9ec;--blueprint:#232f45;--signal:#e87d55;--green:#6cc08d;--amber:#d7a54a;
+  --card:#1b2333;--grid:rgba(127,169,236,.05);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -31,8 +38,8 @@ body{
   color:var(--ink);
   line-height:1.6;
   background-image:
-    linear-gradient(rgba(36,86,166,.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(36,86,166,.055) 1px, transparent 1px);
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size:28px 28px;
   min-height:100vh;
 }
@@ -183,7 +190,7 @@ select,.fill{
 .chartbox svg{width:100%;height:auto;display:block}
 textarea{
   width:100%;min-height:340px;font-family:var(--serif);font-size:1.02rem;line-height:1.7;
-  padding:18px;border:1px solid var(--ink);background:#fffdf8;color:var(--ink);resize:vertical;
+  padding:18px;border:1px solid var(--ink);background:var(--card);color:var(--ink);resize:vertical;
 }
 textarea:focus{outline:2px solid var(--blue);outline-offset:-1px}
 textarea.small{min-height:90px}
@@ -243,7 +250,21 @@ footer{
   padding:12px 22px;opacity:0;transition:all .3s;z-index:99;letter-spacing:.05em;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#theme-toggle{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--line);color:var(--ink-soft);
+  padding:5px 11px;cursor:pointer;margin-top:6px;transition:all .15s;
+}
+#theme-toggle:hover{background:var(--blueprint);color:var(--blue);border-color:var(--blue)}
 </style>
+<script>
+/* set theme before first paint to avoid a flash of the wrong palette */
+(function(){try{
+  var t=localStorage.getItem('ielts-theme');
+  if(!t)t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  if(t==='dark')document.documentElement.setAttribute('data-theme','dark');
+}catch(e){}})();
+</script>
 </head>
 <body>
 
@@ -252,7 +273,8 @@ footer{
     <div class="brand"><h1>IELTS <em>Academic</em> — Mock 01</h1></div>
     <div class="candidate">
       Candidate: Omn · Bangkok<br>
-      Target: <b>7.0 overall / 6.5 min</b> · Chevening / DAAD
+      Target: <b>7.0 overall / 6.5 min</b> · Chevening / DAAD<br>
+      <button id="theme-toggle" title="Toggle light / dark">◐ Theme</button>
     </div>
   </div>
   <nav id="nav">
@@ -652,6 +674,12 @@ const LS_KEY='ielts-mock-01';
 const state=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
 function save(){localStorage.setItem(LS_KEY,JSON.stringify(state))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
+document.getElementById('theme-toggle').addEventListener('click',()=>{
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  if(dark)document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme','dark');
+  try{localStorage.setItem('ielts-theme',dark?'light':'dark')}catch(e){}
+});
 
 /* ================= navigation ================= */
 const nav=document.getElementById('nav');
