@@ -1,0 +1,118 @@
+/* Shared home-screen shell. Existing exercise content and storage keys stay intact. */
+[hidden]{display:none!important}
+html{scroll-padding-top:160px}
+body{min-height:100dvh;-webkit-text-size-adjust:100%}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,a{touch-action:manipulation}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+#theme-toggle{display:inline-grid;place-items:center;width:44px;height:44px;padding:0}
+header{padding-top:env(safe-area-inset-top,0px)}
+.brand h1{font-size:1.9rem;letter-spacing:0}
+h2{font-size:2rem;letter-spacing:0}
+.sheet{box-shadow:none;border:0;padding:28px 0;background:transparent}
+.app-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.app-bar{max-width:1200px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.7rem;color:var(--ink-soft)}
+.app-connection{min-width:0}
+.app-connection.is-ready{color:var(--green)}
+.app-actions{display:flex;gap:8px;flex-shrink:0}
+.app-action{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);padding:7px 10px;min-height:44px;font:inherit;cursor:pointer}
+.app-action:hover{background:var(--blueprint)}
+.app-dock{display:none}
+.app-topic-picker{display:none}
+.app-install-dialog{margin:auto;width:min(540px,calc(100% - 24px));max-height:calc(100dvh - 48px);overflow:auto;padding:24px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;font-family:var(--serif)}
+.app-install-dialog::backdrop{background:rgba(0,0,0,.55)}
+.app-dialog-heading{display:flex;align-items:center;gap:12px}
+.app-dialog-heading img{border-radius:12px;flex-shrink:0}
+.app-dialog-heading>div{min-width:0;flex:1}
+.app-dialog-heading h2{font-size:1.3rem;line-height:1.25;margin:0}
+.app-eyebrow{font-family:var(--mono);font-size:.65rem;color:var(--signal);margin:0 0 4px}
+.app-icon-button{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:4px;cursor:pointer;flex-shrink:0}
+.app-install-dialog h3{margin:22px 0 8px;font-size:1rem}
+.app-install-dialog ol{padding-left:24px}
+.app-install-dialog li{padding-left:4px;margin-bottom:10px}
+.app-install-dialog li .app-icon{display:inline;vertical-align:middle;width:17px;height:17px}
+.app-install-dialog p{font-size:.92rem}
+.app-install-note{border-top:1px solid var(--line);margin-top:18px;padding-top:14px;color:var(--ink-soft)}
+.app-install-note p+p{margin-top:12px}
+.app-help-link{margin-top:16px}
+.app-help-link a{color:var(--blue)}
+.fcard .word{overflow-wrap:anywhere;letter-spacing:0}
+.boxbar{flex-wrap:wrap}
+.spark-row>span{max-width:100%}
+.spark-row svg{max-width:100%;height:auto}
+.gq .opts button,.qt-card .opts button{color:var(--ink)}
+
+@media(max-width:640px){
+  *{letter-spacing:0!important}
+  html{scroll-padding-top:170px}
+  .head-inner{padding:6px 16px 0;gap:6px;align-items:center;flex-wrap:nowrap}
+  .brand{min-width:0;flex:1}
+  .brand h1{font-size:1.25rem;line-height:1.2}
+  .candidate{font-size:0;line-height:0;text-align:right;flex-shrink:0}
+  .candidate br,.candidate a{display:none}
+  #theme-toggle{min-height:44px;padding:7px 12px;margin-top:2px}
+  #nav{padding:6px 16px 0;scrollbar-width:none;gap:4px}
+  #nav::-webkit-scrollbar{display:none}
+  #nav button,#nav a{min-height:44px;font-size:.68rem;padding:10px 12px;flex-shrink:0}
+  main{padding:4px 16px 100px;min-width:0}
+  h2{font-size:1.6rem}
+  h3{font-size:1.1rem}
+  .sheet{padding:28px 0 16px;min-width:0}
+  .stamp{font-size:.55rem;padding:3px 7px;top:0;right:0}
+  .kicker{max-width:100%;padding-right:4px;font-size:.62rem}
+  .btn{min-height:44px;padding:10px 12px;font-size:.7rem;white-space:normal}
+  textarea,input[type=text],select,.fill{font-size:16px!important}
+  select{min-height:44px}
+  .app-bar{padding:8px 16px;font-size:.62rem}
+  .app-actions{gap:4px}
+  .app-action{padding:6px 8px;gap:5px;font-size:.62rem}
+  .app-action .app-icon{width:17px;height:17px}
+  .app-dock{position:fixed;bottom:0;left:0;right:0;z-index:60;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;max-width:none;margin:0;padding:5px max(8px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));border-top:1px solid var(--line);background:var(--paper);overflow:visible}
+  .app-dock button,.app-dock a{position:static;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:53px;min-width:0;padding:5px 2px;border:0;border-radius:4px;background:transparent;color:var(--ink-soft);text-decoration:none;font-family:var(--mono);font-size:.62rem;text-transform:none;white-space:nowrap;transition:none}
+  .app-dock button.is-current{color:var(--blue);background:var(--blueprint);font-weight:600}
+  .app-dock button:hover,.app-dock a:hover{background:var(--blueprint);color:var(--blue)}
+  .app-topic-picker{display:flex;align-items:center;gap:10px;font: .75rem var(--mono);margin:0 0 16px}
+  .app-topic-picker select{flex:1;min-width:0;padding:8px 10px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:4px}
+  #topic-pick{display:none}
+  #vocab-mode{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  #vocab-mode button{min-width:0;font-size:.62rem;padding:8px 4px}
+  .fcard{min-height:285px;padding:38px 20px;box-shadow:none}
+  .fcard .word{font-size:2rem}
+  .fc-actions{margin-top:12px}
+  .qt-banner{padding:18px;margin-top:18px;box-shadow:none}
+  #home .sheet>h2+p{display:none}
+  #home .ov-card p{display:none}
+  #vocab .rubric{display:none}
+  .qt-card{padding:22px 18px;box-shadow:none;min-width:0}
+  .qt-card .word{font-size:1.6rem;overflow-wrap:anywhere}
+  .qt-card .opts button,.gq .opts button{min-height:44px;max-width:100%;overflow-wrap:anywhere}
+  .qt-summary-box .big{font-size:1.7rem}
+  .qt-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .timerbar{gap:8px;padding:10px;margin:14px 0}
+  .timerbar .clock{min-width:85px;font-size:1.4rem}
+  .timerbar .tlabel{flex:1;font-size:.6rem}
+  .match-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .mtile{font-size:.85rem;padding:12px 8px;min-width:0}
+  .ov-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+  .ov-card{padding:14px;min-width:0}
+  .ov-card h4{font-size:1rem}
+  .ov-card p{font-size:.8rem}
+  .ov-card .stat{font-size:.6rem;overflow-wrap:anywhere}
+  .read-grid{grid-template-columns:1fr}
+  .passage{padding:16px;max-height:50dvh}
+  .questions{padding:14px;max-height:none}
+  .q{padding:10px;min-width:0}
+  .tfng label{min-height:44px;display:flex;align-items:center;padding:7px 9px}
+  .chartbox{padding:6px}
+  .chartbox svg{max-width:100%;height:auto}
+  .toast{bottom:calc(80px + env(safe-area-inset-bottom));max-width:calc(100% - 24px);width:max-content;padding:10px 14px;overflow-wrap:anywhere}
+  footer{padding:16px 16px 100px;font-size:.6rem}
+  .app-install-dialog{padding:18px}
+  .app-dialog-heading{gap:8px}
+  .app-dialog-heading img{width:48px;height:48px}
+  .app-dialog-heading h2{font-size:1.1rem}
+  .app-install-dialog h3{font-size:1rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

@@ -2,7 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4efe4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="IELTS Pocket">
+<meta name="description" content="Short daily IELTS practice, vocabulary recall and mock tests. Target band 7 with IELTS Pocket.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
 <title>IELTS Practice Gym — Band 7 Training</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -222,6 +231,8 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 .hist-list li{font-family:var(--mono);font-size:.72rem;padding:9px 12px;border:1px solid var(--line);margin-bottom:6px;background:var(--paper-deep);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .hist-list li.hist-empty{color:var(--ink-soft);font-style:italic;border-style:dashed;background:transparent}
 </style>
+<link rel="stylesheet" href="app.css">
+<script src="app.js" defer></script>
 <script>
 /* set theme before first paint to avoid a flash of the wrong palette */
 (function(){try{
@@ -542,7 +553,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
       <button class="btn signal" id="shadow-record">🎙 Record & shadow</button>
     </div>
     <div class="diff" id="shadow-diff"></div>
-    <p class="progress-note" id="shadow-note">Needs microphone access and a browser with speech recognition (Chrome or Edge, desktop or Android). Nothing is uploaded — recognition happens in your browser only.</p>
+    <p class="progress-note" id="shadow-note">Voice recognition needs microphone permission and a supported browser. Your browser may send audio to its speech service and require internet access. Word match is not a pronunciation or IELTS band score.</p>
   </div>
 </section>
 
@@ -550,7 +561,7 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 
 <footer>
   <span>IELTS Practice Gym · companion to Mock Test 01</span>
-  <span>Progress saved locally · nothing leaves this browser</span>
+  <span>Progress saved on this device · voice services may use internet</span>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -571,7 +582,8 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 const nav=document.getElementById('nav');
 function go(sec){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('active',s.id===sec));
   nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.sec===sec));window.scrollTo({top:0});
-  if(sec==='home')refreshStats()}
+  if(sec==='home')refreshStats();
+  document.dispatchEvent(new CustomEvent('ielts:navigate',{detail:sec}))}
 nav.addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.sec)});
 document.querySelectorAll('.ov-card').forEach(c=>c.addEventListener('click',()=>go(c.dataset.go)));
 // streak
@@ -1297,7 +1309,7 @@ document.getElementById('speak-timer').addEventListener('click',()=>startSpeakTi
 document.getElementById('speak-timer60').addEventListener('click',()=>startSpeakTimer(60));
 
 /* ============ QUICK TEST ============ */
-let qtMinutes=5,qtTimer=null,qtSecLeft=0,qtActive=false,qtItemCount=0;
+let qtMinutes=5,qtTimer=null,qtSecLeft=0,qtActive=false,qtItemCount=0,qtStartedAt=0,qtDeadline=0;
 let qtStats={},qtVocabQueue=[],qtGrammarQueue=[];
 const QT_DESC={5:'~9 quick items: vocab, grammar, paraphrase, speaking.',10:'~16 items — adds listening dictation.',15:'~22 items — the fullest mixed circuit.'};
 document.querySelectorAll('#qt-len button').forEach(b=>b.addEventListener('click',()=>{
@@ -1325,18 +1337,21 @@ function qtStart(){
   document.getElementById('qt-setup').style.display='none';
   document.getElementById('qt-summary').style.display='none';
   document.getElementById('qt-player').style.display='block';
-  qtSecLeft=qtMinutes*60;
-  const bar=document.getElementById('tb-qt'),clock=bar.querySelector('.clock');
+  qtStartedAt=Date.now();qtDeadline=qtStartedAt+qtMinutes*60000;
   clearInterval(qtTimer);
-  const tick=()=>{
-    const m=String(Math.floor(qtSecLeft/60)).padStart(2,'0'),s=String(qtSecLeft%60).padStart(2,'0');
-    clock.textContent=`${m}:${s}`;bar.classList.toggle('crit',qtSecLeft<=30);
-    if(qtSecLeft<=0){clearInterval(qtTimer);qtEnd();return}
-    qtSecLeft--;
-  };
-  tick();qtTimer=setInterval(tick,1000);
+  qtTick();qtTimer=setInterval(qtTick,1000);
   qtNextCard();
 }
+// Use a deadline so locking the phone cannot pause the countdown.
+function qtTick(){
+  if(!qtActive)return;
+  qtSecLeft=Math.max(0,Math.ceil((qtDeadline-Date.now())/1000));
+  const bar=document.getElementById('tb-qt');
+  bar.querySelector('.clock').textContent=String(Math.floor(qtSecLeft/60)).padStart(2,'0')+':'+String(qtSecLeft%60).padStart(2,'0');
+  bar.classList.toggle('crit',qtSecLeft<=30);
+  if(qtSecLeft===0)qtEnd();
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)qtTick()});
 document.getElementById('qt-start').addEventListener('click',qtStart);
 document.getElementById('qt-stop').addEventListener('click',()=>{clearInterval(qtTimer);qtEnd()});
 document.getElementById('qt-again').addEventListener('click',qtStart);
@@ -1451,10 +1466,12 @@ function qtCardSpeak(card){
 }
 
 function qtEnd(){
+  if(!qtActive)return;
   qtActive=false;clearInterval(qtTimer);
+  const minutes=Math.round(Math.min(qtMinutes*60000,Date.now()-qtStartedAt)/6000)/10;
   document.getElementById('qt-player').style.display='none';
   document.getElementById('qt-summary').style.display='block';
-  document.getElementById('qt-sum-headline').textContent=`${qtItemCount} item${qtItemCount===1?'':'s'} in ${qtMinutes} min`;
+  document.getElementById('qt-sum-headline').textContent=`${qtItemCount} item${qtItemCount===1?'':'s'} in ${minutes} min`;
   const rows=[];
   if(qtStats.vocabSeen)rows.push(`<div><b>${qtStats.vocabGot}/${qtStats.vocabSeen}</b><span>vocab known</span></div>`);
   if(qtStats.grammarTotal)rows.push(`<div><b>${Math.round(100*qtStats.grammarRight/qtStats.grammarTotal)}%</b><span>grammar (${qtStats.grammarRight}/${qtStats.grammarTotal})</span></div>`);
@@ -1462,10 +1479,10 @@ function qtEnd(){
   if(qtStats.dictScores.length)rows.push(`<div><b>${Math.round(qtStats.dictScores.reduce((a,b)=>a+b,0)/qtStats.dictScores.length)}%</b><span>dictation avg</span></div>`);
   if(qtStats.speakSeen)rows.push(`<div><b>${qtStats.speakSeen}</b><span>speaking prompts</span></div>`);
   document.getElementById('qt-stats').innerHTML=rows.join('');
-  S.quickSessions=(S.quickSessions||0)+1;S.quickMinutesTotal=(S.quickMinutesTotal||0)+qtMinutes;
+  S.quickSessions=(S.quickSessions||0)+1;S.quickMinutesTotal=Math.round(((S.quickMinutesTotal||0)+minutes)*10)/10;
   S.sessionHistory=S.sessionHistory||[];
   S.sessionHistory.push({
-    date:new Date().toLocaleString(),minutes:qtMinutes,items:qtItemCount,
+    date:new Date().toLocaleString(),minutes,plannedMinutes:qtMinutes,items:qtItemCount,
     vocab:qtStats.vocabSeen?`${qtStats.vocabGot}/${qtStats.vocabSeen}`:'—',
     grammar:qtStats.grammarTotal?`${Math.round(100*qtStats.grammarRight/qtStats.grammarTotal)}%`:'—',
     para:qtStats.paraTotal?`${Math.round(100*qtStats.paraRight/qtStats.paraTotal)}%`:'—',
@@ -1495,7 +1512,7 @@ S.shadowScores=S.shadowScores||[];
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   const recordBtn=document.getElementById('shadow-record');
   if(!SR){
-    document.getElementById('shadow-note').textContent='⚠ Speech recognition is not supported in this browser — try Chrome or Edge on desktop or Android.';
+    document.getElementById('shadow-note').textContent='Speech recognition is unavailable in this browser. You can still play the sentence and repeat it aloud without automatic scoring.';
     recordBtn.disabled=true;return;
   }
   let recognition=null,listening=false;

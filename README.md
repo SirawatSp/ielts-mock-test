@@ -1,6 +1,6 @@
 # IELTS Academic — Mock Test 01
 
-Self-contained IELTS Academic practice mock (single `index.html`, no build, no backend).
+Static IELTS Academic practice site with a mock test and daily training gym. No build or backend required; keep the shared app files alongside both HTML pages.
 
 **Live:** https://sirawatsp.github.io/ielts-mock-test/
 
@@ -23,17 +23,37 @@ Daily skill training between mocks — seven stations plus a Quick Test mode, al
 - **Task 1 Gym** — write the overview sentence for 10 chart types, compare against band-7 models.
 - **Listening dictation** — browser TTS (British voice) reads academic sentences; word-level diff marking, 3 difficulty levels, 30 sentences.
 - **Speaking** — random Part 1/Part 3 question generator (44 questions) with response timers, plus a band-7 functional phrase bank.
-- **Shadowing** — plays a native-voice sentence via TTS, then uses the browser's speech recognition to transcribe your spoken echo and score the word-by-word match. Needs mic access; Chrome/Edge only.
+- **Shadowing** — plays a sentence via TTS, then uses available browser speech recognition to transcribe your spoken echo and score word match. Requires mic permission and browser support; this is not a pronunciation or IELTS band score.
 - **Progress trend** — sparklines on the home dashboard tracking dictation accuracy and shadowing match rate over your last 15 attempts of each.
 - **Session history & backup** — a running log of every Quick Test circuit (date, duration, per-skill accuracy), plus export/import to back up or transfer all gym progress as a `.json` file.
 
-All answers autosave to `localStorage` — nothing leaves the browser. Speech recognition (Shadowing) runs entirely client-side too; no audio is uploaded anywhere.
+Answers and scores autosave to `localStorage`; there is no app-owned server or cloud sync. Browser speech recognition may send audio to the browser provider's speech service and require a connection. TTS voice availability and offline support depend on the device.
 
 **Dark mode** — both pages have a `◐ Theme` toggle in the header. It follows your system preference on first visit and remembers your choice after that, applied before first paint so there's no flash of the wrong palette. The Task 1 chart deliberately stays on white, as it would be on a real exam paper.
 
 ## How persistence works
 
-Both pages save automatically to `localStorage`, which — unlike a cookie — has no expiry and survives closing the tab, restarting the browser, or rebooting the computer. It's tied to this browser on this device only: it won't sync to another browser or device, and clearing browsing data removes it. Use the **Export progress** button (Results tab on the mock, Gym Floor on the practice page) to download a `.json` backup, and **Import progress** to restore it — on this device after a data-clear, or on a different one.
+Both pages save automatically to `localStorage`, which has no fixed expiry and normally survives closing or restarting the browser. It is device/browser-specific, not a cloud backup. Clearing website data, deleting an installed app, or browser storage eviction can remove it. The app requests persistent storage where supported when launched standalone, but approval is up to the browser. Use **Export progress** (Results on the mock, Gym Floor on the practice page) and **Import progress** for backups or transfers.
+
+## iPhone Home Screen
+
+1. Open https://sirawatsp.github.io/ielts-mock-test/practice.html in Safari.
+2. Tap Share, then Add to Home Screen. Share may be in the More menu.
+3. Keep Open as Web App enabled if shown, then tap Add.
+
+The icon opens the Practice Gym, with bottom navigation to Home, Quick Test, Vocabulary and Mock Test. The site also includes installation help via the Home Screen button. A website cannot add itself to an iPhone's home screen; installation requires the user's action. [Apple's guide](https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios).
+
+Export existing Safari progress before installing. If the installed app uses a separate storage container and opens with empty progress, import your backup inside it. This does not migrate automatically or sync between devices.
+
+## Offline and Updates
+
+Open once online and wait for **Offline ready**. Both pages, text exercises, local icons and app files are cached for offline use. External Google Fonts fall back to device fonts offline. Audio/TTS and speech recognition are not guaranteed offline; clipboard and microphone access still depend on device permissions.
+
+`manifest.webmanifest` uses relative URLs so installation stays scoped to this GitHub Pages project. `sw.js` precaches one coherent version; it never clears progress in localStorage. A new service worker waits until the user taps **Update ready** and confirms reloading, rather than interrupting practice. Existing active timers stop on reload. Quick Test uses a wall-clock deadline and logs elapsed time, including when the phone was locked.
+
+For deployment, publish all files, including `app.js`, `app.css`, `sw.js`, the manifest and `assets/`. Bump `VERSION` in `sw.js` whenever a precached file changes. Service workers need HTTPS or localhost; opening an HTML file directly still runs exercises but cannot enable offline installation. Icons are committed PNGs; the optional `scripts/generate-assets.cjs` regenerates them with Sharp and Lucide. Local Lucide icons are accompanied by their license in `assets/`.
+
+Run browser checks with `node tests/pwa.cjs` in an environment with Playwright available (or set `NODE_PATH` to its module directory). Tests start and close their own local server, check phone/desktop layouts, offline use, saved progress, and opt-in updates without changing live user data.
 
 ## Adding more mocks
 
