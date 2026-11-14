@@ -1,0 +1,24 @@
+# Render's setup page prompts for OPENAI_API_KEY; no credential is committed.
+services:
+  - type: web
+    name: ielts-pocket-coach
+    runtime: node
+    plan: free
+    region: singapore
+    autoDeployTrigger: "off"
+    buildCommand: npm ci --omit=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/status
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.1
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: APP_ACCESS_CODE
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: https://sirawatsp.github.io

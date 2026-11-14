@@ -14,7 +14,7 @@ const sha = value => createHash('sha256').update(value).digest();
 const sameSecret = (a, b) => timingSafeEqual(sha(a), sha(b));
 
 function config(env) {
-  const production = env.NODE_ENV === 'production' || env.VERCEL === '1';
+  const production = env.NODE_ENV === 'production' || env.RENDER === 'true';
   const apiKey = env.OPENAI_API_KEY?.trim();
   const accessCode = env.APP_ACCESS_CODE?.trim() || '';
   const protectedServer = production || !!accessCode;
@@ -26,12 +26,24 @@ function config(env) {
   return { apiKey, accessCode, protectedServer, message, configured: !message, production };
 }
 
+function renderOrigin(env) {
+  if (env.RENDER !== 'true' || typeof env.RENDER_EXTERNAL_URL !== 'string') return null;
+  try {
+    const url = new URL(env.RENDER_EXTERNAL_URL);
+    // Render terminates HTTPS before forwarding to Node. Trust its configured
+    // public origin only; never derive it from arbitrary forwarded headers.
+    if (url.protocol !== 'https:' || url.username || url.password || url.port || url.pathname !== '/' || url.search || url.hash) return null;
+    return url.origin;
+  } catch { return null; }
+}
+
 function originHeaders(request, env) {
   const origin = request.headers.get('origin');
   const headers = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', Vary: 'Origin' };
   if (!origin) return headers;
   const allowed = (env.ALLOWED_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean);
-  if (origin !== new URL(request.url).origin && !allowed.includes(origin)) {
+  const sameOrigin = env.RENDER !== 'true' && origin === new URL(request.url).origin;
+  if (!sameOrigin && origin !== renderOrigin(env) && !allowed.includes(origin)) {
     throw new ApiError(403, 'ORIGIN_NOT_ALLOWED', 'This website is not allowed to use the coaching server.');
   }
   return { ...headers, 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, X-Coach-Access-Code', 'Access-Control-Max-Age': '600' };

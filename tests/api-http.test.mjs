@@ -55,3 +55,26 @@ test('actual Node transport rejects bad JSON and over-limit streamed bodies befo
     assert.equal((await oversized.json()).code, 'REQUEST_TOO_LARGE');
   } finally { delete process.env.OPENAI_API_KEY; }
 });
+
+test('actual Node transport permits Render HTTPS origins while retaining production protection', async () => {
+  const prior = Object.fromEntries(['RENDER', 'RENDER_EXTERNAL_URL', 'OPENAI_API_KEY'].map(key => [key, process.env[key]]));
+  process.env.RENDER = 'true';
+  process.env.RENDER_EXTERNAL_URL = 'https://ielts-coach.onrender.com';
+  process.env.OPENAI_API_KEY = 'test-key-not-used-for-provider';
+  try {
+    const status = await fetch(base + '/api/status', { headers: { Origin: process.env.RENDER_EXTERNAL_URL } });
+    assert.equal(status.status, 200);
+    assert.equal(status.headers.get('access-control-allow-origin'), process.env.RENDER_EXTERNAL_URL);
+    const configuration = await status.json();
+    assert.equal(configuration.configured, false, 'Render must require a production access code even with NODE_ENV=test');
+    assert.equal(configuration.requiresAccessCode, true);
+    const foreign = await fetch(base + '/api/status', { headers: { Origin: 'https://another-app.onrender.com', 'X-Forwarded-Proto': 'https', 'X-Forwarded-Host': 'another-app.onrender.com' } });
+    assert.equal(foreign.status, 403);
+    assert.equal((await foreign.json()).code, 'ORIGIN_NOT_ALLOWED');
+  } finally {
+    for (const [key, value] of Object.entries(prior)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});

@@ -94,6 +94,25 @@ test('a configured backend still requires its access code on AI requests', async
   assert.equal(response.status, 200);
 });
 
+test('Render enforces production access protection even without NODE_ENV', async () => {
+  for (const accessCode of [undefined, 'too-short']) {
+    const handle = api({ env: { RENDER: 'true', OPENAI_API_KEY: API_KEY, ...(accessCode ? { APP_ACCESS_CODE: accessCode } : {}) } });
+    const status = await (await handle(request('/api/status'))).json();
+    assert.equal(status.configured, false);
+    assert.equal(status.requiresAccessCode, true);
+    await errorResponse(await handle(request('/api/assess', writingRequest)), 503);
+  }
+  let calls = 0;
+  const handle = api({
+    env: { RENDER: 'true', OPENAI_API_KEY: API_KEY, APP_ACCESS_CODE: ACCESS_CODE },
+    generateAssessment: async () => { calls++; return feedback(); },
+  });
+  await errorResponse(await handle(request('/api/assess', writingRequest)), 401);
+  assert.equal(calls, 0);
+  assert.equal((await handle(request('/api/assess', writingRequest, { headers: { 'x-coach-access-code': ACCESS_CODE } }))).status, 200);
+  assert.equal(calls, 1);
+});
+
 test('unconfigured AI requests return an actionable error and make no provider call', async () => {
   let calls = 0;
   const handle = api({ env: { NODE_ENV: 'test' }, fetchImpl: async () => { calls++; }, generateAssessment: async () => { calls++; } });
@@ -125,6 +144,58 @@ test('CORS preflight permits the access-code header for the configured site', as
   assert.equal(response.status, 204);
   assert.equal(response.headers.get('access-control-allow-origin'), 'https://sirawatsp.github.io');
   assert.match(response.headers.get('access-control-allow-headers') || '', /x-coach-access-code/i);
+});
+
+test('Render accepts its exact configured HTTPS origin behind the internal HTTP proxy', async () => {
+  const publicOrigin = 'https://ielts-coach.onrender.com';
+  let calls = 0;
+  const handle = api({
+    env: { RENDER: 'true', RENDER_EXTERNAL_URL: publicOrigin, OPENAI_API_KEY: API_KEY, APP_ACCESS_CODE: ACCESS_CODE, ALLOWED_ORIGINS: 'https://sirawatsp.github.io,https://custom.example' },
+    generateAssessment: async () => { calls++; return feedback(); },
+  });
+  for (const origin of [publicOrigin, 'https://sirawatsp.github.io', 'https://custom.example']) {
+    const response = await handle(new Request('http://ielts-coach.onrender.com/api/assess', {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json', 'x-coach-access-code': ACCESS_CODE },
+      body: JSON.stringify(writingRequest),
+    }));
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('access-control-allow-origin'), origin);
+  }
+  const preflight = await handle(new Request('http://ielts-coach.onrender.com/api/assess', {
+    method: 'OPTIONS', headers: { Origin: publicOrigin, 'Access-Control-Request-Method': 'POST' },
+  }));
+  assert.equal(preflight.status, 204);
+  assert.equal(preflight.headers.get('access-control-allow-origin'), publicOrigin);
+  assert.equal(calls, 3);
+});
+
+test('Render origin trust rejects other Render apps, lookalikes and forwarded-header claims', async () => {
+  let calls = 0;
+  const handle = api({
+    env: { ...testEnv, RENDER: 'true', RENDER_EXTERNAL_URL: 'https://ielts-coach.onrender.com', APP_ACCESS_CODE: ACCESS_CODE },
+    generateAssessment: async () => { calls++; return feedback(); },
+  });
+  for (const origin of ['https://another-app.onrender.com', 'https://ielts-coach.onrender.com.attacker.example', 'http://ielts-coach.onrender.com', 'https://attacker.example']) {
+    await errorResponse(await handle(request('/api/assess', writingRequest, {
+      headers: { Origin: origin, 'X-Forwarded-Proto': 'https', 'X-Forwarded-Host': origin.slice(8), 'x-coach-access-code': ACCESS_CODE },
+    })), 403);
+  }
+  await errorResponse(await handle(new Request('http://ielts-coach.onrender.com/api/status', {
+    headers: { Origin: 'http://ielts-coach.onrender.com' },
+  })), 403);
+  assert.equal(calls, 0);
+});
+
+test('invalid Render external URLs cannot widen allowed origins', async () => {
+  for (const externalUrl of ['not-a-url', 'http://ielts-coach.onrender.com', 'https://user:password@ielts-coach.onrender.com', 'https://ielts-coach.onrender.com/path', 'https://ielts-coach.onrender.com?query=1', 'https://ielts-coach.onrender.com#fragment', 'https://ielts-coach.onrender.com:8443']) {
+    const handle = api({ env: { ...testEnv, RENDER: 'true', RENDER_EXTERNAL_URL: externalUrl, APP_ACCESS_CODE: ACCESS_CODE } });
+    await errorResponse(await handle(request('/api/status', undefined, { headers: { Origin: 'https://ielts-coach.onrender.com' } })), 403);
+  }
+  for (const renderFlag of [undefined, 'false']) {
+    const handle = api({ env: { ...testEnv, RENDER: renderFlag, RENDER_EXTERNAL_URL: 'https://ielts-coach.onrender.com' } });
+    await errorResponse(await handle(request('/api/status', undefined, { headers: { Origin: 'https://ielts-coach.onrender.com' } })), 403);
+  }
 });
 
 test('malformed JSON, unknown fields and mismatched skill/task types are rejected before generation', async () => {
