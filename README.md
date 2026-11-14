@@ -2,9 +2,13 @@
 
 IELTS Academic practice with a mock test, daily training gym, and a four-skill **Skills Studio**. Reading and Listening exercises mark locally. An optional Node server connects Writing assessment and a live OpenAI speaking coach; API keys stay on the server. The original exercises still run as a static site.
 
-**Live:** https://sirawatsp.github.io/ielts-mock-test/
+**Live Skills Studio:** https://ielts-pocket-coach.onrender.com/skills.html
 
-The GitHub Pages address serves static files only. It cannot run the AI server. Local changes and a successful test run do not update that published site automatically.
+**Render dashboard:** https://dashboard.render.com/web/srv-dbs8h0uk1f9s738j72h0
+
+**Original static site:** https://sirawatsp.github.io/ielts-mock-test/
+
+The Render service runs the website and AI server together in My Workspace on the Free plan in Singapore. It tracks `codex/ielts-skills-coach`, with automatic deploys disabled. The GitHub Pages address serves the original static site and cannot run the AI server. Local changes and a successful test run do not update either published site automatically.
 
 ## Skills Studio (`skills.html`)
 
@@ -43,7 +47,9 @@ The app server does not save learner answers or raw audio. Local history remains
 
 The included `render.yaml` runs the website and Node API together on Render. It selects the Free plan in Singapore, Node 24.22.1, the production authentication checks, and the required public network binding. Automatic deployments are disabled, so a later repository push does not silently release a new app version. Review the plan in Render before deploying; its Free plan has idle/cold-start limits. [Render deployment documentation](https://render.com/docs/deploy-to-render).
 
-During setup, sign in to Render and enter your OpenAI project key in its `OPENAI_API_KEY` field. The Blueprint generates a random `APP_ACCESS_CODE` on the server. After deployment, find that code in the service's **Environment** settings, open the generated website, and enter the code in **Skills → AI settings**. Leave the coach server address empty because the website and API share an origin. API usage is billed by OpenAI. Never publish `.env` or paste the key into the website's coach-access-code field.
+The existing service was created directly through Render, so its environment and deployment settings are managed in the linked Dashboard; the Blueprint is a template for creating another installation, not a linked source of infrastructure updates for this service. A random `APP_ACCESS_CODE` is already configured. To enable AI, open **Environment** in the dashboard, add your OpenAI project key as `OPENAI_API_KEY`, then choose **Save and deploy**. Find the coach access code in the same environment settings, open the website, and enter that code in **Skills → AI settings**. Leave the coach server address empty because the website and API share an origin. API usage is billed by OpenAI. Never publish `.env` or paste the OpenAI key into the website's coach-access-code field.
+
+For a separate installation using the deployment button, Render prompts for `OPENAI_API_KEY` during setup and the Blueprint generates `APP_ACCESS_CODE` automatically.
 
 The Node server serves an explicit list of public files, excluding credentials, repository metadata, source modules, and dependencies. The public-only `dist/` build is still available for static hosting.
 
