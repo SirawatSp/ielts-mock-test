@@ -1,0 +1,36 @@
+{
+  "name": "ielts-mock-test",
+  "version": "1.0.0",
+  "description": "IELTS Academic practice with offline exercises and an optional private OpenAI coaching API",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "build": "node server/build.mjs",
+    "check": "node --check app.js && node --check sw.js && node --check skills.js && node --check skills-content.js && node --check server.mjs && node --check server/coach.mjs && node --check server/openai.mjs && node --check server/schema.mjs && node --check server/http.mjs",
+    "test:api": "node --test tests/api*.test.mjs",
+    "test:pwa": "node tests/pwa.cjs",
+    "test:regressions": "node tests/regressions.cjs",
+    "test:skills": "node tests/skills.cjs",
+    "test": "npm run check && npm run test:api && npm run test:regressions && npm run test:pwa && npm run test:skills"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirawatSp/ielts-mock-test.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/SirawatSp/ielts-mock-test/issues"
+  },
+  "homepage": "https://github.com/SirawatSp/ielts-mock-test#readme",
+  "dependencies": {
+    "@ai-sdk/openai": "^4.0.118",
+    "ai": "^7.0.173",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "playwright": "^1.65.1"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.9.0"
+  }
+}

@@ -19,7 +19,7 @@ const server = http.createServer(async (request, response) => {
     const file = path.resolve(root, relative);
     if (!file.startsWith(root + path.sep)) { response.writeHead(403).end(); return; }
     let body = await fs.readFile(file);
-    if (relative === 'sw.js') body = Buffer.from(body.toString().replace("const VERSION = '2026-10-12-1';", `const VERSION = 'test-${version}';`));
+    if (relative === 'sw.js') body = Buffer.from(body.toString().replace(/const VERSION = '[^']+';/, `const VERSION = 'test-${version}';`));
     response.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     response.end(body);
   } catch { response.writeHead(404).end(); }

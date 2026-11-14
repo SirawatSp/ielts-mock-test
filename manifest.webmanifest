@@ -2,7 +2,7 @@
   "id": "./",
   "name": "IELTS Pocket",
   "short_name": "IELTS Pocket",
-  "description": "Daily IELTS vocabulary, quick tests and academic practice.",
+  "description": "IELTS Reading, Listening, Writing and Speaking practice with corrections and an AI voice coach.",
   "lang": "en",
   "start_url": "./practice.html",
   "scope": "./",
@@ -14,6 +14,7 @@
     { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "shortcuts": [
+    { "name": "Skills & feedback", "url": "./skills.html" },
     { "name": "Quick Test", "url": "./practice.html#quick" },
     { "name": "Vocabulary", "url": "./practice.html#vocab" },
     { "name": "Mock Test", "url": "./index.html" }

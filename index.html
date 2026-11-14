@@ -304,15 +304,16 @@ footer{
 <section id="overview" class="active">
   <div class="sheet">
     <span class="stamp">Session Brief</span>
-    <p class="kicker">Structured practice session · all four papers</p>
+    <p class="kicker">Reading, Writing and typed Speaking practice</p>
     <h2>How this mock works</h2>
     <p style="max-width:70ch;margin-top:10px">
       Work through the four sections in order. Timers run inside each section — press <b>Start</b> when you're ready.
       Everything you type is <b>saved automatically in this browser</b>, so you can close the tab and come back.
-      Reading is <b>marked instantly</b> with explanations. Writing and Speaking can't be machine-scored:
-      when you finish, the <b>Results</b> tab bundles your answers into one assessment package you paste to Claude
-      (or a tutor) for banded feedback against the official criteria — one message, minimal tokens.
+      Reading is <b>marked instantly</b> with explanations. The <b>Results</b> tab bundles your answers into
+      one assessment package to paste to Claude or share with a tutor for Writing feedback and feedback
+      on your typed Speaking language. This mock has no Listening paper or recorded Speaking assessment.
     </p>
+    <p style="margin-top:12px"><a href="skills.html">Practice all four skills and get in-app AI feedback in Skills Studio →</a></p>
     <div class="ov-grid">
       <div class="ov-card" data-go="reading"><span class="num">01</span><h4>Reading</h4><p>One academic passage on passive cooling · 13 questions · TFNG, headings, completion.</p><span class="dur">⏱ 20 min · auto-marked</span></div>
       <div class="ov-card" data-go="writing1"><span class="num">02</span><h4>Writing Task 1</h4><p>Describe a line graph — electricity used for space cooling by region, 2000–2050.</p><span class="dur">⏱ 20 min · 150+ words</span></div>
@@ -325,7 +326,7 @@ footer{
 <!-- ============ READING ============ -->
 <section id="reading">
   <div class="sheet">
-    <span class="stamp">Paper 1 / 4</span>
+    <span class="stamp">Section 1 / 4</span>
     <p class="kicker">Academic Reading · Passage 1 of 1</p>
     <h2>The Quiet Return of Passive Cooling</h2>
     <p class="rubric">You should spend about 20 minutes on Questions 1–13, which are based on the reading passage. In the real test you'd face 3 passages / 40 questions in 60 minutes — this is one passage at test pace.</p>
@@ -475,7 +476,7 @@ footer{
 <!-- ============ WRITING TASK 1 ============ -->
 <section id="writing1">
   <div class="sheet">
-    <span class="stamp">Paper 2 / 4</span>
+    <span class="stamp">Section 2 / 4</span>
     <p class="kicker">Academic Writing · Task 1</p>
     <h2>Describe the graph</h2>
     <p class="rubric">You should spend about 20 minutes on this task. Write at least 150 words. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Do NOT give opinions or reasons — report only what the graph shows.</p>
@@ -548,7 +549,7 @@ footer{
 <!-- ============ WRITING TASK 2 ============ -->
 <section id="writing2">
   <div class="sheet">
-    <span class="stamp">Paper 3 / 4</span>
+    <span class="stamp">Section 3 / 4</span>
     <p class="kicker">Academic Writing · Task 2</p>
     <h2>Essay</h2>
     <p class="rubric">You should spend about 40 minutes on this task. Write at least 250 words. Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
@@ -572,7 +573,7 @@ footer{
 <!-- ============ SPEAKING ============ -->
 <section id="speaking">
   <div class="sheet">
-    <span class="stamp">Paper 4 / 4</span>
+    <span class="stamp">Section 4 / 4</span>
     <p class="kicker">Speaking · typed simulation</p>
     <h2>Speaking test</h2>
     <p class="rubric">Type your answers as you would SAY them — contractions, natural fillers, spoken rhythm. Don't redraft or polish; your first phrasing is what the evaluation needs to see. Answers that read like written English will be flagged.</p>
@@ -641,13 +642,13 @@ footer{
     </div>
     <div id="history-list"></div>
 
-    <h3>Get your band scores</h3>
+    <h3>Get feedback on your answers</h3>
     <p style="max-width:70ch;font-size:.95rem">
-      Writing and Speaking need a human-quality assessor. Click below to copy a single self-contained
-      package — your answers plus strict marking instructions (4 criteria per skill, band per criterion,
-      cross-task error patterns, weaknesses, next-session drills). Paste it into a <b>fresh Claude chat</b>:
-      the app has already done the test-delivery work, so that one message is all the context Claude needs.
+      Copy your answers and assessment instructions into a <b>fresh Claude chat</b> for provisional Writing
+      criterion bands, feedback on your typed Speaking language, repeated errors and next-session drills.
+      Typed answers do not assess pronunciation or spoken fluency, and this mock cannot provide an overall IELTS band.
     </p>
+    <p style="margin-top:12px"><a href="skills.html">Practice all four skills and get in-app AI feedback in Skills Studio →</a></p>
     <div style="display:flex;gap:10px;margin:18px 0;flex-wrap:wrap">
       <button class="btn signal" id="copy-pkg">📋 Copy assessment package</button>
       <button class="btn ghost" id="preview-pkg">Preview package</button>
@@ -673,7 +674,7 @@ footer{
 
 <footer>
   <span>IELTS Academic Mock 01 · Passive Cooling Series</span>
-  <span>Timers &amp; answers saved locally · nothing leaves this browser</span>
+  <span>Answers saved in this browser · timers stop on reload</span>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -681,8 +682,57 @@ footer{
 <script>
 /* ================= state & persistence ================= */
 const LS_KEY='ielts-mock-01';
-const state=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
-function save(){localStorage.setItem(LS_KEY,JSON.stringify(state))}
+const answerFields=['essay1','essay2','sp1a','sp1b','sp1c','sp1d','sp2notes','sp2','sp3a','sp3b','sp3c','sp3d'];
+const isRecord=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+const isCount=value=>Number.isInteger(value)&&value>=0;
+const validRaw=value=>isCount(value)&&value<=13;
+function validAnswers(value){
+  if(!isRecord(value))return false;
+  if(answerFields.some(key=>key in value&&typeof value[key]!=='string'))return false;
+  for(let i=1;i<=13;i++)if('ans_q'+i in value&&typeof value['ans_q'+i]!=='string')return false;
+  return (!('readingDone' in value)||typeof value.readingDone==='boolean')&&
+    (!('readingRaw' in value)||validRaw(value.readingRaw))&&(!value.readingDone||validRaw(value.readingRaw));
+}
+function validHistory(value){
+  return Array.isArray(value)&&value.every(row=>isRecord(row)&&typeof row.date==='string'&&
+    (!('readingRaw' in row)||row.readingRaw===null||validRaw(row.readingRaw))&&
+    (!('band' in row)||row.band===null||typeof row.band==='string')&&
+    ['w1','w2','sp'].every(key=>!(key in row)||isCount(row[key])));
+}
+const blockedStorage=new Set();
+function readStored(key,validate,fallback){
+  let raw;
+  try{
+    raw=localStorage.getItem(key);
+    if(raw===null)return fallback;
+    const value=JSON.parse(raw);
+    if(validate(value))return value;
+  }catch(error){if(raw===undefined){
+    blockedStorage.add(key);
+    setTimeout(()=>toast('Browser storage is unavailable. Export your progress before closing this page.'),0);
+    return fallback;
+  }}
+  // Keep the original bytes before starting fresh, including invalid JSON.
+  try{localStorage.setItem(key+'-recovery-'+Date.now(),raw)}catch(error){blockedStorage.add(key)}
+  setTimeout(()=>toast('Saved data could not be read. The original data has been kept; import a valid backup to restore progress.'),0);
+  return fallback;
+}
+function writeStored(key,value){
+  if(blockedStorage.has(key))return;
+  try{localStorage.setItem(key,JSON.stringify(value))}
+  catch(error){toast('Progress could not be saved. Export a backup before closing this page.')}
+}
+function importStores(updates){
+  const previous=updates.map(([key])=>[key,localStorage.getItem(key)]);
+  try{updates.forEach(([key,value])=>localStorage.setItem(key,JSON.stringify(value)))}
+  catch(error){
+    previous.forEach(([key,raw])=>{try{if(raw===null)localStorage.removeItem(key);else localStorage.setItem(key,raw)}catch(restoreError){}});
+    throw error;
+  }
+}
+const state=readStored(LS_KEY,validAnswers,{});
+function save(){writeStored(LS_KEY,state)}
+function escapeHTML(value){return String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
 document.getElementById('theme-toggle').addEventListener('click',()=>{
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -709,24 +759,26 @@ document.querySelectorAll('[data-timer]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const id=btn.dataset.timer,bar=btn.closest('.timerbar'),clock=bar.querySelector('.clock');
     if(timers[id]){ // stop
-      clearInterval(timers[id]);delete timers[id];btn.textContent='Start';return;
+      clearInterval(timers[id].interval);delete timers[id];btn.textContent='Start';return;
     }
-    let sec=parseInt(btn.dataset.mins)*60;
+    const deadline=Date.now()+parseInt(btn.dataset.mins)*60000;
     btn.textContent='Stop';
     const tick=()=>{
+      const sec=Math.max(0,Math.ceil((deadline-Date.now())/1000));
       const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0');
       clock.textContent=`${m}:${s}`;
       bar.classList.toggle('warn',sec<=300&&sec>60);
       bar.classList.toggle('crit',sec<=60);
-      if(sec<=0){clearInterval(timers[id]);delete timers[id];btn.textContent='Start';
+      if(sec<=0){clearInterval(timers[id]?.interval);delete timers[id];btn.textContent='Start';
         clock.textContent='00:00';toast(`⏱ Time's up — ${bar.querySelector('.tlabel').textContent.split('·')[0].trim()}`);
         try{new AudioContext().close()}catch(e){}
       }
-      sec--;
     };
-    tick();timers[id]=setInterval(tick,1000);
+    timers[id]={tick,interval:setInterval(tick,1000)};tick();
   });
 });
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)Object.values(timers).forEach(timer=>timer.tick())});
+window.addEventListener('pageshow',()=>Object.values(timers).forEach(timer=>timer.tick()));
 
 /* ================= reading marking ================= */
 const KEY={
@@ -766,7 +818,7 @@ document.getElementById('mark-reading').addEventListener('click',()=>{
 });
 
 /* ================= word counts + autosave ================= */
-const fields=['essay1','essay2','sp1a','sp1b','sp1c','sp1d','sp2notes','sp2','sp3a','sp3b','sp3c','sp3d'];
+const fields=answerFields;
 function wc(t){return t.trim()?t.trim().split(/\s+/).length:0}
 function updateCounts(){
   const pairs=[['essay1','wc1',150],['essay2','wc2',250],['sp2','wcsp2',0]];
@@ -786,24 +838,30 @@ fields.forEach(f=>{
 for(let i=1;i<=13;i++){
   const k='ans_q'+i;
   if(state[k]!==undefined){
-    const r=document.querySelector(`input[name="q${i}"][value="${state[k]}"]`);
+    const r=[...document.querySelectorAll(`input[type="radio"][name="q${i}"]`)].find(input=>input.value===state[k]);
     if(r)r.checked=true;
     const s=document.querySelector(`select[name="q${i}"]`);if(s)s.value=state[k];
     const t=document.querySelector(`input.fill[name="q${i}"]`);if(t)t.value=state[k];
   }
 }
 document.getElementById('reading-qs').addEventListener('change',e=>{
-  const n=e.target.name;if(n){state['ans_'+n]=getAnswer(n);save()}
+  const n=e.target.name;if(n){state['ans_'+n]=getAnswer(n);invalidateReading();save()}
 });
 document.getElementById('reading-qs').addEventListener('input',e=>{
-  const n=e.target.name;if(n&&e.target.classList.contains('fill')){state['ans_'+n]=e.target.value.trim();save()}
+  const n=e.target.name;if(n&&e.target.classList.contains('fill')){state['ans_'+n]=e.target.value.trim();invalidateReading();save()}
 });
+function invalidateReading(){
+  state.readingDone=false;delete state.readingRaw;
+  document.getElementById('reading-qs').classList.remove('marked');
+  document.getElementById('reading-score').classList.remove('show');
+}
 updateCounts();
 
 /* ================= results / package ================= */
 function refreshChecklist(){
   const r=document.getElementById('ck-reading');
   if(state.readingDone){r.textContent=`${state.readingRaw}/13 · band ≈ ${BAND[state.readingRaw].toFixed(1)}`;r.className='state done'}
+  else{r.textContent='Not submitted';r.className='state todo'}
   const w1=wc(document.getElementById('essay1').value);
   const e1=document.getElementById('ck-w1');e1.textContent=w1+' words';e1.className='state '+(w1>=150?'done':'todo');
   const w2=wc(document.getElementById('essay2').value);
@@ -815,16 +873,16 @@ function refreshChecklist(){
 function buildPackage(){
   const g=id=>document.getElementById(id).value.trim()||'(no answer)';
   const reading=state.readingDone?`${state.readingRaw}/13 (approx band ${BAND[state.readingRaw].toFixed(1)})`:'not submitted';
-  return `You are an expert IELTS Academic examiner. I completed a full mock test in a web app. Mark my Writing and Speaking below. Be direct and specific — tell me exactly what is costing band points, not generic encouragement.
+  return `You are an expert IELTS Academic examiner. I completed Reading, Writing and a typed Speaking practice in a web app. Mark my Writing and give feedback on the language of my typed Speaking answers below. Be direct and specific — tell me exactly what is costing band points, not generic encouragement.
 
 CANDIDATE: Bangkok-based architect. Target: overall 7.0, no band below 6.5 (UK master's + Chevening/DAAD).
 READING (already auto-marked): ${reading}.
 
 For EACH writing task give a band for Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy, plus an overall task band and 3-5 specific line edits that would raise the score. Then flag grammar/vocab errors that REPEAT across both tasks so I can track patterns.
 
-For Speaking, evaluate the typed answers AS IF SPOKEN against Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy (skip Pronunciation). Explicitly flag any phrasing that sounds written rather than natural spoken English.
+For typed Speaking answers, give provisional feedback on coherence, lexical resource and grammatical range and accuracy. Explicitly flag any phrasing that sounds written rather than natural spoken English. Text does not provide evidence of fluency, pronunciation, timing or delivery, so do not infer those scores or give an overall Speaking band.
 
-Finish with: (1) estimated overall band across all four skills, (2) my 2-3 biggest weaknesses ranked, (3) exactly 3 practice tasks for my next session.
+No Listening test or recorded Speaking assessment is provided. Do not estimate an overall IELTS band or infer missing skill scores. Finish with: (1) a summary of the assessed Writing criteria and the Reading result, clearly identifying the limited evidence, (2) my 2-3 biggest weaknesses ranked, (3) exactly 3 practice tasks for my next session.
 
 ==================================================
 WRITING TASK 1 (20 min, min 150 words — line graph: electricity used for space cooling in TWh, 2000-2050, four regions. Asia Pacific rises steeply 300→1900; Middle East & Africa 120→1000 accelerating; North America nearly flat 550→680; Europe gradual 150→340. Data after 2020 is projected.)
@@ -881,13 +939,13 @@ document.getElementById('reset-all').addEventListener('click',()=>{
 
 /* ================= attempt history ================= */
 const HIST_KEY='ielts-mock-history';
-function loadHistory(){try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch(e){return[]}}
-function saveHistoryArr(h){localStorage.setItem(HIST_KEY,JSON.stringify(h))}
+function loadHistory(){return readStored(HIST_KEY,validHistory,[])}
+function saveHistoryArr(h){writeStored(HIST_KEY,h)}
 function renderHistory(){
   const hist=loadHistory(),el=document.getElementById('history-list');
   if(!hist.length){el.innerHTML='<ul class="checklist"><li class="hist-empty"><span>No saved attempts yet — finish a session and click "Save this attempt" above.</span></li></ul>';return}
   el.innerHTML='<ul class="checklist">'+hist.slice().reverse().map(h=>
-    `<li><span>${h.date}</span><span class="state done">Reading ${h.readingRaw!=null?h.readingRaw+'/13 (band '+h.band+')':'—'} · W1 ${h.w1}w · W2 ${h.w2}w · Speaking ${h.sp}/9</span></li>`
+    `<li><span>${escapeHTML(h.date)}</span><span class="state done">Reading ${h.readingRaw!=null?h.readingRaw+'/13 (band '+escapeHTML(h.band)+')':'—'} · W1 ${h.w1??0}w · W2 ${h.w2??0}w · Speaking ${h.sp??0}/9</span></li>`
   ).join('')+'</ul>';
 }
 document.getElementById('save-attempt').addEventListener('click',()=>{
@@ -921,12 +979,18 @@ document.getElementById('export-progress').addEventListener('click',()=>{
 document.getElementById('import-progress').addEventListener('click',()=>document.getElementById('import-file').click());
 document.getElementById('import-file').addEventListener('change',e=>{
   const file=e.target.files[0];if(!file)return;
+  if(file.size>2*1024*1024){toast('Import failed — backup must be smaller than 2 MB');e.target.value='';return}
   const reader=new FileReader();
   reader.onload=()=>{
     try{
       const data=JSON.parse(reader.result);
-      if(data.answers)localStorage.setItem(LS_KEY,JSON.stringify(data.answers));
-      if(data.history)saveHistoryArr(data.history);
+      if(!isRecord(data)||!('answers' in data||'history' in data)||
+        ('answers' in data&&!validAnswers(data.answers))||('history' in data&&!validHistory(data.history)))throw new Error('Invalid backup');
+      // Validate the whole file before changing either existing progress store.
+      const updates=[];
+      if('answers' in data)updates.push([LS_KEY,data.answers]);
+      if('history' in data)updates.push([HIST_KEY,data.history]);
+      importStores(updates);
       toast('✓ Progress imported — reloading…');
       setTimeout(()=>location.reload(),900);
     }catch(err){toast('Import failed — invalid file')}
