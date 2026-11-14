@@ -17,6 +17,7 @@ h2{font-size:2rem;letter-spacing:0}
 .app-actions{display:flex;gap:8px;flex-shrink:0}
 .app-action{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);padding:7px 10px;min-height:44px;font:inherit;cursor:pointer}
 .app-action:hover{background:var(--blueprint)}
+.app-skills-link{text-decoration:none;color:var(--blue)}
 .app-dock{display:none}
 .app-topic-picker{display:none}
 .app-install-dialog{margin:auto;width:min(540px,calc(100% - 24px));max-height:calc(100dvh - 48px);overflow:auto;padding:24px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;font-family:var(--serif)}
@@ -63,11 +64,13 @@ h2{font-size:2rem;letter-spacing:0}
   .btn{min-height:44px;padding:10px 12px;font-size:.7rem;white-space:normal}
   textarea,input[type=text],select,.fill{font-size:16px!important}
   select{min-height:44px}
-  .app-bar{padding:8px 16px;font-size:.62rem}
+  .app-bar{padding:8px 16px;font-size:.62rem;flex-wrap:wrap}
+  .app-connection{flex:1 1 100%}
+  .app-actions{width:100%;flex-wrap:wrap}
   .app-actions{gap:4px}
   .app-action{padding:6px 8px;gap:5px;font-size:.62rem}
   .app-action .app-icon{width:17px;height:17px}
-  .app-dock{position:fixed;bottom:0;left:0;right:0;z-index:60;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;max-width:none;margin:0;padding:5px max(8px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));border-top:1px solid var(--line);background:var(--paper);overflow:visible}
+  .app-dock{position:fixed;bottom:0;left:0;right:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;max-width:none;margin:0;padding:5px max(8px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));border-top:1px solid var(--line);background:var(--paper);overflow:visible}
   .app-dock button,.app-dock a{position:static;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:53px;min-width:0;padding:5px 2px;border:0;border-radius:4px;background:transparent;color:var(--ink-soft);text-decoration:none;font-family:var(--mono);font-size:.62rem;text-transform:none;white-space:nowrap;transition:none}
   .app-dock button.is-current{color:var(--blue);background:var(--blueprint);font-weight:600}
   .app-dock button:hover,.app-dock a:hover{background:var(--blueprint);color:var(--blue)}

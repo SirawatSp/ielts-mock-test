@@ -1,11 +1,12 @@
 'use strict';
 
 // Bump this version whenever a precached file changes. Updates wait for consent.
-const VERSION = '2026-10-12-1';
+const VERSION = '2026-11-14-1';
 const PREFIX = 'ielts-pocket:' + self.registration.scope + ':';
 const CACHE = PREFIX + VERSION;
 const FILES = [
   './', './index.html', './practice.html', './app.css', './app.js',
+  './skills.html', './skills.css', './skills.js', './skills-content.js',
   './manifest.webmanifest', './assets/apple-touch-icon.png',
   './assets/icon-192.png', './assets/icon-512.png', './assets/ui-icons.svg'
 ];

@@ -569,8 +569,49 @@ footer{max-width:1200px;margin:0 auto;padding:20px 24px;font-family:var(--mono);
 <script>
 /* ============ shared ============ */
 const LS='ielts-gym';
-const S=JSON.parse(localStorage.getItem(LS)||'{}');
-function save(){localStorage.setItem(LS,JSON.stringify(S))}
+const isRecord=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+const isCount=value=>Number.isInteger(value)&&value>=0;
+const isPositive=value=>Number.isFinite(value)&&value>=0;
+function validProgress(value){
+  if(!isRecord(value))return false;
+  if('boxes' in value&&(!isRecord(value.boxes)||!Object.values(value.boxes).every(box=>isCount(box)&&box<=3)))return false;
+  if('gcat' in value&&(!isRecord(value.gcat)||!Object.values(value.gcat).every(cat=>isRecord(cat)&&isCount(cat.r)&&isCount(cat.n)&&cat.r<=cat.n)))return false;
+  if('t1done' in value&&(!isRecord(value.t1done)||!Object.values(value.t1done).every(done=>typeof done==='boolean')))return false;
+  if(['dictScores','shadowScores'].some(key=>key in value&&(!Array.isArray(value[key])||!value[key].every(score=>isPositive(score)&&score<=100))))return false;
+  if(['streak','speakDrawn','quickSessions','recallRight','recallTotal','paraBest'].some(key=>key in value&&!isCount(value[key])))return false;
+  if('quickMinutesTotal' in value&&!isPositive(value.quickMinutesTotal))return false;
+  if('lastDay' in value&&(typeof value.lastDay!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value.lastDay)))return false;
+  for(let i=0;i<10;i++)if('t1a'+i in value&&typeof value['t1a'+i]!=='string')return false;
+  if('sessionHistory' in value&&(!Array.isArray(value.sessionHistory)||!value.sessionHistory.every(row=>isRecord(row)&&typeof row.date==='string'&&
+    isPositive(row.minutes)&&isCount(row.items)&&(!('plannedMinutes' in row)||isPositive(row.plannedMinutes))&&
+    ['vocab','grammar','para','dict'].every(key=>typeof row[key]==='string'))))return false;
+  return true;
+}
+let storageBlocked=false;
+function readProgress(){
+  let raw;
+  try{
+    raw=localStorage.getItem(LS);
+    if(raw===null)return {};
+    const value=JSON.parse(raw);
+    if(validProgress(value))return value;
+  }catch(error){if(raw===undefined){
+    storageBlocked=true;
+    setTimeout(()=>toast('Browser storage is unavailable. Export your progress before closing this page.'),0);
+    return {};
+  }}
+  // Keep invalid data for recovery before allowing any new autosave.
+  try{localStorage.setItem(LS+'-recovery-'+Date.now(),raw)}catch(error){storageBlocked=true}
+  setTimeout(()=>toast('Saved data could not be read. The original data has been kept; import a valid backup to restore progress.'),0);
+  return {};
+}
+const S=readProgress();
+function save(){
+  if(storageBlocked)return;
+  try{localStorage.setItem(LS,JSON.stringify(S))}
+  catch(error){toast('Progress could not be saved. Export a backup before closing this page.')}
+}
+function escapeHTML(value){return String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400)}
 document.getElementById('theme-toggle').addEventListener('click',()=>{
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -1143,12 +1184,13 @@ S.t1done=S.t1done||{};
   T1.forEach((t,i)=>{
     const d=document.createElement('div');d.className='reveal-item';
     d.innerHTML=`<p class="kicker">${i+1} / ${T1.length} · ${t.title}</p><div class="src">${t.data}</div>
-      <textarea class="small" style="min-height:70px" placeholder="Write your overview — trends only, no figures…" id="t1-in-${i}">${S['t1a'+i]||''}</textarea>
+      <textarea class="small" style="min-height:70px" placeholder="Write your overview — trends only, no figures…" id="t1-in-${i}"></textarea>
       <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn" data-rev="${i}">Reveal model</button>
       </div>
       <div class="model" id="t1-model-${i}"><span class="tag">Band-7 model overview</span>${t.model}<br><br><span class="tag">Why it works</span>${t.note}</div>`;
     list.appendChild(d);
+    d.querySelector('textarea').value=S['t1a'+i]||'';
     d.querySelector('textarea').addEventListener('input',e=>{S['t1a'+i]=e.target.value;save()});
     d.querySelector('[data-rev]').addEventListener('click',()=>{
       document.getElementById('t1-model-'+i).classList.add('show');
@@ -1227,17 +1269,24 @@ function lcsDiff(a,b){ // a=target, b=typed
   while(j<n)out.push({t:b[j++],k:'extra'});
   return out;
 }
+function matchAccuracy(diff,targetLength){
+  const matched=diff.filter(word=>word.k==='ok').length;
+  const extra=diff.filter(word=>word.k==='extra').length;
+  return targetLength?Math.round(100*matched/(targetLength+extra)):0;
+}
+function renderDiff(diff){return diff.map(word=>`<span class="${word.k}">${escapeHTML(word.t)}</span>`).join(' ')}
 document.getElementById('dict-mark').addEventListener('click',()=>{
   const target=tokens(DICT[dictLvl][dictIdx]),typed=tokens(document.getElementById('dict-input').value);
   if(!typed.length){toast('Type what you heard first');return}
   const diff=lcsDiff(target,typed);
   const okCount=diff.filter(d=>d.k==='ok').length;
-  const acc=Math.round(100*okCount/target.length);
+  const extraCount=diff.filter(d=>d.k==='extra').length;
+  const acc=matchAccuracy(diff,target.length);
   dictScores.push(acc);if(dictScores.length>30)dictScores.shift();
   S.dictScores=dictScores;save();
   const el=document.getElementById('dict-diff');
-  el.innerHTML=`<b style="font-family:var(--mono);font-size:.8rem">${acc}% accuracy (${okCount}/${target.length} words)</b><br>`+
-    diff.map(d=>`<span class="${d.k}">${d.t}</span>`).join(' ')+
+  el.innerHTML=`<b style="font-family:var(--mono);font-size:.8rem">${acc}% accuracy (${okCount}/${target.length} target words; ${extraCount} extra)</b><br>`+
+    renderDiff(diff)+
     `<br><span style="font-family:var(--mono);font-size:.62rem;color:var(--ink-soft)">green = correct · red strikethrough = missed/wrong · orange = extra word you added</span>`;
   el.classList.add('show');
 });
@@ -1296,15 +1345,18 @@ document.getElementById('qg-draw').addEventListener('click',()=>{
   document.getElementById('qg-q').textContent=q[1];
   S.speakDrawn=(S.speakDrawn||0)+1;save();
 });
-let spTimer=null;
+let spTimer=null,spTick=null;
 function startSpeakTimer(secs){
   const bar=document.getElementById('tb-speak'),clock=bar.querySelector('.clock');
-  clearInterval(spTimer);let sec=secs;
-  const tick=()=>{clock.textContent='00:'+String(sec).padStart(2,'0');
+  clearInterval(spTimer);const deadline=Date.now()+secs*1000;
+  const tick=()=>{const sec=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+    clock.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
     bar.classList.toggle('crit',sec<=10);
-    if(sec<=0){clearInterval(spTimer);toast('⏱ Time — wrap up your answer')}sec--};
-  tick();spTimer=setInterval(tick,1000);
+    if(sec<=0){clearInterval(spTimer);spTick=null;toast('⏱ Time — wrap up your answer')}};
+  spTick=tick;spTimer=setInterval(tick,1000);tick();
 }
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&spTick)spTick()});
+window.addEventListener('pageshow',()=>{if(spTick)spTick()});
 document.getElementById('speak-timer').addEventListener('click',()=>startSpeakTimer(45));
 document.getElementById('speak-timer60').addEventListener('click',()=>startSpeakTimer(60));
 
@@ -1445,11 +1497,11 @@ function qtCardDict(card){
     if(!typed.length){toast('Type what you heard first');return}
     card.dataset.answered='1';
     const target=tokens(sentence),diff=lcsDiff(target,typed);
-    const ok=diff.filter(d=>d.k==='ok').length,acc=Math.round(100*ok/target.length);
+    const acc=matchAccuracy(diff,target.length);
     qtStats.dictScores.push(acc);
     S.dictScores=S.dictScores||[];S.dictScores.push(acc);if(S.dictScores.length>30)S.dictScores.shift();save();
     const el=card.querySelector('#qt-d-diff');
-    el.innerHTML=`<b style="font-family:var(--mono);font-size:.78rem">${acc}% accuracy</b><br>`+diff.map(d=>`<span class="${d.k}">${d.t}</span>`).join(' ');
+    el.innerHTML=`<b style="font-family:var(--mono);font-size:.78rem">${acc}% accuracy</b><br>`+renderDiff(diff);
     el.style.display='block';
     const next=document.createElement('button');next.className='btn qt-next';next.textContent='Next →';
     next.addEventListener('click',qtNextCard);card.appendChild(next);
@@ -1530,10 +1582,10 @@ S.shadowScores=S.shadowScores||[];
       const said=e.results[0][0].transcript;
       const target=tokens(DICT[shadowLvl][shadowIdx]),typed=tokens(said);
       const diff=lcsDiff(target,typed);
-      const ok=diff.filter(d=>d.k==='ok').length,acc=Math.round(100*ok/target.length);
+      const acc=matchAccuracy(diff,target.length);
       S.shadowScores.push(acc);if(S.shadowScores.length>30)S.shadowScores.shift();save();
       const el=document.getElementById('shadow-diff');
-      el.innerHTML=`<b style="font-family:var(--mono);font-size:.8rem">${acc}% word match · heard: "${said}"</b><br>`+diff.map(d=>`<span class="${d.k}">${d.t}</span>`).join(' ');
+      el.innerHTML=`<b style="font-family:var(--mono);font-size:.8rem">${acc}% word match · heard: "${escapeHTML(said)}"</b><br>`+renderDiff(diff);
       el.classList.add('show');
       refreshStats();
     };
@@ -1587,7 +1639,7 @@ function renderSessionHistory(){
   if(!el)return;
   if(!hist.length){el.innerHTML='<ul class="hist-list"><li class="hist-empty"><span>No Quick Test circuits logged yet.</span></li></ul>';return}
   el.innerHTML='<ul class="hist-list">'+hist.slice().reverse().map(h=>
-    `<li><span>${h.date} · ${h.minutes} min · ${h.items} items</span><span>vocab ${h.vocab} · grammar ${h.grammar} · para ${h.para} · dict ${h.dict}</span></li>`
+    `<li><span>${escapeHTML(h.date)} · ${h.minutes} min · ${h.items} items</span><span>vocab ${escapeHTML(h.vocab)} · grammar ${escapeHTML(h.grammar)} · para ${escapeHTML(h.para)} · dict ${escapeHTML(h.dict)}</span></li>`
   ).join('')+'</ul>';
 }
 
@@ -1603,12 +1655,13 @@ document.getElementById('export-gym').addEventListener('click',()=>{
 document.getElementById('import-gym').addEventListener('click',()=>document.getElementById('import-gym-file').click());
 document.getElementById('import-gym-file').addEventListener('change',e=>{
   const file=e.target.files[0];if(!file)return;
+  if(file.size>2*1024*1024){toast('Import failed — backup must be smaller than 2 MB');e.target.value='';return}
   const reader=new FileReader();
   reader.onload=()=>{
     try{
       const data=JSON.parse(reader.result);
-      if(data.progress){localStorage.setItem(LS,JSON.stringify(data.progress));toast('✓ Progress imported — reloading…');setTimeout(()=>location.reload(),900)}
-      else toast('Import failed — no progress data found in file');
+      if(!isRecord(data)||!validProgress(data.progress))throw new Error('Invalid progress');
+      localStorage.setItem(LS,JSON.stringify(data.progress));toast('✓ Progress imported — reloading…');setTimeout(()=>location.reload(),900);
     }catch(err){toast('Import failed — invalid file')}
   };
   reader.readAsText(file);e.target.value='';

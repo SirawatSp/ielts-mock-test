@@ -8,6 +8,7 @@
   bar.className = 'app-bar';
   bar.innerHTML = `<span class="app-connection" role="status" aria-live="polite">Preparing offline practice...</span>
     <div class="app-actions">
+      <a class="app-action app-skills-link" href="skills.html">${icon('book-open')}<span>Skills &amp; feedback</span></a>
       <button type="button" class="app-action" id="app-update" hidden>${icon('refresh-cw')}Update ready</button>
       <button type="button" class="app-action" id="app-install">${icon('smartphone')}<span>Home Screen</span></button>
     </div>`;
@@ -74,6 +75,7 @@
        <button type="button" data-app-section="reading" title="Reading">${icon('book-open')}<span>Reading</span></button>
        <button type="button" data-app-section="writing1" title="Writing Task 1">${icon('pen-line')}<span>Writing</span></button>
        <button type="button" data-app-section="results" title="Results">${icon('clipboard-list')}<span>Results</span></button>`;
+  dock.insertAdjacentHTML('beforeend', `<a href="skills.html" title="Practice all four skills and review feedback">${icon('pen-line')}<span>Skills</span></a>`);
   document.body.append(dock);
   dock.addEventListener('click', event => {
     const button = event.target.closest('[data-app-section]');
